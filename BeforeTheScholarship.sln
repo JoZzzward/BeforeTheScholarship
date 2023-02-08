@@ -3,7 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship", "BeforeTheScholarship\BeforeTheScholarship.csproj", "{E4F7729F-4730-44C3-8D6F-A106A0925563}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{04E6D5E7-4FEB-47BB-A5E1-FA907E12B50C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Systems", "Systems", "{61DB5ACC-F027-4530-B1B0-2AE5CCF88502}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{AC4B384F-BEED-4BAD-922E-6DBF496BF6E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{2540E46E-6DD2-47C1-87C7-1B302367A5B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Api", "Systems\Api\BeforeTheScholarship.Api\BeforeTheScholarship.Api.csproj", "{6D68F8FE-BE3E-4E6E-9B52-7D75EB69737E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{CFB84E26-A860-40B6-A567-5843432D12EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Settings", "Shared\BeforeTheScholarship.Settings\BeforeTheScholarship.Settings.csproj", "{585A4BBC-FD3C-46CC-AAE7-1666D2B61E47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +25,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E4F7729F-4730-44C3-8D6F-A106A0925563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4F7729F-4730-44C3-8D6F-A106A0925563}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4F7729F-4730-44C3-8D6F-A106A0925563}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4F7729F-4730-44C3-8D6F-A106A0925563}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D68F8FE-BE3E-4E6E-9B52-7D75EB69737E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D68F8FE-BE3E-4E6E-9B52-7D75EB69737E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D68F8FE-BE3E-4E6E-9B52-7D75EB69737E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D68F8FE-BE3E-4E6E-9B52-7D75EB69737E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{585A4BBC-FD3C-46CC-AAE7-1666D2B61E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{585A4BBC-FD3C-46CC-AAE7-1666D2B61E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{585A4BBC-FD3C-46CC-AAE7-1666D2B61E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{585A4BBC-FD3C-46CC-AAE7-1666D2B61E47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2540E46E-6DD2-47C1-87C7-1B302367A5B0} = {61DB5ACC-F027-4530-B1B0-2AE5CCF88502}
+		{6D68F8FE-BE3E-4E6E-9B52-7D75EB69737E} = {2540E46E-6DD2-47C1-87C7-1B302367A5B0}
+		{CFB84E26-A860-40B6-A567-5843432D12EB} = {04E6D5E7-4FEB-47BB-A5E1-FA907E12B50C}
+		{585A4BBC-FD3C-46CC-AAE7-1666D2B61E47} = {AC4B384F-BEED-4BAD-922E-6DBF496BF6E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37ACCB9C-F5D9-4B83-AC74-C538F7149F3C}
