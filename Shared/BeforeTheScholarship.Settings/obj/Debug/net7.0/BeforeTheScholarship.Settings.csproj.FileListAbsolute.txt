@@ -1,0 +1,12 @@
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\bin\Debug\net7.0\BeforeTheScholarship.Settings.deps.json
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\bin\Debug\net7.0\BeforeTheScholarship.Settings.dll
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\bin\Debug\net7.0\BeforeTheScholarship.Settings.pdb
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.csproj.AssemblyReference.cache
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.AssemblyInfoInputs.cache
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.AssemblyInfo.cs
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.csproj.CoreCompileInputs.cache
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.dll
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\refint\BeforeTheScholarship.Settings.dll
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\BeforeTheScholarship.Settings.pdb
+C:\Users\admin\source\repos\BeforeTheScholarship\Shared\BeforeTheScholarship.Settings\obj\Debug\net7.0\ref\BeforeTheScholarship.Settings.dll
