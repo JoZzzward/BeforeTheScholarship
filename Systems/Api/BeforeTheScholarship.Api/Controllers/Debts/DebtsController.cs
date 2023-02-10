@@ -3,7 +3,7 @@
 namespace BeforeTheScholarship.Api.Controllers.Debts;
 
 /// <summary>
-/// Debts controller
+/// Debts ApiController with implemented CRUD.
 /// </summary>
 [ApiController]
 [Route("api/debts")]
@@ -17,9 +17,8 @@ public class DebtsController : ControllerBase
     }
 
     /// <summary>
-    /// HttpGet method that returns the list of debts 
+    /// Async HttpGet method that returns the list of debts 
     /// </summary>
-    /// <returns> IEnumerable<see cref="{DebtModel}"/></returns>
     [HttpGet]
     public async Task<IEnumerable<DebtModel>> GetDebts()
     {
@@ -29,19 +28,10 @@ public class DebtsController : ControllerBase
             new DebtModel { Id = 2, Cost = 200 },
             new DebtModel { Id = 3, Cost = 300 }
         };
+        //todo: 
 
         _logger.LogInformation("Debts was returned successfully!");
 
         return debts;
-    }
-
-    /// <summary>
-    /// Sends an Error log to file "errorlog.txt"
-    /// </summary>
-    /// <returns></returns>
-    [HttpPost]
-    public async Task ThrowError()
-    {
-        _logger.LogError("Error");
     }
 }
