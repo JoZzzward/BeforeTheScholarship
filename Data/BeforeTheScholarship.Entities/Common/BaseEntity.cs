@@ -2,10 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace BeforeTheScholarship.Entities.Common;
+namespace BeforeTheScholarship.Entities;
 
 [Index("Uid",IsUnique = true, Name = "Uid_Index")]
-[Obsolete]
 public class BaseEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 
 public abstract class Settings
 {
-    public static T Load<T>(string key, IConfiguration configuration = null)
+    public static T? Load<T>(string key, IConfiguration configuration = null)
     {
-        var settings = (T)Activator.CreateInstance(typeof(T));
+        var settings = (T?)Activator.CreateInstance(typeof(T));
 
         SettingsFactory.Create(configuration)
             .GetSection(key)
