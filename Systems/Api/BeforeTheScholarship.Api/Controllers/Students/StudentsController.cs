@@ -7,6 +7,7 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 /// Students controller
 /// </summary>
 [ApiController]
+[ApiVersion("1.0")]
 [Route("api/students")]
 public class StudentsController : ControllerBase
 {
