@@ -1,19 +1,18 @@
-﻿using BeforeTheScholarship.Context.Factories;
-using BeforeTheScholarship.Context.Settings;
+﻿namespace BeforeTheScholarship.Context;
+
+using BeforeTheScholarship.Settings;
+using BeforeTheScholarship.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace BeforeTheScholarship.Context;
 
 public static class Bootstrapper
 {
     /// <summary>
-    /// Register database context as service
+    /// Register database context 
     /// </summary>
     public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration configuration = null)
     {
-        var settings = BeforeTheScholarship.Settings.Settings.Load<DbSettings>("Database", configuration);
-
+        var settings = Settings.Load<DbSettings>("Database", configuration);
         services.AddSingleton(settings);
 
         var dbOptionsBuilder = DbContextOptionsFactory.Configure(

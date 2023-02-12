@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BeforeTheScholarship.Context.Setup;
+namespace BeforeTheScholarship.Context;
 
 public static class DbInitializer
 {

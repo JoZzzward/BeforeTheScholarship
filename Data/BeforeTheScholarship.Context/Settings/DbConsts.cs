@@ -1,6 +1,6 @@
-﻿namespace BeforeTheScholarship.Context.Settings;
+﻿namespace BeforeTheScholarship.Context;
 
 public static class DbConsts
 {
-    public const string migrationAssembly = "BeforeTheScholarship.Context.Migrations.";
+    public const string MigrationAssembly = "BeforeTheScholarship.Context.Migrations.";
 }

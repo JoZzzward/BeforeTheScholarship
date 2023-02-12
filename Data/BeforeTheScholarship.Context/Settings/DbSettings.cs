@@ -1,4 +1,4 @@
-﻿namespace BeforeTheScholarship.Context.Settings;
+﻿namespace BeforeTheScholarship.Context;
 
 public class DbSettings
 {

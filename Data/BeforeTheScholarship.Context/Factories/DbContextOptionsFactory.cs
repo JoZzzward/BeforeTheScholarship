@@ -1,7 +1,6 @@
-﻿using BeforeTheScholarship.Context.Settings;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace BeforeTheScholarship.Context.Factories;
+namespace BeforeTheScholarship.Context;
 
 public class DbContextOptionsFactory
 {
@@ -21,16 +20,19 @@ public class DbContextOptionsFactory
             switch(Type)
             {
                 case DbType.PostgreSQL:     
-                    bldr.UseNpgsql(o =>
-                    {
-                        o.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
-                        o.MigrationsHistoryTable("EFMigrationHistory", "public");
-                        o.MigrationsAssembly($"{DbConsts.migrationAssembly}{Type}");
-                    });
+                    bldr.UseNpgsql(
+                        connStr, 
+                        o =>
+                            {
+                                o.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
+                                o.MigrationsHistoryTable("EFMigrationHistory", "public");
+                                o.MigrationsAssembly($"{DbConsts.MigrationAssembly}{Type}");
+                            });
                 break;
             }
 
             bldr.EnableSensitiveDataLogging();
+            bldr.EnableDetailedErrors();
             bldr.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         };
     }

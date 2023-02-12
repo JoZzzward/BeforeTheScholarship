@@ -1,5 +1,4 @@
 using BeforeTheScholarship.Context;
-using BeforeTheScholarship.Context.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
 

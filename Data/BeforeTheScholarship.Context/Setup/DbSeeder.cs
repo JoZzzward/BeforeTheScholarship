@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
 
-namespace BeforeTheScholarship.Context.Setup;
+namespace BeforeTheScholarship.Context;
 
 public static class DbSeeder
 {
