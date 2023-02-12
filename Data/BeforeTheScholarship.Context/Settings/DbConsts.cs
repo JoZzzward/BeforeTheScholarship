@@ -2,5 +2,5 @@
 
 public static class DbConsts
 {
-    public const string migrationAssembly = "BeforeTheScholarship.Context.Migrations";
+    public const string migrationAssembly = "BeforeTheScholarship.Context.Migrations.";
 }

@@ -5,11 +5,13 @@ namespace BeforeTheScholarship.Context.Factories;
 
 public class DbContextOptionsFactory
 {
-    public async void Create(string connStr, DbType Type)
+    public static DbContextOptions<AppDbContext> Create(string connStr, DbType Type)
     {
         var bldr = new DbContextOptionsBuilder<AppDbContext>();
 
         Configure(connStr, Type).Invoke(bldr);
+
+        return bldr.Options;
     }
 
 	public static Action<DbContextOptionsBuilder> Configure(string connStr, DbType Type)
@@ -21,15 +23,15 @@ public class DbContextOptionsFactory
                 case DbType.PostgreSQL:     
                     bldr.UseNpgsql(o =>
                     {
-                        o.CommandTimeout(TimeSpan.FromMinutes(10).Seconds);
+                        o.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
                         o.MigrationsHistoryTable("EFMigrationHistory", "public");
-                        o.MigrationsAssembly($"{DbConsts.migrationAssembly}.{Type}");
+                        o.MigrationsAssembly($"{DbConsts.migrationAssembly}{Type}");
                     });
                 break;
             }
 
             bldr.EnableSensitiveDataLogging();
-            bldr.EnableDetailedErrors();
+            bldr.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         };
     }
 }

@@ -12,5 +12,6 @@ public class StudentUser : BaseEntity
     public string Phone { get; set; } = "";
     public string Email { get; set; } = "";
     public bool EmailConfirmed { get; set; } = false;
+    public string Password { get; set; }
     public ICollection<Debts> Debts { get; set; }
 }

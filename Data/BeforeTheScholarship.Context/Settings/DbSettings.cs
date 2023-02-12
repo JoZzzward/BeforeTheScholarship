@@ -2,6 +2,6 @@
 
 public class DbSettings
 {
-    public DbType Type { get; set; }
-    public string ConnectionString { get; set; }
+    public DbType Type { get; private set; }
+    public string ConnectionString { get; private set; }
 }

@@ -8,22 +8,23 @@ namespace BeforeTheScholarship.Context.Factories;
 public class DbDesignTimeContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)
-    {
-        var provider = $"{args[0] ?? DbType.PostgreSQL.ToString()}".ToUpper();
-            
+    {   
+        var provider = DbType.PostgreSQL.ToString().ToLower();
+
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.context.json")
             .Build();
 
         DbContextOptions<AppDbContext> options;
 
-        if (provider.Equals($"{DbType.PostgreSQL}".ToUpper()))
+        if (provider.Equals($"{DbType.PostgreSQL}".ToLower()))
         {
             options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseNpgsql(
-                    configuration.GetConnectionString(provider),
+                    configuration.GetConnectionString(provider),    
                     opt =>
-                        opt.MigrationsAssembly(DbConsts.migrationAssembly)
+                        opt.MigrationsAssembly($"{DbConsts.migrationAssembly}{DbType.PostgreSQL.ToString()}")
+                        
                 ).Options;
         } else
         {

@@ -1,3 +1,6 @@
+using BeforeTheScholarship.Context;
+using BeforeTheScholarship.Context.Setup;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLogger();
@@ -10,6 +13,8 @@ services.AddSwaggerGen();
 services.AddAppVersioning();
 services.AddAppAutoMapper();
 
+services.AddAppDbContext(builder.Configuration);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -21,5 +26,8 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+DbInitializer.Execute(app.Services);
+DbSeeder.Execute(app.Services, true);
 
 app.Run();
