@@ -1,7 +1,7 @@
 ﻿namespace BeforeTheScholarship.Entities;
 
 /// <summary>
-/// StudentUser model - main model that users will user after registration
+/// Main model that users will user after registration
 /// </summary>
 public class StudentUser : BaseEntity
 {
@@ -12,5 +12,6 @@ public class StudentUser : BaseEntity
     public string Phone { get; set; } = "";
     public string Email { get; set; } = "";
     public bool EmailConfirmed { get; set; } = false;
+    public string Password { get; set; }
     public ICollection<Debts> Debts { get; set; }
 }

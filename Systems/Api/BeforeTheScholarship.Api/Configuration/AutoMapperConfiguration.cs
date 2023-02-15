@@ -3,14 +3,12 @@
 public static class AutoMapperConfiguration
 {
     /// <summary>
-    /// Adds AutoMapper to domain assemblies which names starts with "BEFORETHESCHOLARSHIP"
+    /// Adds AutoMapper to domain assemblies which names starts with "beforethescholarship."
     /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
     public static IServiceCollection AddAppAutoMapper(this IServiceCollection services)
     {
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-            .Where(x => x.FullName != null && x.FullName.ToUpper().StartsWith("BEFORETHESCHOLARSHIP"));
+            .Where(s => s.FullName != null && s.FullName.ToLower().StartsWith("beforethescholarship."));
 
         services.AddAutoMapper(assemblies);
 
