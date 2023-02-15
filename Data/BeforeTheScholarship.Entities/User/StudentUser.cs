@@ -1,7 +1,7 @@
 ﻿namespace BeforeTheScholarship.Entities;
 
 /// <summary>
-/// StudentUser model - main model that users will user after registration
+/// Main model that users will user after registration
 /// </summary>
 public class StudentUser : BaseEntity
 {
