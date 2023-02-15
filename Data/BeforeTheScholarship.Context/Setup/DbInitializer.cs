@@ -3,8 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BeforeTheScholarship.Context;
 
+/// <summary>
+/// Database initializer
+/// </summary>
 public static class DbInitializer
 {
+    /// <summary>
+    /// Initializing database by latest migration
+    /// </summary>
+    /// <param name="serviceProvider"></param>
     public static void Execute(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.GetService<IServiceScopeFactory>()?.CreateScope();

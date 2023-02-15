@@ -5,13 +5,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BeforeTheScholarship.Context;
 
+/// <summary>
+/// Database seeder
+/// </summary>
 public static class DbSeeder
 {
     public static IServiceScope ScopeService(IServiceProvider provider)
-        => provider.GetService<IServiceScopeFactory>()!.CreateScope();
+        => provider
+            .GetService<IServiceScopeFactory>()
+            !.CreateScope();
     public static AppDbContext AppDbContext(IServiceProvider provider)
-        => ScopeService(provider).ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContext();
-
+        => ScopeService(provider)
+            .ServiceProvider
+            .GetRequiredService<IDbContextFactory<AppDbContext>>()
+            .CreateDbContext();
+    
+    /// <summary>
+    /// Execute DatabaseSeeder and adding the data
+    /// </summary>
     public static void Execute(IServiceProvider provider, bool addData)
     {
         using var scope = ScopeService(provider);
@@ -30,11 +41,16 @@ public static class DbSeeder
     {
         await AddData(provider);
     }
-
+    /// <summary>
+    /// Data that will be added in database by launching the app
+    /// </summary>
+    /// <param name="provider"></param>
+    /// <returns></returns>
     public static async Task AddData(IServiceProvider provider)
     {
         await using var context = AppDbContext(provider);
 
+        #region Adding models
         if (!context.StudentUsers.Any())
         {
             var studentUsers = new List<StudentUser>()
@@ -96,7 +112,7 @@ public static class DbSeeder
 
             context.Debts.AddRange(debtsList);
         }
-
+        #endregion
         context.SaveChanges();
     }
 }

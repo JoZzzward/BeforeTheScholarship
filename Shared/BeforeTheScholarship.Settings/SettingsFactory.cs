@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 
 public static class SettingsFactory
 {
+    /// <summary>
+    /// Creates a configuration file for reading environment variables from {appsettings.json} and {appsettings.Development.json} optional
+    /// </summary>
     public static IConfiguration Create(IConfiguration? configuration = null)
     {
         var conf = configuration ?? new ConfigurationBuilder()

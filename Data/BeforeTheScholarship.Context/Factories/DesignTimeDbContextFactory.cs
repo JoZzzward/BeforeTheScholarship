@@ -1,12 +1,11 @@
-﻿namespace BeforeTheScholarship.Context;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
+namespace BeforeTheScholarship.Context;
+
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
-
     public AppDbContext CreateDbContext(string[] args)
     {
         var provider = (args?[0] ?? $"{DbType.PostgreSQL}").ToLower();
@@ -28,9 +27,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
                     .Options;
         }
         else
-        {
             throw new Exception($"Unsupported provider: {provider}");
-        }
+        
 
         var dbf = new DbContextFactory(options);
         return dbf.Create();
