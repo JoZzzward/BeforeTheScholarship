@@ -1,37 +1,80 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using BeforeTheScholarship.Api.Controllers.Debts.Models;
+using BeforeTheScholarship.DebtService;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BeforeTheScholarship.Api.Controllers.Debts;
 
 /// <summary>
-/// Debts ApiController with implemented CRUD.
+/// Debts ApiController
 /// </summary>
 [ApiController]
+[ApiVersion("1.0")]
 [Route("api/debts")]
 public class DebtsController : ControllerBase
 {
+    private readonly IDebtService _debtService;
     private readonly ILogger<DebtsController> _logger;
+    private readonly IMapper _mapper;
 
-    public DebtsController(ILogger<DebtsController> logger)
+    public DebtsController(
+        IDebtService debtService,
+        ILogger<DebtsController> logger,
+        IMapper mapper)
     {
+        _debtService = debtService;
         _logger = logger;
+        _mapper = mapper;
     }
 
-    /// <summary>
-    /// Async HttpGet method that returns the list of debts 
-    /// </summary>
-    [HttpGet]
-    public async Task<IEnumerable<DebtModel>> GetDebts()
+    [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
+    [HttpGet("")]
+    public async Task<IEnumerable<DebtResponse>> GetDebts()
     {
-        var debts = new List<DebtModel>()
-        {
-            new DebtModel { Id = 1, Cost = 100 },
-            new DebtModel { Id = 2, Cost = 200 },
-            new DebtModel { Id = 3, Cost = 300 }
-        };
-        //todo: 
+        var debts = await _debtService.GetDebts();
+        var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
-        _logger.LogInformation("Debts was returned successfully!");
+        _logger.LogInformation("--> Debts was returned successfully!");
 
-        return debts;
+        return data;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<DebtResponse> GetDebtById([FromRoute] int? id)
+    {
+        var debts = await _debtService.GetDebtById(id);
+
+        var data = _mapper.Map<DebtResponse>(debts);
+
+        _logger.LogInformation($"--> The Debt({id}) was returned successfully!");
+
+        return data;
+    }
+
+    [HttpPost("")]
+    public async Task<DebtResponse> CreateDebt([FromBody] AddDebtRequest request)
+    {
+        var model = _mapper.Map<AddDebtModel>(request);
+        var debts = await _debtService.CreateDebt(model);
+        var response = _mapper.Map<DebtResponse>(debts);
+
+        return response;
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtsRequest request)
+    {
+        var model = _mapper.Map<UpdateDebtModel>(request);
+        await _debtService.UpdateDebt(id, model);
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteDebt([FromRoute] int? id)
+    {
+        await _debtService.DeleteDebt(id);
+
+        return Ok();
     }
 }

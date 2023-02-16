@@ -7,16 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BeforeTheScholarship.Context\BeforeTheScholarship.Context.csproj" />
-    <ProjectReference Include="..\..\BeforeTheScholarship.Entities\BeforeTheScholarship.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\..\Data\BeforeTheScholarship.Context\BeforeTheScholarship.Context.csproj" />
   </ItemGroup>
 
 </Project>

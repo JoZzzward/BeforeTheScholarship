@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeforeTheScholarship.Entities;
 
-[Index("Uid",IsUnique = true, Name = "Uid_Index")]
+[Index("Uid", IsUnique = true)]
 public class BaseEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

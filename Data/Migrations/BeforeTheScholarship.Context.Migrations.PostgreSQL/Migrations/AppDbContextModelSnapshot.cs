@@ -47,17 +47,17 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                     b.Property<Guid>("Uid")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("WhenBorrowed")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("WhenBorrowed")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTimeOffset>("WhenToPayback")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("WhenToPayback")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex(new[] { "Uid" }, "Uid_Index")
+                    b.HasIndex("Uid")
                         .IsUnique();
 
                     b.ToTable("Debts");
@@ -105,9 +105,8 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Uid" }, "Uid_Index")
-                        .IsUnique()
-                        .HasDatabaseName("Uid_Index1");
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("StudentUsers");
                 });

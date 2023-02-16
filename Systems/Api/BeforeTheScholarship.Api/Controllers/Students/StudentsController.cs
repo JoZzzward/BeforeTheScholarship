@@ -27,12 +27,8 @@ public class StudentsController : ControllerBase
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// HttpGet method that returns the list of students 
-    /// </summary>
-    /// <returns> IEnumerable<see cref="{StudentModel}"/></returns>
     [ProducesResponseType(typeof(IEnumerable<StudentModel>), 200)]
-    [HttpGet]
+    [HttpGet("")]
     public async Task<IEnumerable<StudentResponse>> GetStudents()
     {
         var students = await _studentService.GetStudents();
@@ -55,7 +51,7 @@ public class StudentsController : ControllerBase
         return data;
     }
 
-    [HttpPost]
+    [HttpPost("")]
     public async Task<StudentResponse> CreateStudent([FromBody]AddStudentRequest request)
     {
         var model = _mapper.Map<AddStudentModel>(request);

@@ -9,7 +9,10 @@ public class AppDbContext : DbContext
     public DbSet<Debts> Debts { get; set; }
 
 	public AppDbContext(DbContextOptions<AppDbContext> options)
-		:base (options) { }
+		:base (options) 
+    { 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,5 +32,6 @@ public class AppDbContext : DbContext
         // Initializing Debts model
         modelBuilder.Entity<Debts>().Property(x => x.BorrowedFromWho).IsRequired();
         modelBuilder.Entity<Debts>().Property(x => x.Borrowed).IsRequired();
+
     }
 }

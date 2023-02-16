@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+
+  beforethescholarship_postgresql:
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Passw0rd
+    ports:
+      - "5432:5432"
+    networks:
+      - beforethescholarship_network
+    volumes:      
+      - ~/.docker-conf/postgresql/data/:/var/lib/postgresql/data
+
+  beforethescholarship_api:
+    ports:
+      - "7000:80"
+    networks:
+      - beforethescholarship_network
+    env_file:
+      - env.api
+
+networks:
+  beforethescholarship_network:
+    name: beforethescholarship
+    driver: bridge

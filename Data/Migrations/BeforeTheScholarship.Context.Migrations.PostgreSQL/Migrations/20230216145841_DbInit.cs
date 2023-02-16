@@ -42,8 +42,8 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                     Borrowed = table.Column<decimal>(type: "numeric", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     BorrowedFromWho = table.Column<string>(type: "text", nullable: false),
-                    WhenBorrowed = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    WhenToPayback = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    WhenBorrowed = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    WhenToPayback = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Uid = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -63,13 +63,13 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "Uid_Index",
+                name: "IX_Debts_Uid",
                 table: "Debts",
                 column: "Uid",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "Uid_Index1",
+                name: "IX_StudentUsers_Uid",
                 table: "StudentUsers",
                 column: "Uid",
                 unique: true);

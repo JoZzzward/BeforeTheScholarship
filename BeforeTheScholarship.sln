@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Context.Migrations.PostgreSQL", "Data\Migrations\BeforeTheScholarship.Context.Migrations.PostgreSQL\BeforeTheScholarship.Context.Migrations.PostgreSQL.csproj", "{34B1CE38-895E-4797-BFDC-CA34DFDA370E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.StudentService", "Services\BeforeTheScholarship.StudentService\BeforeTheScholarship.StudentService.csproj", "{415EEA21-FB4C-4242-99FA-47F51CE6B172}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.StudentService", "Services\BeforeTheScholarship.StudentService\BeforeTheScholarship.StudentService.csproj", "{415EEA21-FB4C-4242-99FA-47F51CE6B172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.DebtService", "Services\BeforeTheScholarship.DebtService\BeforeTheScholarship.DebtService.csproj", "{674D3FB6-ACD5-40BC-8658-0AB85DEB9505}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BD41E950-F581-4FB3-AB4A-F350D5BC5E38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,14 @@ Global
 		{415EEA21-FB4C-4242-99FA-47F51CE6B172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415EEA21-FB4C-4242-99FA-47F51CE6B172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415EEA21-FB4C-4242-99FA-47F51CE6B172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{674D3FB6-ACD5-40BC-8658-0AB85DEB9505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674D3FB6-ACD5-40BC-8658-0AB85DEB9505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674D3FB6-ACD5-40BC-8658-0AB85DEB9505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674D3FB6-ACD5-40BC-8658-0AB85DEB9505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD41E950-F581-4FB3-AB4A-F350D5BC5E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD41E950-F581-4FB3-AB4A-F350D5BC5E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD41E950-F581-4FB3-AB4A-F350D5BC5E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD41E950-F581-4FB3-AB4A-F350D5BC5E38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +82,7 @@ Global
 		{C359C694-3134-4A56-AF54-8A337287BDFD} = {04E6D5E7-4FEB-47BB-A5E1-FA907E12B50C}
 		{34B1CE38-895E-4797-BFDC-CA34DFDA370E} = {CFB84E26-A860-40B6-A567-5843432D12EB}
 		{415EEA21-FB4C-4242-99FA-47F51CE6B172} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
+		{674D3FB6-ACD5-40BC-8658-0AB85DEB9505} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37ACCB9C-F5D9-4B83-AC74-C538F7149F3C}
