@@ -1,6 +1,5 @@
 ﻿using BeforeTheScholarship.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace BeforeTheScholarship.Context;
 
@@ -33,5 +32,6 @@ public class AppDbContext : DbContext
         // Initializing Debts model
         modelBuilder.Entity<Debts>().Property(x => x.BorrowedFromWho).IsRequired();
         modelBuilder.Entity<Debts>().Property(x => x.Borrowed).IsRequired();
+
     }
 }

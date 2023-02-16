@@ -55,8 +55,8 @@ public class StudentService : IStudentService
 
         var data = _mapper.Map<StudentUser>(model);
 
-        context.StudentUsers.Add(data);
-        await context.SaveChangesAsync();
+        await context.StudentUsers.AddAsync(data);
+        context.SaveChanges();
 
         return _mapper.Map<StudentModel>(model);
     }
@@ -75,7 +75,7 @@ public class StudentService : IStudentService
         student = _mapper.Map(model, student);
 
         context.StudentUsers.Update(student);
-        await context.SaveChangesAsync();
+        context.SaveChanges();
     }
 
     public async Task DeleteStudent(int? id)
@@ -88,6 +88,6 @@ public class StudentService : IStudentService
             throw new NullReferenceException($"Student({id}) was not found");
 
         context.StudentUsers.Remove(student);
-        await context.SaveChangesAsync();
+        context.SaveChanges();
     }
 }

@@ -4,7 +4,7 @@ namespace BeforeTheScholarship.Api.Controllers.Debts.Models;
 
 public class DebtResponse
 {
-    public int Id { get; set; }
+    public int Id { get; set; } 
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
     public string BorrowedFromWho { get; set; }

@@ -54,8 +54,8 @@ public class DebtService : IDebtService
 
         var data = _mapper.Map<Debts>(model);
 
-        context.Debts.Add(data);
-        await context.SaveChangesAsync();
+        await context.Debts.AddAsync(data);
+        context.SaveChanges();
 
         return _mapper.Map<DebtModel>(data);
     }
@@ -74,7 +74,7 @@ public class DebtService : IDebtService
         debt = _mapper.Map(model, debt);
 
         context.Debts.Update(debt);
-        await context.SaveChangesAsync();
+        context.SaveChanges();
     }
 
     public async Task DeleteDebt(int? id)
@@ -89,6 +89,6 @@ public class DebtService : IDebtService
             throw new NullReferenceException($"Debt({id}) was not found");
 
         context.Debts.Remove(debt);
-        await context.SaveChangesAsync();
+        context.SaveChanges();
     }
 }

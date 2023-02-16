@@ -27,8 +27,8 @@ public class DebtsController : ControllerBase
         _mapper = mapper;
     }
 
-    [ProducesResponseType(typeof(IEnumerable<DebtModel>), 200)]
-    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
+    [HttpGet("")]
     public async Task<IEnumerable<DebtResponse>> GetDebts()
     {
         var debts = await _debtService.GetDebts();
@@ -51,7 +51,7 @@ public class DebtsController : ControllerBase
         return data;
     }
 
-    [HttpPost]
+    [HttpPost("")]
     public async Task<DebtResponse> CreateDebt([FromBody] AddDebtRequest request)
     {
         var model = _mapper.Map<AddDebtModel>(request);
