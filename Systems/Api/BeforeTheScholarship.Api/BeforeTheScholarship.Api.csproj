@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\BeforeTheScholarship.Context\BeforeTheScholarship.Context.csproj" />
     <ProjectReference Include="..\..\..\Data\Migrations\BeforeTheScholarship.Context.Migrations.PostgreSQL\BeforeTheScholarship.Context.Migrations.PostgreSQL.csproj" />
+    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.DebtService\BeforeTheScholarship.DebtService.csproj" />
     <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.StudentService\BeforeTheScholarship.StudentService.csproj" />
     <ProjectReference Include="..\..\..\Shared\BeforeTheScholarship.Settings\BeforeTheScholarship.Settings.csproj" />
   </ItemGroup>

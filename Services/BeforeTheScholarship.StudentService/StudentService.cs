@@ -40,7 +40,8 @@ public class StudentService : IStudentService
             .StudentUsers
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        ArgumentNullException.ThrowIfNull(student, $"Student({id}) was not found!");
+        if (student is null)
+            throw new NullReferenceException($"Student({id}) was not found");
 
         var data = _mapper.Map<StudentModel>(student);
 
@@ -68,7 +69,8 @@ public class StudentService : IStudentService
             .StudentUsers
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        ArgumentNullException.ThrowIfNull(student, $"Student({id}) was not found while updating");
+        if (student is null)
+            throw new NullReferenceException($"Student({id}) was not found");
 
         student = _mapper.Map(model, student);
 
@@ -82,7 +84,8 @@ public class StudentService : IStudentService
 
         var student = await context.StudentUsers.FirstOrDefaultAsync(x => x.Id == id);
 
-        ArgumentNullException.ThrowIfNull(student, $"Student({id}) was not found while deleting!");
+        if (student is null)
+            throw new NullReferenceException($"Student({id}) was not found");
 
         context.StudentUsers.Remove(student);
         await context.SaveChangesAsync();

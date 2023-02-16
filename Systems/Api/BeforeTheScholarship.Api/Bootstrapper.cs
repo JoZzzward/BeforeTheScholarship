@@ -1,4 +1,5 @@
-﻿using BeforeTheScholarship.StudentService;
+﻿using BeforeTheScholarship.DebtService;
+using BeforeTheScholarship.StudentService;
 
 namespace BeforeTheScholarship.Api;
 
@@ -9,7 +10,8 @@ public static class Bootstrapper
 {
     public static IServiceCollection RegisterAppServices(this IServiceCollection services)
     {
-        services.AddStudentService();
+        services.AddStudentService()
+            .AddDebtService();
 
         return services;
     }

@@ -27,10 +27,6 @@ public class StudentsController : ControllerBase
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// HttpGet method that returns the list of students 
-    /// </summary>
-    /// <returns> IEnumerable<see cref="{StudentModel}"/></returns>
     [ProducesResponseType(typeof(IEnumerable<StudentModel>), 200)]
     [HttpGet]
     public async Task<IEnumerable<StudentResponse>> GetStudents()

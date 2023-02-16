@@ -1,5 +1,6 @@
 ﻿using BeforeTheScholarship.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BeforeTheScholarship.Context;
 
@@ -9,7 +10,10 @@ public class AppDbContext : DbContext
     public DbSet<Debts> Debts { get; set; }
 
 	public AppDbContext(DbContextOptions<AppDbContext> options)
-		:base (options) { }
+		:base (options) 
+    { 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
