@@ -18,7 +18,7 @@ public class DebtService : IDebtService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<DebtModel>> GetDebts()
+    public async Task<IEnumerable<DebtModel>> GetDebts(int? studentId)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
@@ -26,7 +26,7 @@ public class DebtService : IDebtService
             .Debts
             .AsQueryable();
 
-        var data = (await debt.ToListAsync()).Select(s => _mapper.Map<DebtModel>(s))
+        var data = (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(s => _mapper.Map<DebtModel>(s))
             ?? new List<DebtModel>();
 
         return data;
@@ -90,5 +90,26 @@ public class DebtService : IDebtService
 
         context.Debts.Remove(debt);
         context.SaveChanges();
+    }
+
+    public async Task<IEnumerable<DebtModel>> GetUrgentlyRepaidDebts(int studentId, bool overdue)
+    {
+        var debts = await GetDebts(studentId);
+
+        var daysOff = overdue ? 0 : 3;
+
+        var result = new List<DebtModel>();
+
+        foreach (var debt in debts)
+        {
+            var subtractDate = debt.WhenToPayback.Subtract(DateTime.Now);
+
+            if (subtractDate.TotalDays <= daysOff && subtractDate.Seconds < 1 && overdue)
+                result.Add(debt);
+            else if (subtractDate.TotalDays <= daysOff && subtractDate.Seconds >= 0)
+                result.Add(debt);
+        }
+
+        return _mapper.Map<IEnumerable<DebtModel>>(result);
     }
 }

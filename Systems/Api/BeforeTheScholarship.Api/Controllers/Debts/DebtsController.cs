@@ -28,10 +28,10 @@ public class DebtsController : ControllerBase
     }
 
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [HttpGet("")]
-    public async Task<IEnumerable<DebtResponse>> GetDebts()
+    [HttpGet("{studentId}")]
+    public async Task<IEnumerable<DebtResponse>> GetDebts([FromRoute] int? studentId)
     {
-        var debts = await _debtService.GetDebts();
+        var debts = await _debtService.GetDebts(studentId);
         var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
         _logger.LogInformation("--> Debts was returned successfully!");
@@ -39,7 +39,7 @@ public class DebtsController : ControllerBase
         return data;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("current/{id}")]
     public async Task<DebtResponse> GetDebtById([FromRoute] int? id)
     {
         var debts = await _debtService.GetDebtById(id);
@@ -58,6 +58,8 @@ public class DebtsController : ControllerBase
         var debts = await _debtService.CreateDebt(model);
         var response = _mapper.Map<DebtResponse>(debts);
 
+        _logger.LogInformation("--> Debt was successfully created!");
+
         return response;
     }
 
@@ -67,6 +69,8 @@ public class DebtsController : ControllerBase
         var model = _mapper.Map<UpdateDebtModel>(request);
         await _debtService.UpdateDebt(id, model);
 
+        _logger.LogInformation("--> Debt was successfully updated!");
+
         return Ok();
     }
 
@@ -75,6 +79,20 @@ public class DebtsController : ControllerBase
     {
         await _debtService.DeleteDebt(id);
 
+        _logger.LogInformation("--> Debt was successfully removed!");
+
         return Ok();
+    }
+
+    [HttpGet("urgently-repay")]
+    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] int studentId, [FromQuery] bool overdue)
+    {
+        var debts = await _debtService.GetUrgentlyRepaidDebts(studentId, overdue);
+
+        var data = debts.ToList().Select(x => _mapper.Map<DebtResponse>(x));
+
+        _logger.LogInformation("--> Debts that needed to be repaid urgently have been successfully returned!");
+
+        return data;
     }
 }

@@ -29,7 +29,7 @@ app.UseAuthorization();
 app.UseHealthChecks();
 app.MapControllers();
 
-DbInitializer.Execute(app.Services);
-DbSeeder.Execute(app.Services, true);
+//DbInitializer.Execute(app.Services);
+//DbSeeder.Execute(app.Services, true);
 
 app.Run();
