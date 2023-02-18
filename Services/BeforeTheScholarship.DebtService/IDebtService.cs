@@ -8,11 +8,12 @@ public interface IDebtService
     /// Returns a list of Debts
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<DebtModel>> GetDebts(int? studentId);
+    Task<IEnumerable<DebtModel>> GetDebts();
     /// <summary>
-    /// Returns <see cref="DebtModel"/> with same <paramref name="id"/>
+    /// Returns a list of Debts for Student with <paramref name="studentId"/>
     /// </summary>
-    Task<DebtModel> GetDebtById(int? id);
+    /// <returns></returns>
+    Task<IEnumerable<DebtModel>> GetDebts(int? studentId);
     /// <summary>
     /// Adds a new Debt to the database
     /// </summary>

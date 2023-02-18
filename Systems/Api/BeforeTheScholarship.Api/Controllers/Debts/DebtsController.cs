@@ -28,10 +28,10 @@ public class DebtsController : ControllerBase
     }
 
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [HttpGet("{studentId}")]
-    public async Task<IEnumerable<DebtResponse>> GetDebts([FromRoute] int? studentId)
+    [HttpGet("")]
+    public async Task<IEnumerable<DebtResponse>> GetDebts()
     {
-        var debts = await _debtService.GetDebts(studentId);
+        var debts = await _debtService.GetDebts();
         var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
         _logger.LogInformation("--> Debts was returned successfully!");
@@ -39,14 +39,14 @@ public class DebtsController : ControllerBase
         return data;
     }
 
-    [HttpGet("current/{id}")]
-    public async Task<DebtResponse> GetDebtById([FromRoute] int? id)
+    [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
+    [HttpGet("{studentId}")]
+    public async Task<IEnumerable<DebtResponse>> GetDebts([FromRoute] int? studentId)
     {
-        var debts = await _debtService.GetDebtById(id);
+        var debts = await _debtService.GetDebts(studentId);
+        var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
-        var data = _mapper.Map<DebtResponse>(debts);
-
-        _logger.LogInformation($"--> The Debt({id}) was returned successfully!");
+        _logger.LogInformation("--> Debts was returned successfully!");
 
         return data;
     }

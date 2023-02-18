@@ -22,6 +22,12 @@ services:
     env_file:
       - env.api
 
+  beforethescholarship_emailworker:
+    networks:
+      - beforethescholarship_network
+    env_file:
+      - env.emailworker
+
 networks:
   beforethescholarship_network:
     name: beforethescholarship

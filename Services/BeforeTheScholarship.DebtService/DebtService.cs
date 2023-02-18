@@ -18,6 +18,20 @@ public class DebtService : IDebtService
         _mapper = mapper;
     }
 
+    public async Task<IEnumerable<DebtModel>> GetDebts()
+    {
+        using var context = await _dbContext.CreateDbContextAsync();
+
+        var debt = context
+            .Debts
+            .AsQueryable();
+
+        var data = (await debt.ToListAsync()).Select(s => _mapper.Map<DebtModel>(s))
+            ?? new List<DebtModel>();
+
+        return data;
+    }
+
     public async Task<IEnumerable<DebtModel>> GetDebts(int? studentId)
     {
         using var context = await _dbContext.CreateDbContextAsync();
@@ -28,22 +42,6 @@ public class DebtService : IDebtService
 
         var data = (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(s => _mapper.Map<DebtModel>(s))
             ?? new List<DebtModel>();
-
-        return data;
-    }
-
-    public async Task<DebtModel> GetDebtById(int? id)
-    {
-        using var context = await _dbContext.CreateDbContextAsync();
-
-        var debt = await context
-            .Debts
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (debt is null)
-            throw new NullReferenceException($"Debt({id}) was not found");
-
-        var data = _mapper.Map<DebtModel>(debt);
 
         return data;
     }

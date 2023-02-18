@@ -30,6 +30,6 @@ app.UseHealthChecks();
 app.MapControllers();
 
 //DbInitializer.Execute(app.Services);
-//DbSeeder.Execute(app.Services, true);
+//DbSeeder.Execute(app.Services, false);
 
 app.Run();

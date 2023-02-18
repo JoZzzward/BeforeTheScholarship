@@ -10,6 +10,7 @@ public class Debts : BaseEntity
     public decimal Borrowed { get; set; }
     public string Phone { get; set; } = "";
     public string BorrowedFromWho { get; set; }
+    public bool EmailSended { get; set; }
     public DateTime WhenBorrowed { get; set; } = DateTime.UtcNow.Date;
-    public DateTime WhenToPayback { get; set; } = DateTime.UtcNow.Date.AddDays(1);
+    public DateTime WhenToPayback { get; set; } = DateTime.UtcNow.Date.AddDays(3);
 }

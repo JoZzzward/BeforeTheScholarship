@@ -4,11 +4,19 @@ services:
   
   beforethescholarship_postgresql:
     image: postgres:15.1
-
+  
   beforethescholarship_api:
     image: ${DOCKER_REGISTRY-}beforethescholarshipapi
     build:
       context: .
       dockerfile: Systems/Api/BeforeTheScholarship.Api/Dockerfile
+    depends_on:
+      - beforethescholarship_postgresql
+
+  beforethescholarship_emailworker:
+    image: ${DOCKER_REGISTRY-}beforethescholarshipemailworkers
+    build:
+      context: .
+      dockerfile: Systems/Workers/BeforeTheScholarship.EmailWorker/Dockerfile
     depends_on:
       - beforethescholarship_postgresql
