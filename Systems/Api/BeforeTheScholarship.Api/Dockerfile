@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+#VOLUME ../../../Services/BeforeTheScholarship.UserAccountService/EmailPages /app/emailspages
+#COPY ["Services/BeforeTheScholarship.UserAccountService/EmailPages/emailConfirmation.html", "/app/emailspages"]
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
@@ -10,7 +12,11 @@ COPY ["Shared/BeforeTheScholarship.Settings/BeforeTheScholarship.Settings.csproj
 COPY ["Data/BeforeTheScholarship.Entities/BeforeTheScholarship.Entities.csproj", "Data/BeforeTheScholarship.Entities/"]
 COPY ["Data/Migrations/BeforeTheScholarship.Context.Migrations.PostgreSQL/BeforeTheScholarship.Context.Migrations.PostgreSQL.csproj", "Data/Migrations/BeforeTheScholarship.Context.Migrations.PostgreSQL/"]
 COPY ["Services/BeforeTheScholarship.DebtService/BeforeTheScholarship.DebtService.csproj", "Services/BeforeTheScholarship.DebtService/"]
+COPY ["Services/BeforeTheScholarship.Settings/BeforeTheScholarship.Services.Settings.csproj", "Services/BeforeTheScholarship.Settings/"]
 COPY ["Services/BeforeTheScholarship.StudentService/BeforeTheScholarship.StudentService.csproj", "Services/BeforeTheScholarship.StudentService/"]
+COPY ["Services/BeforeTheScholarship.UserAccountService/BeforeTheScholarship.UserAccountService.csproj", "Services/BeforeTheScholarship.UserAccountService/"]
+COPY ["Shared/BeforeTheScholarship.Common/BeforeTheScholarship.Common.csproj", "Shared/BeforeTheScholarship.Common/"]
+COPY ["Services/BeforeTheScholarship.EmailSender/BeforeTheScholarship.EmailSender.csproj", "Services/BeforeTheScholarship.EmailSender/"]
 RUN dotnet restore "Systems/Api/BeforeTheScholarship.Api/BeforeTheScholarship.Api.csproj"
 COPY . .
 WORKDIR "/src/Systems/Api/BeforeTheScholarship.Api"

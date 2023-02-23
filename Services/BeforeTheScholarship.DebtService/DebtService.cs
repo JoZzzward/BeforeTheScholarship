@@ -32,7 +32,7 @@ public class DebtService : IDebtService
         return data;
     }
 
-    public async Task<IEnumerable<DebtModel>> GetDebts(int? studentId)
+    public async Task<IEnumerable<DebtModel>> GetDebts(Guid? studentId)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
@@ -90,7 +90,7 @@ public class DebtService : IDebtService
         context.SaveChanges();
     }
 
-    public async Task<IEnumerable<DebtModel>> GetUrgentlyRepaidDebts(int studentId, bool overdue)
+    public async Task<IEnumerable<DebtModel>> GetUrgentlyRepaidDebts(Guid studentId, bool overdue)
     {
         var debts = await GetDebts(studentId);
 

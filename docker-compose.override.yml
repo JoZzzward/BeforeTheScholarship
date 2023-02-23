@@ -28,6 +28,14 @@ services:
     env_file:
       - env.emailworker
 
+  beforethescholarship_identity:
+    ports:
+      - "7001:80"
+    networks:
+      - beforethescholarship_network
+    env_file:
+      - env.identityserver
+
 networks:
   beforethescholarship_network:
     name: beforethescholarship

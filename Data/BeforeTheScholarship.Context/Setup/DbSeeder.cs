@@ -50,61 +50,33 @@ public static class DbSeeder
     {
         await using var context = AppDbContext(provider);
 
-        #region Adding models
-        if (!context.StudentUsers.Any())
-        {
-            var studentUsers = new List<StudentUser>()
-            { 
-                new StudentUser()
-                {
-                    Id = 1,
-                    Uid = Guid.NewGuid(),
-                    UserName = "Clara",
-                    Password = "password"
-                },
-                new StudentUser()
-                {
-                    Id = 2,
-                    Uid = Guid.NewGuid(),
-                    UserName = "John",
-                    Password = "123"
-                },
-                new StudentUser()
-                {
-                    Id = 3,
-                    Uid = Guid.NewGuid(),
-                    UserName = "Lucy",
-                    Password = "123123123"
-                }
-            };
 
-            context.StudentUsers.AddRange(studentUsers);
-        }
-        if (!context.Debts.Any())
+        #region Adding models
+        var usersArray = context.StudentUsers.Select(x => x.Id).ToArray();
+
+        if (!context.Debts.Any() && 
+            context.StudentUsers.Count() > 2)
         {
             var debtsList = new List<Debts>()
             {
                 new Debts()
                 {
                     Id = 1,
-                    StudentId = 1,
-                    Uid = Guid.NewGuid(),
+                    StudentId = usersArray[0],
                     Borrowed = 100,
                     BorrowedFromWho = "John"
                 },
                 new Debts()
                 {
                     Id = 2,     
-                    StudentId = 2,
-                    Uid = Guid.NewGuid(),
+                    StudentId = usersArray[0],
                     Borrowed = 200,
                     BorrowedFromWho = "Jastin"
                 },
                 new Debts()
                 {
                     Id = 3,
-                    StudentId = 1,
-                    Uid = Guid.NewGuid(),
+                    StudentId = usersArray[1],
                     Borrowed = 300,
                     BorrowedFromWho = "Nolan"
                 }

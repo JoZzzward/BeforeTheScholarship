@@ -1,16 +1,22 @@
 ﻿using BeforeTheScholarship.DebtService;
+using BeforeTheScholarship.Services.Settings;
 using BeforeTheScholarship.StudentService;
 
 namespace BeforeTheScholarship.Api;
 
 /// <summary>
-/// Registers all services to application
+/// Loads all services
 /// </summary>
 public static class Bootstrapper
 {
+    /// <summary>
+    /// Registers all services to application
+    /// </summary>
     public static IServiceCollection RegisterAppServices(this IServiceCollection services)
     {
-        services.AddStudentService()
+        services.AddIdentitySettings()
+            .AddSwaggerSettings()
+            .AddStudentService()
             .AddDebtService();
 
         return services;

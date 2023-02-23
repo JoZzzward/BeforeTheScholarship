@@ -1,27 +1,21 @@
 {
   "profiles": {
-    "http": {
+    "BeforeTheScholarship.EmailWorker": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "emailservice",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5100"
+      "applicationUrl": "http://localhost:7100"
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "emailservice",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/emailservice",
       "publishAllPorts": true
     }
   },
@@ -30,7 +24,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5100",
+      "applicationUrl": "http://localhost:7100",
       "sslPort": 0
     }
   }

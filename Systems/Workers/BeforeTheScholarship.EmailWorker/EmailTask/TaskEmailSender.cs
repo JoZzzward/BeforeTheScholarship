@@ -18,11 +18,11 @@ public class TaskEmailSender : ITaskEmailSender
         IServiceProvider serviceProvider,
         IMapper mapper
         )
-    {
-        _logger = logger;
-        _serviceProvider = serviceProvider;
-        _mapper = mapper;
-    }
+        {
+            _logger = logger;
+            _serviceProvider = serviceProvider;
+            _mapper = mapper;
+        }
 
     public async Task Start(bool isDevelopment)
     {
@@ -40,8 +40,8 @@ public class TaskEmailSender : ITaskEmailSender
                 foreach (var debt in debts)
                 {
                     _logger.LogInformation($"TotalDays: {(debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays}");
-                    if ((debt.WhenToPayback.AddHours(-3) - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays < 1 &&
-                        (debt.WhenToPayback.AddHours(-3) - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays > 0 &&
+                    if ((debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays < 1 &&
+                        (debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays > 0 &&
                         !debt.EmailSended)
                     {
                         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();

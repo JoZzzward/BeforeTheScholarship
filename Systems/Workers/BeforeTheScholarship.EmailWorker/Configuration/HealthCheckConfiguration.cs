@@ -4,7 +4,8 @@ public static class HealthCheckConfiguration
 {
     public static IServiceCollection AddAppHealthChecks(this IServiceCollection services)
     {
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddCheck<HealthCheck>("BeforeTheScholarship.EmailWorker");
         
         return services;
     }

@@ -5,7 +5,7 @@ COPY ["Systems/Workers/BeforeTheScholarship.EmailWorker/EmailTask/EmailContentPa
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src 
+WORKDIR /src
 COPY ["Systems/Workers/BeforeTheScholarship.EmailWorker/BeforeTheScholarship.EmailWorker.csproj", "Systems/Workers/BeforeTheScholarship.EmailWorker/"]
 COPY ["Data/BeforeTheScholarship.Context/BeforeTheScholarship.Context.csproj", "Data/BeforeTheScholarship.Context/"]
 COPY ["Shared/BeforeTheScholarship.Settings/BeforeTheScholarship.Settings.csproj", "Shared/BeforeTheScholarship.Settings/"]

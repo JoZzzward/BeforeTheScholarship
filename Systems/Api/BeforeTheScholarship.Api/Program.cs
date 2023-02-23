@@ -1,5 +1,7 @@
 using BeforeTheScholarship.Api;
 using BeforeTheScholarship.Context;
+using BeforeTheScholarship.Services.Settings;
+using BeforeTheScholarship.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,29 +9,34 @@ builder.AddLogger();
 
 var services = builder.Services;
 
-services.AddControllers();
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
-services.AddAppVersioning();
+var identitySettings = Settings.Load<IdentitySettings>("IdentitySettings");
+
+services.AddHttpContextAccessor();
+services.AddAppCors();
 
 services.AddAppDbContext(builder.Configuration);
+services.AddAppAuth(identitySettings);
+
+services.AddAppHealthChecks();
+services.AddAppVersioning();
+services.AddAppSwagger(identitySettings);
+services.AddAppAutoMapper();
 
 services.RegisterAppServices();
 
-services.AddAppAutoMapper();
-
-services.AddAppHealthChecks();
-
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseAppCors();
 
-app.UseAuthorization();
 app.UseHealthChecks();
+
+app.UseAppSwagger();
+
+app.UseAppAuth();
+
 app.MapControllers();
 
 //DbInitializer.Execute(app.Services);
-//DbSeeder.Execute(app.Services, false);
+//DbSeeder.Execute(app.Services, true);
 
 app.Run();
