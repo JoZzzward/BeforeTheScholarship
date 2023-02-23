@@ -32,18 +32,16 @@ public class DebtService : IDebtService
         return data;
     }
 
-    public async Task<DebtModel> GetDebtById(int? id)
+    public async Task<IEnumerable<DebtModel>> GetDebts(Guid? studentId)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
-        var debt = await context
+        var debt = context
             .Debts
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .AsQueryable();
 
-        if (debt is null)
-            throw new NullReferenceException($"Debt({id}) was not found");
-
-        var data = _mapper.Map<DebtModel>(debt);
+        var data = (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(s => _mapper.Map<DebtModel>(s))
+            ?? new List<DebtModel>();
 
         return data;
     }
@@ -90,5 +88,26 @@ public class DebtService : IDebtService
 
         context.Debts.Remove(debt);
         context.SaveChanges();
+    }
+
+    public async Task<IEnumerable<DebtModel>> GetUrgentlyRepaidDebts(Guid studentId, bool overdue)
+    {
+        var debts = await GetDebts(studentId);
+
+        var daysOff = overdue ? 0 : 3;
+
+        var result = new List<DebtModel>();
+
+        foreach (var debt in debts)
+        {
+            var subtractDate = debt.WhenToPayback.Subtract(DateTime.Now);
+
+            if (subtractDate.TotalDays <= daysOff && subtractDate.Seconds < 1 && overdue)
+                result.Add(debt);
+            else if (subtractDate.TotalDays <= daysOff && subtractDate.Seconds >= 0)
+                result.Add(debt);
+        }
+
+        return _mapper.Map<IEnumerable<DebtModel>>(result);
     }
 }

@@ -10,13 +10,16 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 /// </summary>
 [ApiController]
 [ApiVersion("1.0")]
-[Route("api/students")]
+[Route("api/v{version:apiVersion}/students")]
 public class StudentsController : ControllerBase
 {
     private readonly IStudentService _studentService;
     private readonly ILogger<DebtsController> _logger;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Students constructor that implements services
+    /// </summary>
     public StudentsController(
         IStudentService studentService,
         ILogger<DebtsController> logger,
@@ -27,6 +30,10 @@ public class StudentsController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// HttpGet - Gettings students from database
+    /// </summary>
+    /// <returns></returns>
     [ProducesResponseType(typeof(IEnumerable<StudentModel>), 200)]
     [HttpGet("")]
     public async Task<IEnumerable<StudentResponse>> GetStudents()
@@ -39,8 +46,12 @@ public class StudentsController : ControllerBase
         return data;
     }
 
+    /// <summary>
+    /// HttpGet - Returns <see cref="StudentResponse"/> with same <paramref name="id"/>
+    /// </summary>
+    /// <param name="id">Unique student identifier</param>
     [HttpGet("{id}")]
-    public async Task<StudentResponse> GetStudentById([FromRoute]int id)
+    public async Task<StudentResponse> GetStudentById([FromRoute] Guid id)
     {
         var student = await _studentService.GetStudentById(id);
             
@@ -51,6 +62,11 @@ public class StudentsController : ControllerBase
         return data;
     }
 
+    /// <summary>
+    /// HttpPost - Adds new StudentUser to database
+    /// TODO: Delete this method instead of future AccountController
+    /// </summary>
+    /// <param name="request"></param>
     [HttpPost("")]
     public async Task<StudentResponse> CreateStudent([FromBody]AddStudentRequest request)
     {
@@ -61,8 +77,12 @@ public class StudentsController : ControllerBase
         return response;
     }
 
+    /// <summary>
+    /// HttpPut - Updates existed StudentUser in database
+    /// TODO: Delete this method instead of future AccountController
+    /// </summary>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateStudent([FromRoute]int id, [FromBody] UpdateStudentRequest request)
+    public async Task<IActionResult> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
     {
         var model = _mapper.Map<UpdateStudentModel>(request);
         await _studentService.UpdateStudent(id, model);
@@ -70,8 +90,13 @@ public class StudentsController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// HttpDelete - Deletes existed StudentUser in database
+    /// TODO: Delete this method instead of future AccountController
+    /// </summary>
+    /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteStudent([FromRoute] int? id)
+    public async Task<IActionResult> DeleteStudent([FromRoute] Guid? id)
     {
         await _studentService.DeleteStudent(id);
 

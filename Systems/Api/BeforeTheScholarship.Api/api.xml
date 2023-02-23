@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BeforeTheScholarship.Api</name>
+    </assembly>
+    <members>
+        <member name="T:BeforeTheScholarship.Api.Bootstrapper">
+            <summary>
+            Loads all services
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Bootstrapper.RegisterAppServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Registers all services to application
+            </summary>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.AutoMapperConfiguration">
+            <summary>
+            AutoMapper Configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.AutoMapperConfiguration.AddAppAutoMapper(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds AutoMapper to domain assemblies which names starts with "beforethescholarship."
+            </summary>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.CorsConfiguration">
+            <summary>
+            CORS configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.CorsConfiguration.AddAppCors(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds CORS to application 
+            </summary>
+            <param name="services">Services collection</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.CorsConfiguration.UseAppCors(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds CORS using to application
+            </summary>
+            <param name="app">Application</param>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.HealthCheckConfiguration">
+            <summary>
+            HealthCheck Configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.HealthCheckConfiguration.AddAppHealthChecks(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds healthchecks settings
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.HealthCheckConfiguration.UseHealthChecks(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Adds healthchecks endpoints 
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.HealthCheck">
+            <summary>
+            Health check, which can be used to check the status of a component in the application, such as a backend service, database or some internal
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.HealthCheck.CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext,System.Threading.CancellationToken)">
+            <summary>
+            Checks the BeforeTheScholarship.Api component on health
+            </summary>
+            <param name="context"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.LoggerConfiguration">
+            <summary>
+            Logger configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.LoggerConfiguration.AddLogger(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds Serilog logger to application
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.SwaggerConfiguration">
+            <summary>
+            Swagger configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.SwaggerConfiguration.AddAppSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection,BeforeTheScholarship.Services.Settings.IdentitySettings)">
+            <summary>
+            Add OpenAPI for API
+            </summary>  
+            <param name="services">Services collection</param>
+            <param name="identitySettings"></param>
+            <param name="swaggerSettings"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.SwaggerConfiguration.UseAppSwagger(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Start OpenAPI UI
+            </summary>
+            <param name="app">Web application</param>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.VersioningConfiguration">
+            <summary>
+            Versioning configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.VersioningConfiguration.AddAppVersioning(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds application versioning
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Controllers.Debts.DebtsController">
+            <summary>
+            Debts ApiController
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.#ctor(BeforeTheScholarship.DebtService.IDebtService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
+            <summary>
+            Debts constructor that implements services
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetDebts">
+            <summary>
+            HttpGet - Gettings debts from database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetDebts(System.Nullable{System.Guid})">
+            <summary>
+            HttpGet - Returns debts that owned by StudentUser with <paramref name="studentId"/>
+            </summary>
+            <param name="studentId">Unique student identifier</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.CreateDebt(BeforeTheScholarship.Api.Controllers.Debts.AddDebtRequest)">
+            <summary>
+            HttpPost - Adds new debt to database
+            </summary>
+            <param name="request"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Int32},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtsRequest)">
+            <summary>
+            HttpPut - Updates existing debt with <paramref name="id"/> in database
+            </summary>
+            <param name="id">Unique debt identifier</param>
+            <param name="request">Request body</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.DeleteDebt(System.Nullable{System.Int32})">
+            <summary>
+            HttpDelete - Deletes existing debt in database
+            </summary>
+            <param name="id">Unique debt identifier</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Guid,System.Boolean)">
+            <summary>
+            Returns debts that need to be urgently repaid
+            </summary>
+            <param name="studentId">Identifier of the student whose debts must be repaid</param>
+            <param name="overdue">Whether the deadline for debt is overdue</param>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Controllers.Students.StudentsController">
+            <summary>
+            Students controller
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
+            <summary>
+            Students constructor that implements services
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.GetStudents">
+            <summary>
+            HttpGet - Gettings students from database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.GetStudentById(System.Guid)">
+            <summary>
+            HttpGet - Returns <see cref="T:BeforeTheScholarship.Api.Controllers.Students.StudentResponse"/> with same <paramref name="id"/>
+            </summary>
+            <param name="id">Unique student identifier</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.CreateStudent(BeforeTheScholarship.Api.Controllers.Students.AddStudentRequest)">
+            <summary>
+            HttpPost - Adds new StudentUser to database
+            TODO: Delete this method instead of future AccountController
+            </summary>
+            <param name="request"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.UpdateStudent(System.Guid,BeforeTheScholarship.Api.Controllers.Students.UpdateStudentRequest)">
+            <summary>
+            HttpPut - Updates existed StudentUser in database
+            TODO: Delete this method instead of future AccountController
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.DeleteStudent(System.Nullable{System.Guid})">
+            <summary>
+            HttpDelete - Deletes existed StudentUser in database
+            TODO: Delete this method instead of future AccountController
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BeforeTheScholarship.API.Controllers.AccountsController">
+            <summary>
+            Controller to manage account
+            </summary>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.API.Controllers.AccountsController},BeforeTheScholarship.Services.UserAccount.IUserAccountService)">
+            <summary>
+            Accounts constructor that implements services
+            </summary>
+            <param name="mapper"></param>
+            <param name="logger"></param>
+            <param name="userAccountService"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.Register(BeforeTheScholarship.API.Controllers.Models.RegisterUserAccountRequest)">
+            <summary>
+            Creates new user account and send email 
+            </summary>
+            <param name="request"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.Models.ConfirmationEmailRequest)">
+            <summary>
+            Confirm email with token that was given on account registration
+            </summary>
+            <param name="request">Contains email and token for confirmation</param>
+        </member>
+    </members>
+</doc>

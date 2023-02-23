@@ -4,7 +4,7 @@ services:
   
   beforethescholarship_postgresql:
     image: postgres:15.1
-
+  
   beforethescholarship_api:
     image: ${DOCKER_REGISTRY-}beforethescholarshipapi
     build:
@@ -12,3 +12,27 @@ services:
       dockerfile: Systems/Api/BeforeTheScholarship.Api/Dockerfile
     depends_on:
       - beforethescholarship_postgresql
+    environment:
+      - TZ=Europe/Moscow
+
+  beforethescholarship_emailworker:
+    image: ${DOCKER_REGISTRY-}beforethescholarshipemailworkers
+    build:
+      context: .
+      dockerfile: Systems/Workers/BeforeTheScholarship.EmailWorker/Dockerfile
+    depends_on:
+      - beforethescholarship_postgresql
+      - beforethescholarship_api
+    environment:
+      - TZ=Europe/Moscow
+
+  beforethescholarship_identity:
+    image: ${DOCKER_REGISTRY-}beforethescholarshipidentityserver
+    build:
+      context: .
+      dockerfile: Systems/IdentityServer4/BeforeTheScholarship.IdentityServer/Dockerfile
+    depends_on:
+      - beforethescholarship_postgresql
+      - beforethescholarship_api
+    environment:
+      - TZ=Europe/Moscow

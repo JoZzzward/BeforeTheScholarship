@@ -1,5 +1,4 @@
-﻿
-namespace BeforeTheScholarship.StudentService;
+﻿namespace BeforeTheScholarship.StudentService;
 
 public interface IStudentService
 {
@@ -11,7 +10,7 @@ public interface IStudentService
     /// <summary>
     /// Returns <see cref="StudentModel"/> with same <paramref name="id"/>
     /// </summary>
-    Task<StudentModel> GetStudentById(int? id);
+    Task<StudentModel> GetStudentById(Guid id);
     /// <summary>
     /// Adds a new student to the database
     /// </summary>
@@ -20,9 +19,9 @@ public interface IStudentService
     /// <summary>
     /// Updates a <see cref="StudentModel"/> in database with the same <paramref name="id"/>
     /// </summary>
-    Task UpdateStudent(int id, UpdateStudentModel model);
+    Task UpdateStudent(Guid id, UpdateStudentModel model);
     /// <summary>
     /// Removes a <see cref="StudentModel"/> in database with the same <paramref name="id"/>.
     /// </summary>
-    Task DeleteStudent(int? id);
+    Task DeleteStudent(Guid? id);
 }

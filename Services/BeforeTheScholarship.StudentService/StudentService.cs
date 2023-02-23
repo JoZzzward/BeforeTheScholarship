@@ -32,7 +32,7 @@ public class StudentService : IStudentService
         return data;
     }
 
-    public async Task<StudentModel> GetStudentById(int? id)
+    public async Task<StudentModel> GetStudentById(Guid id)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
@@ -61,7 +61,7 @@ public class StudentService : IStudentService
         return _mapper.Map<StudentModel>(model);
     }
  
-    public async Task UpdateStudent(int id, UpdateStudentModel model)
+    public async Task UpdateStudent(Guid id, UpdateStudentModel model)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
@@ -78,7 +78,7 @@ public class StudentService : IStudentService
         context.SaveChanges();
     }
 
-    public async Task DeleteStudent(int? id)
+    public async Task DeleteStudent(Guid? id)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 

@@ -1,16 +1,17 @@
-﻿namespace BeforeTheScholarship.DebtService;
+﻿using BeforeTheScholarship.Entities;
+
+namespace BeforeTheScholarship.DebtService;
 
 public interface IDebtService
 {
     /// <summary>
     /// Returns a list of Debts
     /// </summary>
-    /// <returns></returns>
     Task<IEnumerable<DebtModel>> GetDebts();
     /// <summary>
-    /// Returns <see cref="DebtModel"/> with same <paramref name="id"/>
+    /// Returns a list of Debts for Student with <paramref name="studentId"/>
     /// </summary>
-    Task<DebtModel> GetDebtById(int? id);
+    Task<IEnumerable<DebtModel>> GetDebts(Guid? studentId);
     /// <summary>
     /// Adds a new Debt to the database
     /// </summary>
@@ -23,4 +24,9 @@ public interface IDebtService
     /// Removes a <see cref="DebtModel"/> in database with the same <paramref name="id"/>.
     /// </summary>
     Task DeleteDebt(int? id);
+
+    /// <summary>
+    /// Returns debts that need to be urgently repaid
+    /// </summary>
+    Task<IEnumerable<DebtModel>> GetUrgentlyRepaidDebts(Guid studentId, bool overdue);
 }

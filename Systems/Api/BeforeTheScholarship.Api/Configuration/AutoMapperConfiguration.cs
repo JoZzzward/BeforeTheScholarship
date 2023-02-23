@@ -1,5 +1,8 @@
 ﻿namespace BeforeTheScholarship.Api.Configuration;
 
+/// <summary>
+/// AutoMapper Configuration
+/// </summary>
 public static class AutoMapperConfiguration
 {
     /// <summary>

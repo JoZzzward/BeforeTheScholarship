@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Api.Controllers.Debts.Models;
+using BeforeTheScholarship.Common.Security;
 using BeforeTheScholarship.DebtService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeforeTheScholarship.Api.Controllers.Debts;
@@ -8,15 +10,19 @@ namespace BeforeTheScholarship.Api.Controllers.Debts;
 /// <summary>
 /// Debts ApiController
 /// </summary>
+[Route("api/v{version:apiVersion}/debts")]
+[Authorize]
 [ApiController]
 [ApiVersion("1.0")]
-[Route("api/debts")]
 public class DebtsController : ControllerBase
 {
     private readonly IDebtService _debtService;
     private readonly ILogger<DebtsController> _logger;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Debts constructor that implements services
+    /// </summary>
     public DebtsController(
         IDebtService debtService,
         ILogger<DebtsController> logger,
@@ -27,7 +33,12 @@ public class DebtsController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// HttpGet - Gettings debts from database
+    /// </summary>
+    /// <returns></returns>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
+    [Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("")]
     public async Task<IEnumerable<DebtResponse>> GetDebts()
     {
@@ -39,18 +50,28 @@ public class DebtsController : ControllerBase
         return data;
     }
 
-    [HttpGet("{id}")]
-    public async Task<DebtResponse> GetDebtById([FromRoute] int? id)
+    /// <summary>
+    /// HttpGet - Returns debts that owned by StudentUser with <paramref name="studentId"/>
+    /// </summary>
+    /// <param name="studentId">Unique student identifier</param>
+    [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
+    [Authorize(Policy = AppScopes.DebtsRead)]
+    [HttpGet("{studentId}")]
+    public async Task<IEnumerable<DebtResponse>> GetDebts([FromRoute] Guid? studentId)
     {
-        var debts = await _debtService.GetDebtById(id);
+        var debts = await _debtService.GetDebts(studentId);
+        var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
-        var data = _mapper.Map<DebtResponse>(debts);
-
-        _logger.LogInformation($"--> The Debt({id}) was returned successfully!");
+        _logger.LogInformation("--> Debts was returned successfully!");
 
         return data;
     }
 
+    /// <summary>
+    /// HttpPost - Adds new debt to database
+    /// </summary>
+    /// <param name="request"></param>
+    [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPost("")]
     public async Task<DebtResponse> CreateDebt([FromBody] AddDebtRequest request)
     {
@@ -58,23 +79,58 @@ public class DebtsController : ControllerBase
         var debts = await _debtService.CreateDebt(model);
         var response = _mapper.Map<DebtResponse>(debts);
 
+        _logger.LogInformation("--> Debt was successfully created!");
+
         return response;
     }
 
+    /// <summary>
+    /// HttpPut - Updates existing debt with <paramref name="id"/> in database
+    /// </summary>
+    /// <param name="id">Unique debt identifier</param>
+    /// <param name="request">Request body</param>
+    [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtsRequest request)
     {
         var model = _mapper.Map<UpdateDebtModel>(request);
         await _debtService.UpdateDebt(id, model);
 
+        _logger.LogInformation("--> Debt was successfully updated!");
+
         return Ok();
     }
 
+    /// <summary>
+    /// HttpDelete - Deletes existing debt in database
+    /// </summary>
+    /// <param name="id">Unique debt identifier</param>
+    [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDebt([FromRoute] int? id)
     {
         await _debtService.DeleteDebt(id);
 
+        _logger.LogInformation("--> Debt was successfully removed!");
+
         return Ok();
+    }
+
+    /// <summary>
+    /// Returns debts that need to be urgently repaid
+    /// </summary>
+    /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
+    /// <param name="overdue">Whether the deadline for debt is overdue</param>
+    [Authorize(Policy = AppScopes.DebtsRead)]
+    [HttpGet("urgently-repay")]
+    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] Guid studentId, [FromQuery] bool overdue)
+    {
+        var debts = await _debtService.GetUrgentlyRepaidDebts(studentId, overdue);
+
+        var data = debts.ToList().Select(x => _mapper.Map<DebtResponse>(x));
+
+        _logger.LogInformation("--> Debts that needed to be repaid urgently have been successfully returned!");
+
+        return data;
     }
 }
