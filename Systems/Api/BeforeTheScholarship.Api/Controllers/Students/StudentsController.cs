@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Api.Controllers.Debts;
-using BeforeTheScholarship.Common;
 using BeforeTheScholarship.StudentService;
 using Microsoft.AspNetCore.Mvc;
 

@@ -6,7 +6,6 @@ using BeforeTheScholarship.API.Controllers.Models;
 using Microsoft.AspNetCore.Mvc;
 using BeforeTheScholarship.Api.Controllers.Accounts.Models;
 using BeforeTheScholarship.Services.UserAccount.Models;
-using BeforeTheScholarship.Common;
 
 /// <summary>
 /// Controller to manage account

@@ -50,6 +50,7 @@ public static class DbSeeder
     {
         await using var context = AppDbContext(provider);
 
+
         #region Adding models
         var usersArray = context.StudentUsers.Select(x => x.Id).ToArray();
 
