@@ -6,7 +6,7 @@ services:
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Passw0rd
+      - POSTGRES_PASSWORD=Passw0rd 
     ports:
       - "5432:5432"
     networks:

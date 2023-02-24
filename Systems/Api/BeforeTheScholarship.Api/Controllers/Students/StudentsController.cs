@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Api.Controllers.Debts;
+using BeforeTheScholarship.Common;
 using BeforeTheScholarship.StudentService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 /// <summary>
 /// Students controller
 /// </summary>
+[Produces("application/json")]
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/students")]

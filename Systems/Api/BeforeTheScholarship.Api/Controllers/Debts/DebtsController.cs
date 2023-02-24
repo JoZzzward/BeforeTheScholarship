@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Api.Controllers.Debts.Models;
+using BeforeTheScholarship.Common;
 using BeforeTheScholarship.Common.Security;
 using BeforeTheScholarship.DebtService;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,11 @@ namespace BeforeTheScholarship.Api.Controllers.Debts;
 /// <summary>
 /// Debts ApiController
 /// </summary>
-[Route("api/v{version:apiVersion}/debts")]
+[Produces("application/json")]
 [Authorize]
 [ApiController]
 [ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/debts")]
 public class DebtsController : ControllerBase
 {
     private readonly IDebtService _debtService;

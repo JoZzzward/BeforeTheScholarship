@@ -9,8 +9,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
+/// <summary>
+/// Authentication and Authorization configuration
+/// </summary>
 public static class AuthConfiguration
 {
+    /// <summary>
+    /// Adds Authentication and Authorization to services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="settings"></param>
     public static IServiceCollection AddAppAuth(this IServiceCollection services, IdentitySettings settings)
     {
         IdentityModelEventSource.ShowPII = true;
@@ -18,11 +26,9 @@ public static class AuthConfiguration
         services
             .AddIdentity<StudentUser, IdentityRole<Guid>>(options =>
             {
-                options.Password.RequiredLength = 0;
+                options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = true;
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddUserManager<UserManager<StudentUser>>()
@@ -60,6 +66,11 @@ public static class AuthConfiguration
         return services;
     }
 
+    /// <summary>
+    /// Adds Authentication and Authorization to application
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
     public static IApplicationBuilder UseAppAuth(this IApplicationBuilder app)
     {
         app.UseAuthentication();
