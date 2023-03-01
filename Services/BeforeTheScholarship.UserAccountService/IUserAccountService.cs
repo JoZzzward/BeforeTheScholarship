@@ -13,23 +13,30 @@ public interface IUserAccountService
     Task ConfirmEmail(ConfirmationEmailModel confirmationEmail);
 
     /// <summary>
-    /// Create user account
+    /// Registers new user. Sends mail with ConfirmationLink on user email if it was provided.
     /// </summary>
     /// <returns></returns>
     Task<UserAccountModel> RegisterUser(RegisterUserAccountModel model);
 
     /// <summary>
-    /// Genera 
+    /// Finding user by email. Generates token for password resetting and recovers password with given new one.
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryModel request);
 
     /// <summary>
-    /// 
+    /// Sending mail on email that contain link with user email and token for password recovery.
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(SendPasswordRecoveryModel request);
+
+    /// <summary>
+    /// Changing the password of the user who specified the email address. Checks the old password for correctness.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<ChangePasswordResponse> ChangePassword(ChangePasswordModel request);
 
 }

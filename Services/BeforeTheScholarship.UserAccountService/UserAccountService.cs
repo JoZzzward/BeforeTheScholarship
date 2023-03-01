@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class UserAccountService : IUserAccountService
 {
@@ -23,13 +22,13 @@ public class UserAccountService : IUserAccountService
         UserManager<StudentUser> userManager,
         ILogger<UserAccountService> logger,
         IEmailSender emailSender
-        )
-        {
-            _mapper = mapper;
-            _userManager = userManager; 
-            _logger = logger;
-            _emailSender = emailSender;
-        }
+    )
+    {
+        _mapper = mapper;
+        _userManager = userManager; 
+        _logger = logger;
+        _emailSender = emailSender;
+    }
 
     public async Task<UserAccountModel> RegisterUser(RegisterUserAccountModel model)
     {
@@ -62,10 +61,13 @@ public class UserAccountService : IUserAccountService
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
+            // Gets a path of html page for mail content
             var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\emailConfirmation.html";
 
             string content;
 
+            // Filling content
+            // TODO: Fix this big blog with reading
             try
             {
                 content = File.ReadAllText(path);
@@ -81,11 +83,13 @@ public class UserAccountService : IUserAccountService
                          .Replace("DATENOW", DateTimeOffset.Now.LocalDateTime.ToShortDateString().ToString())
                          ;
 
+
+            // Sending mail to user email for confirmation
             _emailSender?.SendEmail(new EmailModel()
             {
                 EmailFrom = MainEmail.Email,
                 EmailTo = user.Email,
-                Subject = $"Hello, dear {user.UserName}!",
+                Subject = $"Hello, dear {char.ToUpper(user.UserName[0]) + user.UserName.Substring(1)}!",
                 Message = content
             });
         }
@@ -112,10 +116,12 @@ public class UserAccountService : IUserAccountService
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
+        // Gets a path of html page for mail content
         var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\passwordRecovery.html";
         
         string content;
 
+        // Filling content
         try
         {
             content = File.ReadAllText(path);
@@ -131,6 +137,7 @@ public class UserAccountService : IUserAccountService
                          .Replace("DATENOW", DateTimeOffset.Now.LocalDateTime.ToShortDateString().ToString())
                          ;
 
+        // Sending mail to user email for password recovery
         await _emailSender.SendEmail(new EmailModel()
         {
             EmailFrom = MainEmail.Email,
@@ -156,5 +163,29 @@ public class UserAccountService : IUserAccountService
         var result = _mapper.Map<PasswordRecoveryResponse>(user);
 
         return result;
+    }
+
+    public async Task<ChangePasswordResponse> ChangePassword(ChangePasswordModel request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user is null) throw new Exception($"User with email({request.Email}) was not found!");
+
+        /// Compares old password with current
+        if (new PasswordHasher<StudentUser>().VerifyHashedPassword(user, user.PasswordHash!, request.CurrentPassword)
+            == PasswordVerificationResult.Failed)
+            throw new Exception($"Current password is incorrect!");
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        // Changes password
+        var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+
+        if (!result.Succeeded)
+            throw new Exception($"Exception on changing current password to new");
+
+        var response = _mapper.Map<ChangePasswordResponse>(user);
+
+        return response;
     }
 }

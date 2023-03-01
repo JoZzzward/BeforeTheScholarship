@@ -52,7 +52,7 @@ public class AccountsController : ControllerBase
     }
 
     /// <summary>
-    /// Confirm email with token that was given on account registration
+    /// Confirm email with token that was given on account registration and sended to user email
     /// </summary>
     /// <param name="request">Contains email and token for confirmation</param>
     [HttpPost("confirmemail")]
@@ -65,6 +65,10 @@ public class AccountsController : ControllerBase
         _logger.LogInformation($"--> User(email: {request.Email}) succesfully confirmed email!");
     }
 
+    /// <summary>
+    /// Sending password recovery mail on user email that specified in <paramref name="request"/>
+    /// </summary>
+    /// <param name="request">Contains user email to send the mail to</param>
     [HttpPost("recover-password-mail")]
     public async Task SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
     {
@@ -75,7 +79,10 @@ public class AccountsController : ControllerBase
         _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully recovered!");
     }
 
-
+    /// <summary>
+    /// Recover password on new password from request to user with given email.
+    /// </summary>
+    /// <param name="request">Contains email on what your password will be recovered & token from mail & new password</param>
     [HttpPost("recover-password")]
     public async Task RecoverPassword([FromBody] PasswordRecoveryRequest request)
     {
@@ -84,5 +91,20 @@ public class AccountsController : ControllerBase
         var response = await _userAccountService.RecoverPassword(model);
 
         _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully recovered!");
+    }
+
+    /// <summary>
+    /// Changes user with given email old password on new password.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("change-password")]
+    public async Task ChangePassword([FromQuery] ChangePasswordRequest request)
+    {
+        var model = _mapper.Map<ChangePasswordModel>(request);
+
+        var response = await _userAccountService.ChangePassword(model);
+
+        _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully changed!");
     }
 }
