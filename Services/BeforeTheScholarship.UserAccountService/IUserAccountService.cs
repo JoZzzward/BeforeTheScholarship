@@ -1,4 +1,5 @@
-﻿using BeforeTheScholarship.Services.UserAccount.Models;
+﻿
+using BeforeTheScholarship.UserAccountService.Models;
 
 namespace BeforeTheScholarship.Services.UserAccount;
 
@@ -9,12 +10,26 @@ public interface IUserAccountService
     /// </summary>
     /// <param name="confirmationEmail">Contains email that need to confirm and token for cor</param>
     /// <returns></returns>
-    Task ConfirmEmail(ConfirmationEmail confirmationEmail);
+    Task ConfirmEmail(ConfirmationEmailModel confirmationEmail);
 
     /// <summary>
     /// Create user account
     /// </summary>
     /// <returns></returns>
-    Task<UserAccountModel> Create(RegisterUserAccountModel model);
+    Task<UserAccountModel> RegisterUser(RegisterUserAccountModel model);
+
+    /// <summary>
+    /// Genera 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryModel request);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(SendPasswordRecoveryModel request);
 
 }

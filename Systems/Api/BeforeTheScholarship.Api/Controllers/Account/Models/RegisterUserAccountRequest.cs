@@ -1,11 +1,11 @@
-﻿namespace BeforeTheScholarship.API.Controllers.Models;
+﻿namespace BeforeTheScholarship.Api.Controllers.Account.Models;
 
 using AutoMapper;
-using BeforeTheScholarship.Services.UserAccount;
+using BeforeTheScholarship.UserAccountService.Models;
 
 public class RegisterUserAccountRequest
 {
-    public string FirstName { get; set; }
+    public string UserName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }

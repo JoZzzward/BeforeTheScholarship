@@ -1,11 +1,10 @@
 ﻿namespace BeforeTheScholarship.API.Controllers;
 
 using AutoMapper;
+using BeforeTheScholarship.Api.Controllers.Account.Models;
 using BeforeTheScholarship.Services.UserAccount;
-using BeforeTheScholarship.API.Controllers.Models;
+using BeforeTheScholarship.UserAccountService.Models;
 using Microsoft.AspNetCore.Mvc;
-using BeforeTheScholarship.Api.Controllers.Accounts.Models;
-using BeforeTheScholarship.Services.UserAccount.Models;
 
 /// <summary>
 /// Controller to manage account
@@ -40,15 +39,14 @@ public class AccountsController : ControllerBase
     /// <summary>
     /// Creates new user account and send email 
     /// </summary>
-    /// <param name="request"></param>
-    [HttpPost("/register")]
-    public async Task<UserAccountResponse> Register([FromBody] RegisterUserAccountRequest request)
+    [HttpPost("register")]
+    public async Task<UserAccountResponse> Register([FromQuery] RegisterUserAccountRequest request)
     {
-        var user = await _userAccountService.Create(_mapper.Map<RegisterUserAccountModel>(request));
+        var user = await _userAccountService.RegisterUser(_mapper.Map<RegisterUserAccountModel>(request));
 
         var response = _mapper.Map<UserAccountResponse>(user);
 
-        _logger.LogInformation($"--> User(name: {user.FirstName}) was succesfully registered!");
+        _logger.LogInformation($"--> User(name: {user.UserName}) was succesfully registered!");
 
         return response;
     }
@@ -60,10 +58,31 @@ public class AccountsController : ControllerBase
     [HttpPost("confirmemail")]
     public async Task ConfirmEmail([FromBody] ConfirmationEmailRequest request)
     {
-        var confirmEmailModel = _mapper.Map<ConfirmationEmail>(request);
+        var confirmEmailModel = _mapper.Map<ConfirmationEmailModel>(request);
 
         await _userAccountService.ConfirmEmail(confirmEmailModel);
 
         _logger.LogInformation($"--> User(email: {request.Email}) succesfully confirmed email!");
+    }
+
+    [HttpPost("recover-password-mail")]
+    public async Task SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
+    {
+        var model = _mapper.Map<SendPasswordRecoveryModel>(request);
+
+        var response = await _userAccountService.SendRecoveryPasswordEmail(model);
+
+        _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully recovered!");
+    }
+
+
+    [HttpPost("recover-password")]
+    public async Task RecoverPassword([FromBody] PasswordRecoveryRequest request)
+    {
+        var model = _mapper.Map<PasswordRecoveryModel>(request);
+
+        var response = await _userAccountService.RecoverPassword(model);
+
+        _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully recovered!");
     }
 }

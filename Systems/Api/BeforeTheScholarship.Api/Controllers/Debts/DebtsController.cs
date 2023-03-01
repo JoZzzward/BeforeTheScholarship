@@ -27,7 +27,8 @@ public class DebtsController : ControllerBase
     public DebtsController(
         IDebtService debtService,
         ILogger<DebtsController> logger,
-        IMapper mapper)
+        IMapper mapper
+        )
     {
         _debtService = debtService;
         _logger = logger;
@@ -47,7 +48,6 @@ public class DebtsController : ControllerBase
         var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
         _logger.LogInformation("--> Debts was returned successfully!");
-
         return data;
     }
 

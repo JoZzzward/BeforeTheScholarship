@@ -11,10 +11,7 @@ public class AppDbContext : IdentityDbContext<StudentUser, IdentityRole<Guid>, G
     public DbSet<Debts> Debts { get; set; }
 
 	public AppDbContext(DbContextOptions<AppDbContext> options)
-		:base (options) 
-    { 
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-    }
+		: base (options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

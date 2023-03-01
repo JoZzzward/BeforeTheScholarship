@@ -235,13 +235,12 @@
             <param name="logger"></param>
             <param name="userAccountService"></param>
         </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.Register(BeforeTheScholarship.API.Controllers.Models.RegisterUserAccountRequest)">
+        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.Register(BeforeTheScholarship.Api.Controllers.Account.Models.RegisterUserAccountRequest)">
             <summary>
             Creates new user account and send email 
             </summary>
-            <param name="request"></param>
         </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.Models.ConfirmationEmailRequest)">
+        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Account.Models.ConfirmationEmailRequest)">
             <summary>
             Confirm email with token that was given on account registration
             </summary>

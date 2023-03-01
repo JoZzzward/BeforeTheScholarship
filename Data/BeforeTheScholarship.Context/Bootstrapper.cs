@@ -13,11 +13,11 @@ public static class Bootstrapper
     public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration configuration = null)
     {
         var settings = Settings.Load<DbSettings>("Database", configuration);
-        services.AddSingleton(settings);
+        services.AddSingleton(settings!);
 
         var dbOptionsBuilder = DbContextOptionsFactory.Configure(
-            settings.ConnectionString,
-            settings.Type);
+            settings!.ConnectionString,
+            settings!.Type);
 
         services.AddDbContextFactory<AppDbContext>(dbOptionsBuilder);
 

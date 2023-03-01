@@ -1,14 +1,13 @@
-﻿namespace BeforeTheScholarship.API.Controllers.Models;
+﻿namespace BeforeTheScholarship.Api.Controllers.Account.Models;
 
 using AutoMapper;
-using BeforeTheScholarship.Services.UserAccount;
+using BeforeTheScholarship.UserAccountService.Models;
 
 public class UserAccountResponse
 {
     public Guid Id { get; set; }
-    public string FirstName { get; set; }
+    public string UserName { get; set; }
     public string Email { get; set; }
-    public string Error { get; set; }
 }
 
 public class UserAccountResponseProfile : Profile

@@ -8,6 +8,7 @@ public static class AppIdentityResources
         new List<IdentityResource>
         {
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new IdentityResources.Email(),
         };
 }

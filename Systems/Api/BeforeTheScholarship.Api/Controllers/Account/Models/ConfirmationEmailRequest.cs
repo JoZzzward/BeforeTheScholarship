@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Services.UserAccount.Models;
+using BeforeTheScholarship.UserAccountService.Models;
 
-namespace BeforeTheScholarship.Api.Controllers.Accounts.Models;
+namespace BeforeTheScholarship.Api.Controllers.Account.Models;
 
 public class ConfirmationEmailRequest
 {
@@ -13,6 +13,6 @@ public class ConfirmationEmailProfile : Profile
 {
     public ConfirmationEmailProfile()
     {
-        CreateMap<ConfirmationEmailRequest, ConfirmationEmail>();
+        CreateMap<ConfirmationEmailRequest, ConfirmationEmailModel>();
     }
 }

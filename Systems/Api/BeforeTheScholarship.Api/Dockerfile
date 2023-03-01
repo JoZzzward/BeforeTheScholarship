@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-#VOLUME ../../../Services/BeforeTheScholarship.UserAccountService/EmailPages /app/emailspages
-#COPY ["Services/BeforeTheScholarship.UserAccountService/EmailPages/emailConfirmation.html", "/app/emailspages"]
+VOLUME /EmailPages /app/emailpages
+COPY ["Systems/Api/BeforeTheScholarship.Api/EmailPages", "/app/emailpages"]
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build

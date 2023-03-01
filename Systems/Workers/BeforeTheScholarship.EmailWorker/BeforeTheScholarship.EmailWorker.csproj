@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.DebtService\BeforeTheScholarship.DebtService.csproj" />
     <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.EmailSender\BeforeTheScholarship.EmailSender.csproj" />
     <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.StudentService\BeforeTheScholarship.StudentService.csproj" />
+    <ProjectReference Include="..\..\..\Shared\BeforeTheScholarship.Common\BeforeTheScholarship.Common.csproj" />
   </ItemGroup>
 
 </Project>

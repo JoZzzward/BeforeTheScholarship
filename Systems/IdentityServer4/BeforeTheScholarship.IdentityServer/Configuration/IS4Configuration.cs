@@ -2,13 +2,11 @@
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.IdentityServer.Configuration.Settings;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BeforeTheScholarship.IdentityServer.Configuration;
 
 public static class IS4Configuration
 {
-    
     public static IServiceCollection AddIS4(this IServiceCollection services)
     {
         services
@@ -17,6 +15,8 @@ public static class IS4Configuration
                 options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddUserManager<UserManager<StudentUser>>()
@@ -31,7 +31,7 @@ public static class IS4Configuration
                 .AddInMemoryApiResources(AppApiResources.ApiResources)
                 .AddInMemoryApiScopes(AppApiScopes.ApiScopes)
 
-                .AddTestUsers(AppTestUsers.TestUsers)
+                //.AddTestUsers(AppTestUsers.TestUsers)
 
                 .AddDeveloperSigningCredential();
 

@@ -9,6 +9,7 @@
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>C:\Users\admin\source\repos\BeforeTheScholarship\Systems\Api\BeforeTheScholarship.Api\api.xml</DocumentationFile>
+		<UserSecretsId>c989aa34-4170-4753-96ce-9ccec942cf94</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>

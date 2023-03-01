@@ -9,11 +9,9 @@ public static class AppApiScopes
         new List<ApiScope>()
         {
             new ApiScope(name: AppScopes.DebtsRead,
-                         displayName: "Access to read debts.",
-                         userClaims: new[] { "DebtsAccess" }),
+                         displayName: "Access to read debts."),
             new ApiScope(name: AppScopes.DebtsWrite, 
-                         displayName: "Access to write debts.",
-                         userClaims: new[] { "DebtsAccess" })
+                         displayName: "Access to write debts.")
         };
 
 }

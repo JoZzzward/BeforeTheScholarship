@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230222211457_IdentityInit")]
-    partial class IdentityInit
+    [Migration("20230301143508_DbInit")]
+    partial class DbInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,10 +54,10 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("WhenBorrowed")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("WhenToPayback")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -168,7 +168,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("StudentUsersRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -192,7 +192,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("StudentUserRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -216,7 +216,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("StudentUsersClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -237,7 +237,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("StudentUsersLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -252,7 +252,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("StudentUsersRoleOwners", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -271,7 +271,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("StudentUsersTokens", (string)null);
                 });
 
             modelBuilder.Entity("BeforeTheScholarship.Entities.Debts", b =>

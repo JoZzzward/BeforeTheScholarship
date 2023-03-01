@@ -15,14 +15,16 @@ services.AddHttpContextAccessor();
 services.AddAppCors();
 
 services.AddAppDbContext(builder.Configuration);
-services.AddAppAuth(identitySettings);
 
 services.AddAppHealthChecks();
 services.AddAppVersioning();
+
+services.AddAppAuth(identitySettings);
 services.AddAppSwagger(identitySettings);
-services.AddAppAutoMapper();
 
 services.RegisterAppServices();
+
+services.AddAppAutoMapper();
 
 var app = builder.Build();
 
@@ -30,13 +32,11 @@ app.UseAppCors();
 
 app.UseHealthChecks();
 
-app.UseAppSwagger();
-
 app.UseAppAuth();
+app.UseAppSwagger();
 
 app.MapControllers();
 
-//DbInitializer.Execute(app.Services);
-//DbSeeder.Execute(app.Services, true);
+DbInitializer.Execute(app.Services);
 
 app.Run();

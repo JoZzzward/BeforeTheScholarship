@@ -5,19 +5,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLogger();
 
-var services = builder.Services;
-
-services.AddAppCors();
+var services = builder.Services;    
 
 services.AddHttpContextAccessor();
 
 services.AddAppDbContext(builder.Configuration);
+
+services.AddAppCors();
 
 services.AddAppHealthChecks();
 
 services.AddIS4();
 
 var app = builder.Build();
+
+app.UseAppHealthChecks();
 
 app.UseIS4();
 

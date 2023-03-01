@@ -3,17 +3,16 @@ using BeforeTheScholarship.Entities;
 
 namespace BeforeTheScholarship.UserAccountService.Models;
 
-public class UserAccountModel
+public class PasswordRecoveryResponse
 {
-    public Guid Id { get; set; }
     public string UserName { get; set; }
     public string Email { get; set; }
 }
 
-public class UserAccountModelProfile : Profile
+public class PasswordRecoveryResponseProfile : Profile 
 {
-    public UserAccountModelProfile()
+    public PasswordRecoveryResponseProfile()
     {
-        CreateMap<StudentUser, UserAccountModel>();
+        CreateMap<StudentUser, PasswordRecoveryResponse>();
     }
 }

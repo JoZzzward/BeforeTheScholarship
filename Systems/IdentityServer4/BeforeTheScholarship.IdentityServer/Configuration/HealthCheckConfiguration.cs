@@ -12,7 +12,7 @@ public static class HealthCheckConfiguration
         return services;
     }
 
-    public static void UseHealthChecks(this WebApplication app)
+    public static void UseAppHealthChecks(this WebApplication app)
     {
         app.MapHealthChecks("/healthy");
     }

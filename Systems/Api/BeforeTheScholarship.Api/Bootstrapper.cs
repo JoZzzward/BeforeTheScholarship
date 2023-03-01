@@ -1,5 +1,7 @@
 ﻿using BeforeTheScholarship.DebtService;
+using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.Settings;
+using BeforeTheScholarship.Services.UserAccount;
 using BeforeTheScholarship.StudentService;
 
 namespace BeforeTheScholarship.Api;
@@ -16,8 +18,12 @@ public static class Bootstrapper
     {
         services.AddIdentitySettings()
             .AddSwaggerSettings()
+
             .AddStudentService()
-            .AddDebtService();
+            .AddDebtService()
+
+            .AddEmailSender()
+            .AddUserAccountService();
 
         return services;
     }

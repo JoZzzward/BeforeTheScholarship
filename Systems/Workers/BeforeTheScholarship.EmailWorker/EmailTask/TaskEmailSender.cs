@@ -4,6 +4,7 @@ using BeforeTheScholarship.Services.EmailSender;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using AutoMapper;
+using BeforeTheScholarship.Common.EmailSettings;
 
 namespace BeforeTheScholarship.EmailWorker.EmailTask;
 
@@ -61,7 +62,7 @@ public class TaskEmailSender : ITaskEmailSender
                             await emailService.SendEmail(
                                 new EmailModel()
                                 {
-                                    EmailFrom = "jozzzwardtm@mail.ru",
+                                    EmailFrom = MainEmail.Email,
                                     EmailTo = student.Email,
                                     Subject = "One of your debts is about to expire",
                                     Message = content
@@ -86,7 +87,7 @@ public class TaskEmailSender : ITaskEmailSender
         if (isDevelopment)
             path = Directory.GetCurrentDirectory() + "\\EmailTask\\EmailContentPages\\debtNotification.html";
         else
-            path = "/app/emailspages/debtNotification.html";
+            path = "/app/emailpages/debtNotification.html";
 
         string content = File.ReadAllText(path);
 

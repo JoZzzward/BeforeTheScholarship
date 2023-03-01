@@ -15,6 +15,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\BeforeTheScholarship.Settings\BeforeTheScholarship.Settings.csproj" />
+    <ProjectReference Include="..\BeforeTheScholarship.Settings\BeforeTheScholarship.Services.Settings.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\" />
   </ItemGroup>
 
 </Project>

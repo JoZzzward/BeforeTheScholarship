@@ -11,10 +11,11 @@ public static class Bootstrapper
     public static IServiceCollection RegisterAppServices(this IServiceCollection services)
     {
         services
-            .AddAppAutoMapper()
             .AddDebtService()
             .AddStudentService()
-            .AddEmailSender();
+            .AddEmailSender()
+            .AddAppAutoMapper()
+            ;
 
         services.AddSingleton<ITaskEmailSender, TaskEmailSender>();
 

@@ -7,25 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityInit : Migration
+    public partial class DbInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "StudentUsers",
                 columns: table => new
@@ -54,109 +40,17 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
+                name: "StudentUsersRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_StudentUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "StudentUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_StudentUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "StudentUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_StudentUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "StudentUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_StudentUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "StudentUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_StudentUsersRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,8 +64,8 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                     Phone = table.Column<string>(type: "text", nullable: false),
                     BorrowedFromWho = table.Column<string>(type: "text", nullable: false),
                     EmailSended = table.Column<bool>(type: "boolean", nullable: false),
-                    WhenBorrowed = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    WhenToPayback = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    WhenBorrowed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    WhenToPayback = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Uid = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -185,31 +79,111 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
+            migrationBuilder.CreateTable(
+                name: "StudentUsersClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentUsersClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentUsersClaims_StudentUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "StudentUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "StudentUsersLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentUsersLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_StudentUsersLogins_StudentUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "StudentUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
+            migrationBuilder.CreateTable(
+                name: "StudentUsersTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentUsersTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_StudentUsersTokens_StudentUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "StudentUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
+            migrationBuilder.CreateTable(
+                name: "StudentUserRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentUserRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentUserRoleClaims_StudentUsersRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "StudentUsersRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId");
+            migrationBuilder.CreateTable(
+                name: "StudentUsersRoleOwners",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentUsersRoleOwners", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_StudentUsersRoleOwners_StudentUsersRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "StudentUsersRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentUsersRoleOwners_StudentUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "StudentUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Debts_StudentId",
@@ -223,6 +197,11 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudentUserRoleClaims_RoleId",
+                table: "StudentUserRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "StudentUsers",
                 column: "NormalizedEmail");
@@ -232,31 +211,52 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                 table: "StudentUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentUsersClaims_UserId",
+                table: "StudentUsersClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentUsersLogins_UserId",
+                table: "StudentUsersLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentUsersRoleOwners_RoleId",
+                table: "StudentUsersRoleOwners",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "StudentUsersRoles",
+                column: "NormalizedName",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
                 name: "Debts");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "StudentUserRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "StudentUsersClaims");
+
+            migrationBuilder.DropTable(
+                name: "StudentUsersLogins");
+
+            migrationBuilder.DropTable(
+                name: "StudentUsersRoleOwners");
+
+            migrationBuilder.DropTable(
+                name: "StudentUsersTokens");
+
+            migrationBuilder.DropTable(
+                name: "StudentUsersRoles");
 
             migrationBuilder.DropTable(
                 name: "StudentUsers");
