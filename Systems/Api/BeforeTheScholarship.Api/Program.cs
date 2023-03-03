@@ -19,8 +19,8 @@ services.AddAppDbContext(builder.Configuration);
 services.AddAppHealthChecks();
 services.AddAppVersioning();
 
-services.AddAppAuth(identitySettings);
-services.AddAppSwagger(identitySettings);
+services.AddAppAuth(identitySettings!);
+services.AddAppSwagger(identitySettings!);
 
 services.RegisterAppServices();
 

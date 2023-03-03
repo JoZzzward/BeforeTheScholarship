@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +10,20 @@ public class DebtService : IDebtService
 {
     private readonly IDbContextFactory<AppDbContext> _dbContext;
     private readonly IMapper _mapper;
+    private readonly IModelValidator<AddDebtModel> _addDebtModelValidator;
+    private readonly IModelValidator<UpdateDebtModel> _updateDebtModelValidator;
 
     public DebtService(
         IDbContextFactory<AppDbContext> dbContext,
-        IMapper mapper)
+        IMapper mapper,
+        IModelValidator<AddDebtModel> addDebtModelValidator,
+        IModelValidator<UpdateDebtModel> updateDebtModelValidator
+        )
     {
         _dbContext = dbContext;
         _mapper = mapper;
+        _addDebtModelValidator = addDebtModelValidator;
+        _updateDebtModelValidator = updateDebtModelValidator;
     }
 
     public async Task<IEnumerable<DebtModel>> GetDebts()
@@ -48,6 +56,8 @@ public class DebtService : IDebtService
 
     public async Task<DebtModel> CreateDebt(AddDebtModel model)
     {
+        _addDebtModelValidator.CheckValidation(model);
+
         using var context = await _dbContext.CreateDbContextAsync();
 
         var data = _mapper.Map<Debts>(model);
@@ -60,6 +70,7 @@ public class DebtService : IDebtService
 
     public async Task UpdateDebt(int? id, UpdateDebtModel model)
     {
+        _updateDebtModelValidator.CheckValidation(model);
         using var context = await _dbContext.CreateDbContextAsync();
 
         var debt = await context

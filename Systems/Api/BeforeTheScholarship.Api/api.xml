@@ -252,7 +252,12 @@
             </summary>
             <param name="request">Contains user email to send the mail to</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BeforeTheScholarship.API.Controllers.AccountsController.RecoverPassword(BeforeTheScholarship.Api.Controllers.Account.Models.PasswordRecoveryRequest)" -->
+        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.RecoverPassword(BeforeTheScholarship.Api.Controllers.Account.Models.PasswordRecoveryRequest)">
+            <summary>
+            Recover password on new password from request to user with given email.
+            </summary>
+            <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
+        </member>
         <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.ChangePassword(BeforeTheScholarship.Api.Controllers.Account.Models.ChangePasswordRequest)">
             <summary>
             Changes user with given email old password on new password.

@@ -27,8 +27,10 @@ public class AppDbContext : IdentityDbContext<StudentUser, IdentityRole<Guid>, G
 
         // Initializing StudentUser model
         modelBuilder.Entity<StudentUser>().Property(x => x.UserName).IsRequired();
-        modelBuilder.Entity<StudentUser>().Property(x => x.PhoneNumber).HasMaxLength(11);
+        modelBuilder.Entity<StudentUser>().Property(x => x.PhoneNumber).HasMaxLength(12);
+        modelBuilder.Entity<StudentUser>().HasIndex(x => x.PhoneNumber).IsUnique();
         modelBuilder.Entity<StudentUser>().Property(x => x.Email).HasMaxLength(50);
+        modelBuilder.Entity<StudentUser>().HasIndex(x => x.Email).IsUnique();
         modelBuilder.Entity<StudentUser>()
             .HasMany(x => x.Debts)
             .WithOne(x => x.StudentUser)
@@ -36,7 +38,7 @@ public class AppDbContext : IdentityDbContext<StudentUser, IdentityRole<Guid>, G
 
         // Initializing Debts model
         modelBuilder.Entity<Debts>().ToTable("Debts");
-        modelBuilder.Entity<Debts>().Property(x => x.BorrowedFromWho).IsRequired();
+        modelBuilder.Entity<Debts>().Property(x => x.BorrowedFromWho).HasMaxLength(30).IsRequired();
         modelBuilder.Entity<Debts>().Property(x => x.Borrowed).IsRequired();
 
     }

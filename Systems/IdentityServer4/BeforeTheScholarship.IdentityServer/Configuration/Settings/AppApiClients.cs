@@ -6,23 +6,28 @@ namespace BeforeTheScholarship.IdentityServer.Configuration.Settings;
 
 public static class AppApiClients
 {
-    public static IEnumerable<Client> ApiClients =
-        new List<Client>()
+    public static IEnumerable<Client> Get(ServiceProvider provider)
+    {
+        var configuration = provider.GetRequiredService<IConfiguration>();
+
+        var clientSecret = configuration["ClientSecretValue:IdentitySettings"];
+
+        var clients = new List<Client>()
             {
                 new Client()
                 {
                     ClientId = "swagger",
                     ClientSecrets =
                     {
-                        new Secret("acrosstheapi".Sha256())
+                        new Secret(clientSecret.Sha256())
                     },
                     AccessTokenLifetime = 3600,
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                    AllowedScopes = 
+                    AllowedScopes =
                     {
-                        AppScopes.DebtsRead, 
+                        AppScopes.DebtsRead,
                         AppScopes.DebtsWrite
                     },
                 },
@@ -32,7 +37,7 @@ public static class AppApiClients
                     ClientId= "mobile_app",
                     ClientSecrets =
                     {
-                        new Secret("acrosstheapi".Sha256())
+                        new Secret(clientSecret.Sha256())
                     },
 
                     AccessTokenLifetime = 3600,
@@ -50,6 +55,8 @@ public static class AppApiClients
                         AppScopes.DebtsWrite
                     }
                 }
-            };  
+            };
 
+        return clients;
+    }
 }

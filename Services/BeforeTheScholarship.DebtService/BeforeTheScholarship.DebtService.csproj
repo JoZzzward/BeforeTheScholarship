@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\BeforeTheScholarship.Context\BeforeTheScholarship.Context.csproj" />
+    <ProjectReference Include="..\..\Shared\BeforeTheScholarship.Common\BeforeTheScholarship.Common.csproj" />
   </ItemGroup>
 
 </Project>

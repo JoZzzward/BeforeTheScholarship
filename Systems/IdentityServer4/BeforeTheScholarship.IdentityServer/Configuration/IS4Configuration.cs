@@ -25,7 +25,7 @@ public static class IS4Configuration
 
         services.AddIdentityServer()
                 .AddAspNetIdentity<StudentUser>()
-                .AddInMemoryClients(AppApiClients.ApiClients)
+                .AddInMemoryClients(AppApiClients.Get(services.BuildServiceProvider()))
                 .AddInMemoryIdentityResources(AppIdentityResources.IdentityResources)
 
                 .AddInMemoryApiResources(AppApiResources.ApiResources)

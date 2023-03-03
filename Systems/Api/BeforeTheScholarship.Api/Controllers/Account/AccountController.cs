@@ -42,11 +42,13 @@ public class AccountsController : ControllerBase
     [HttpPost("register")]
     public async Task<UserAccountResponse> Register([FromQuery] RegisterUserAccountRequest request)
     {
+        _logger.LogInformation("--> User(UserName: {UserUserName}) trying to register.", request.UserName);
+
         var user = await _userAccountService.RegisterUser(_mapper.Map<RegisterUserAccountModel>(request));
 
         var response = _mapper.Map<UserAccountResponse>(user);
 
-        _logger.LogInformation($"--> User(name: {user.UserName}) was succesfully registered!");
+        _logger.LogInformation("--> User(UserName: {UserUserName}) was succesfully registered.", user.UserName);
 
         return response;
     }
@@ -58,11 +60,13 @@ public class AccountsController : ControllerBase
     [HttpPost("confirmemail")]
     public async Task ConfirmEmail([FromBody] ConfirmationEmailRequest request)
     {
+        _logger.LogInformation("--> User(Email: {UserEmail}) trying to confirm email.", request.Email);
+        
         var confirmEmailModel = _mapper.Map<ConfirmationEmailModel>(request);
 
         await _userAccountService.ConfirmEmail(confirmEmailModel);
 
-        _logger.LogInformation($"--> User(email: {request.Email}) succesfully confirmed email!");
+        _logger.LogInformation("--> User(Email: {UserEmail}) successfully confirm his email.", request.Email);
     }
 
     /// <summary>
@@ -72,25 +76,29 @@ public class AccountsController : ControllerBase
     [HttpPost("recover-password-mail")]
     public async Task SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
     {
+        _logger.LogInformation("--> User(Email: {UserEmail}) trying to send password recover message on his email.", request.Email);
+
         var model = _mapper.Map<SendPasswordRecoveryModel>(request);
 
         var response = await _userAccountService.SendRecoveryPasswordEmail(model);
 
-        _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully recovered!");
+        _logger.LogInformation("--> Password message was successfully sended to User(Email: {UserEmail})", response.Email);
     }
 
     /// <summary>
     /// Recover password on new password from request to user with given email.
     /// </summary>
-    /// <param name="request">Contains email on what your password will be recovered & token from mail & new password</param>
+    /// <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
     [HttpPost("recover-password")]
     public async Task RecoverPassword([FromBody] PasswordRecoveryRequest request)
     {
+        _logger.LogInformation("--> User(Email: {UserEmail}) trying to recover his password.", request.Email);
+
         var model = _mapper.Map<PasswordRecoveryModel>(request);
 
         var response = await _userAccountService.RecoverPassword(model);
 
-        _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully recovered!");
+        _logger.LogInformation("--> Password of User(Email: {UserEmail}) was successfully recovered.", response.Email);
     }
 
     /// <summary>
@@ -101,10 +109,11 @@ public class AccountsController : ControllerBase
     [HttpPost("change-password")]
     public async Task ChangePassword([FromQuery] ChangePasswordRequest request)
     {
+        _logger.LogInformation("User(Email: {UserEmail}) trying to change his password.", request.Email);
         var model = _mapper.Map<ChangePasswordModel>(request);
 
         var response = await _userAccountService.ChangePassword(model);
 
-        _logger.LogInformation($"Password of User(UserName: {response.UserName}) was successfully changed!");
+        _logger.LogInformation("Password of User(Email: {UserEmail}) was successfully changed.", response.Email);
     }
 }

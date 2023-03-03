@@ -40,13 +40,14 @@ public class TaskEmailSender : ITaskEmailSender
 
                 foreach (var debt in debts)
                 {
-                    _logger.LogInformation($"TotalDays: {(debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays}");
-                    if ((debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays < 1 &&
-                        (debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays > 0 &&
-                        !debt.EmailSended)
+                    var totalDays = (debt.WhenToPayback - DateTimeOffset.Now.DateTime.ToLocalTime()).TotalDays;
+
+                    _logger.LogInformation("TotalDays: {TotalDays}", totalDays);
+                    if (totalDays < 1 && totalDays > 0 && !debt.EmailSended)
                     {
                         var studentService = scope.ServiceProvider.GetRequiredService<IStudentService>();
                         var emailService = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+
                         var student = await studentService.GetStudentById(debt.StudentId);
 
                         if (student.Email != null &&
@@ -70,17 +71,19 @@ public class TaskEmailSender : ITaskEmailSender
 
                             debt.EmailSended = true;
                             await debtService.UpdateDebt(debt.Id, _mapper.Map<UpdateDebtModel>(debt));
-                            _logger.LogInformation($"Notification about debt sent to email({student.Email}).");
+                            _logger.LogInformation("Notification about debt sent to email({StudentEmail}).", student.Email);
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.LogInformation($"Error: {e.Message}");
+                _logger.LogError($"Error: {e.Message}");
+                throw new Exception(e.Message);
             }
         }
     }
+
     private static string GetContentMessage(bool isDevelopment)
     {
         string path;

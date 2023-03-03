@@ -39,10 +39,12 @@ public class StudentsController : ControllerBase
     [HttpGet("")]
     public async Task<IEnumerable<StudentResponse>> GetStudents()
     {
+        _logger.LogInformation("--> Trying to return all students..");
+
         var students = await _studentService.GetStudents();
         var data = students.Select(x => _mapper.Map<StudentResponse>(x));
 
-        _logger.LogInformation("--> Students was returned successfully!");
+        _logger.LogInformation("--> Students(Count: {StudentsCount}) was returned successfully!", data.Count());
 
         return data;
     }
@@ -54,11 +56,13 @@ public class StudentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<StudentResponse> GetStudentById([FromRoute] Guid id)
     {
+        _logger.LogInformation("--> Student(Id: {StudentId}) trying to return..", id);
+
         var student = await _studentService.GetStudentById(id);
             
         var data = _mapper.Map<StudentResponse>(student);
 
-        _logger.LogInformation($"--> The Student({id}) was returned successfully!");
+        _logger.LogInformation("--> The student(Id: {StudentId}) was successfully returned!", id);
 
         return data;
     }
@@ -71,9 +75,13 @@ public class StudentsController : ControllerBase
     [HttpPost("")]
     public async Task<StudentResponse> CreateStudent([FromBody]AddStudentRequest request)
     {
+        _logger.LogInformation("--> Trying to create student(Id: {StudentId})", request.UserName);
+
         var model = _mapper.Map<AddStudentModel>(request);
         var student = await _studentService.CreateStudent(model);
         var response = _mapper.Map<StudentResponse>(student);
+
+        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully created.", response.Id);
 
         return response;
     }
@@ -85,8 +93,12 @@ public class StudentsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
     {
+        _logger.LogInformation("--> Trying to update student(Id: {StudentId})", id);
+
         var model = _mapper.Map<UpdateStudentModel>(request);
         await _studentService.UpdateStudent(id, model);
+
+        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully updated.", id);
 
         return Ok();
     }
@@ -99,7 +111,11 @@ public class StudentsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent([FromRoute] Guid? id)
     {
+        _logger.LogInformation("--> Trying to remove student(Id: {StudentId})", id);
+
         await _studentService.DeleteStudent(id);
+
+        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully removed.", id);
 
         return Ok();
     }

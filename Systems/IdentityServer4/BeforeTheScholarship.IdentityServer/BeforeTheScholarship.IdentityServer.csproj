@@ -7,6 +7,7 @@
     <UserSecretsId>0f8afe52-34af-4442-b046-11d353744a1c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+	<EnableEmailUserName>true</EnableEmailUserName>
   </PropertyGroup>
 
   <ItemGroup>
