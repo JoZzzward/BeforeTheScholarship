@@ -63,7 +63,7 @@ public class UserAccountService : IUserAccountService
 
             // Gets a path of html page for mail content
             var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\emailConfirmation.html";
-
+            
             string content;
 
             // Filling content
