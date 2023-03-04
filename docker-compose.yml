@@ -1,5 +1,13 @@
 version: '3.4'
 
+secrets:
+  emailusername:
+    file: emailusername.txt
+  emailpassword:
+    file: emailpassword.txt
+  clientsecret:
+    file: clientsecret.txt
+
 services:
   
   beforethescholarship_postgresql:
@@ -14,6 +22,9 @@ services:
       - beforethescholarship_postgresql
     environment:
       - TZ=Europe/Moscow
+    secrets:
+      - emailusername
+      - emailpassword
 
   beforethescholarship_emailworker:
     image: ${DOCKER_REGISTRY-}beforethescholarshipemailworkers
@@ -25,6 +36,9 @@ services:
       - beforethescholarship_api
     environment:
       - TZ=Europe/Moscow
+    secrets:
+      - emailusername
+      - emailpassword
 
   beforethescholarship_identity:
     image: ${DOCKER_REGISTRY-}beforethescholarshipidentityserver
@@ -36,3 +50,5 @@ services:
       - beforethescholarship_api
     environment:
       - TZ=Europe/Moscow
+    secrets:
+      - clientsecret

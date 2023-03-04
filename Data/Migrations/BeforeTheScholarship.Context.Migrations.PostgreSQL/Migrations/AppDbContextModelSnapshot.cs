@@ -35,7 +35,8 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.Property<string>("BorrowedFromWho")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<bool>("EmailSended")
                         .HasColumnType("boolean");
@@ -112,8 +113,8 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(11)
-                        .HasColumnType("character varying(11)");
+                        .HasMaxLength(12)
+                        .HasColumnType("character varying(12)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
@@ -131,12 +132,18 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.ToTable("StudentUsers", (string)null);
                 });

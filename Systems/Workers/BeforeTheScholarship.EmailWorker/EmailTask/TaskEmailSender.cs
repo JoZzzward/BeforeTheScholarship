@@ -1,10 +1,7 @@
 ﻿using BeforeTheScholarship.DebtService;
 using BeforeTheScholarship.StudentService;
 using BeforeTheScholarship.Services.EmailSender;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 using AutoMapper;
-using BeforeTheScholarship.Common.EmailSettings;
 
 namespace BeforeTheScholarship.EmailWorker.EmailTask;
 
@@ -63,7 +60,6 @@ public class TaskEmailSender : ITaskEmailSender
                             await emailService.SendEmail(
                                 new EmailModel()
                                 {
-                                    EmailFrom = MainEmail.Email,
                                     EmailTo = student.Email,
                                     Subject = "One of your debts is about to expire",
                                     Message = content

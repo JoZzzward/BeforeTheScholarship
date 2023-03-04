@@ -1,7 +1,6 @@
 ﻿namespace BeforeTheScholarship.Services.UserAccount;
 
 using AutoMapper;
-using BeforeTheScholarship.Common.EmailSettings;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.UserAccountService.Models;
@@ -80,14 +79,13 @@ public class UserAccountService : IUserAccountService
 
             content = content.Replace("QUERYEMAIL", user.Email)
                          .Replace("QUERYTOKEN", token)
-                         .Replace("DATENOW", DateTimeOffset.Now.LocalDateTime.ToShortDateString().ToString())
+                         .Replace("DATENOW", DateTime.Now.ToLocalTime().ToShortDateString().ToString())
                          ;
 
 
             // Sending mail to user email for confirmation
             _emailSender?.SendEmail(new EmailModel()
             {
-                EmailFrom = MainEmail.Email,
                 EmailTo = user.Email,
                 Subject = $"Hello, dear {char.ToUpper(user.UserName[0]) + user.UserName.Substring(1)}!",
                 Message = content
@@ -140,7 +138,6 @@ public class UserAccountService : IUserAccountService
         // Sending mail to user email for password recovery
         await _emailSender.SendEmail(new EmailModel()
         {
-            EmailFrom = MainEmail.Email,
             EmailTo = user.Email ?? request.Email,
             Subject = "Password recovery message",
             Message = content

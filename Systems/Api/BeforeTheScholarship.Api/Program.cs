@@ -25,6 +25,8 @@ services.AddAppSwagger(identitySettings!);
 services.RegisterAppServices();
 
 services.AddAppAutoMapper();
+services.AddValidator();
+
 
 var app = builder.Build();
 
@@ -37,6 +39,6 @@ app.UseAppSwagger();
 
 app.MapControllers();
 
-DbInitializer.Execute(app.Services);
+//DbInitializer.Execute(app.Services);
 
 app.Run();

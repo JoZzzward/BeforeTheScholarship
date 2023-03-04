@@ -27,7 +27,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
                     SecurityStamp = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -62,7 +62,7 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false),
                     Borrowed = table.Column<decimal>(type: "numeric", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
-                    BorrowedFromWho = table.Column<string>(type: "text", nullable: false),
+                    BorrowedFromWho = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     EmailSended = table.Column<bool>(type: "boolean", nullable: false),
                     WhenBorrowed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     WhenToPayback = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -205,6 +205,18 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                 name: "EmailIndex",
                 table: "StudentUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentUsers_Email",
+                table: "StudentUsers",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentUsers_PhoneNumber",
+                table: "StudentUsers",
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

@@ -1,5 +1,6 @@
 ﻿using BeforeTheScholarship.Common.Security;
 using Duende.IdentityServer.Models;
+using Microsoft.Extensions.Configuration;
 using System.Text;
 
 namespace BeforeTheScholarship.IdentityServer.Configuration.Settings;
@@ -10,7 +11,7 @@ public static class AppApiClients
     {
         var configuration = provider.GetRequiredService<IConfiguration>();
 
-        var clientSecret = configuration["ClientSecretValue:IdentitySettings"];
+        var clientSecret = SecretSearcher.SearchSecret("ClientSecretValue:IdentitySettings", "clientsecret", configuration);
 
         var clients = new List<Client>()
             {
