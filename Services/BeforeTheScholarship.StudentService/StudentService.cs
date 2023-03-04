@@ -50,7 +50,7 @@ public class StudentService : IStudentService
 
         return data;
     }
- 
+
     public async Task UpdateStudent(Guid id, UpdateStudentModel model)
     {
         _updateStudentModelValidator.CheckValidation(model);
@@ -64,10 +64,12 @@ public class StudentService : IStudentService
         if (student is null)
             throw new NullReferenceException($"Student({id}) was not found");
 
-        student = _mapper.Map(model, student);
-
         // Disable Email confirm field if Email was changed
-        if (student.Email != model.Email) student.EmailConfirmed = false;
+        if (student.Email != model.Email)
+        {
+            student.EmailConfirmed = false;
+            student.NormalizedEmail = model.Email.ToUpper();
+        }
 
         // Disable PhoneNumber confirm field if Email was changed
         if (student.PhoneNumber != model.PhoneNumber) student.PhoneNumberConfirmed = false;
@@ -75,6 +77,7 @@ public class StudentService : IStudentService
         // Change normalized UserName if current UserName was changed
         if (student.UserName != model.UserName) student.NormalizedUserName = model.UserName.ToUpper();
 
+        student = _mapper.Map(model, student);
 
         context.StudentUsers.Update(student);
         context.SaveChanges();
