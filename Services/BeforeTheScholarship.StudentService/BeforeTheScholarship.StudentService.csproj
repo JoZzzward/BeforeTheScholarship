@@ -8,12 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.5.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\BeforeTheScholarship.Context\BeforeTheScholarship.Context.csproj" />
+    <ProjectReference Include="..\..\Shared\BeforeTheScholarship.Common\BeforeTheScholarship.Common.csproj" />
   </ItemGroup>
 
 </Project>

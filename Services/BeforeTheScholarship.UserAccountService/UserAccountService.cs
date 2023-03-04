@@ -15,24 +15,44 @@ public class UserAccountService : IUserAccountService
     private readonly UserManager<StudentUser> _userManager;
     private readonly SignInManager<StudentUser> _signInManager;
     private readonly IEmailSender _emailSender;
+    #region Model Validators
     private readonly IModelValidator<RegisterUserAccountModel> _registerModelValidator;
     private readonly IModelValidator<LoginUserAccountModel> _loginModelValidator;
+    private readonly IModelValidator<ConfirmationEmailModel> _confirmationEmailModelValidator;
+    private readonly IModelValidator<SendPasswordRecoveryModel> _sendPasswordRecoveryModelValidator;
+    private readonly IModelValidator<PasswordRecoveryModel> _passwordRecoveryModelValidator;
+    private readonly IModelValidator<ChangePasswordModel> _changePasswordModelValidator;
+    #endregion
 
     public UserAccountService(
         IMapper mapper,
         UserManager<StudentUser> userManager,
         SignInManager<StudentUser> signInManager,
         IEmailSender emailSender,
+    #region Model Validators
         IModelValidator<RegisterUserAccountModel> registerModelValidator,
-        IModelValidator<LoginUserAccountModel> loginModelValidator
+        IModelValidator<LoginUserAccountModel> loginModelValidator,
+        IModelValidator<ConfirmationEmailModel> confirmationEmailModelValidator,
+        IModelValidator<SendPasswordRecoveryModel> sendPasswordRecoveryModelValidator,
+        IModelValidator<PasswordRecoveryModel> passwordRecoveryModelValidator,
+        IModelValidator<ChangePasswordModel> changePasswordModelValidator
+    #endregion
         )
     {
         _mapper = mapper;
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
+        #region Model Validators
+
         _registerModelValidator = registerModelValidator;
         _loginModelValidator = loginModelValidator;
+        _confirmationEmailModelValidator = confirmationEmailModelValidator;
+        _sendPasswordRecoveryModelValidator = sendPasswordRecoveryModelValidator;
+        _passwordRecoveryModelValidator = passwordRecoveryModelValidator;
+        _changePasswordModelValidator = changePasswordModelValidator;
+
+        #endregion
     }
 
     public async Task<UserAccountModel> RegisterUser(RegisterUserAccountModel model)
@@ -110,41 +130,34 @@ public class UserAccountService : IUserAccountService
         return data;
     }
 
-    public async Task ConfirmEmail(ConfirmationEmailModel confirmationEmail)
+    public async Task ConfirmEmail(ConfirmationEmailModel model)
     {
-        var user = await _userManager!.FindByEmailAsync(confirmationEmail.Email);
+        _confirmationEmailModelValidator.CheckValidation(model);
+
+        var user = await _userManager!.FindByEmailAsync(model.Email);
         
         if (user is null)
-            throw new Exception($"User with email - {confirmationEmail.Email} doesnt not exists.");
+            throw new Exception($"User with email - {model.Email} doesnt not exists.");
 
-        await _userManager.ConfirmEmailAsync(user, confirmationEmail.Token);
+        await _userManager.ConfirmEmailAsync(user, model.Token);
     }
 
-    public async Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(SendPasswordRecoveryModel request)
+    public async Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(SendPasswordRecoveryModel model)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        _sendPasswordRecoveryModelValidator.CheckValidation(model);
+        var user = await _userManager.FindByEmailAsync(model.Email);
 
         if (user is null)
-            throw new Exception($"--> User with the email({request.Email}) not found!");
+            throw new Exception($"--> User with the email({model.Email}) not found!");
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
         // Gets a path of html page for mail content
         var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\passwordRecovery.html";
-        
-        string content;
 
-        // Filling content
-        try
-        {
-            content = File.ReadAllText(path);
-        }
-        catch
-        {
-            path = "/app/emailpages/passwordRecovery.html";
-            content = File.ReadAllText(path);
-        }
+        if (!File.Exists(path)) path = "/app/emailpages/passwordRecovery.html";
 
+        var content = File.ReadAllText(path);
         content = content.Replace("QUERYEMAIL", user.Email)
                          .Replace("QUERYTOKEN", token)
                          .Replace("DATENOW", DateTimeOffset.Now.LocalDateTime.ToShortDateString().ToString())
@@ -153,48 +166,50 @@ public class UserAccountService : IUserAccountService
         // Sending mail to user email for password recovery
         await _emailSender.SendEmail(new EmailModel()
         {
-            EmailTo = user.Email ?? request.Email,
+            EmailTo = user.Email!,
             Subject = "Password recovery message",
             Message = content
         });
 
-        var result = _mapper.Map<PasswordRecoveryResponse>(user); 
+        var response = _mapper.Map<PasswordRecoveryResponse>(user); 
 
-        return result;
+        return response;
     }
 
-    public async Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryModel request)
+    public async Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryModel model)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        _passwordRecoveryModelValidator.CheckValidation(model);
+        var user = await _userManager.FindByEmailAsync(model.Email);
 
         if (user is null)
-            throw new Exception($"--> User with the email({request.Email}) not found!");
+            throw new Exception($"--> User with the email({model.Email}) not found!");
 
-        await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+        await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
 
-        var result = _mapper.Map<PasswordRecoveryResponse>(user);
+        var response = _mapper.Map<PasswordRecoveryResponse>(user);
 
-        return result;
+        return response;
     }
 
-    public async Task<ChangePasswordResponse> ChangePassword(ChangePasswordModel request)
+    public async Task<ChangePasswordResponse> ChangePassword(ChangePasswordModel model)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        _changePasswordModelValidator.CheckValidation(model);
+        var user = await _userManager.FindByEmailAsync(model.Email);
 
-        if (user is null) throw new Exception($"User with email({request.Email}) was not found!");
+        if (user is null) throw new Exception($"User with email({model.Email}) was not found!");
 
         /// Compares old password with current
-        if (new PasswordHasher<StudentUser>().VerifyHashedPassword(user, user.PasswordHash!, request.CurrentPassword)
+        if (new PasswordHasher<StudentUser>().VerifyHashedPassword(user, user.PasswordHash!, model.CurrentPassword)
             == PasswordVerificationResult.Failed)
             throw new Exception($"Current password is incorrect!");
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
         // Changes password
-        var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+        var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
 
         if (!result.Succeeded)
-            throw new Exception($"Exception on changing current password to new");
+            throw new Exception($"Exception by changing password for email({model.Email}).");
 
         var response = _mapper.Map<ChangePasswordResponse>(user);
 

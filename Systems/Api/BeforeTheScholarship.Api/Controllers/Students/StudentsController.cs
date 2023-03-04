@@ -67,8 +67,8 @@ public class StudentsController : ControllerBase
         return data;
     }
 
+    /// <summary>
     /// HttpPut - Updates existed StudentUser in database
-    /// TODO: Delete this method instead of future AccountController
     /// </summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)

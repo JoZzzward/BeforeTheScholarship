@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
-using BeforeTheScholarship.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeforeTheScholarship.StudentService;
@@ -9,13 +9,16 @@ public class StudentService : IStudentService
 {
     private readonly IDbContextFactory<AppDbContext> _dbContext;
     private readonly IMapper _mapper;
+    private readonly IModelValidator<UpdateStudentModel> _updateStudentModelValidator;
 
     public StudentService(
         IDbContextFactory<AppDbContext> dbContext, 
-        IMapper mapper)
+        IMapper mapper,
+        IModelValidator<UpdateStudentModel> updateStudentModelValidator)
 	{
         _dbContext = dbContext;
         _mapper = mapper;
+        _updateStudentModelValidator = updateStudentModelValidator;
     }
 
     public async Task<IEnumerable<StudentModel>> GetStudents()
@@ -50,6 +53,8 @@ public class StudentService : IStudentService
  
     public async Task UpdateStudent(Guid id, UpdateStudentModel model)
     {
+        _updateStudentModelValidator.CheckValidation(model);
+
         using var context = await _dbContext.CreateDbContextAsync();
 
         var student = await context
@@ -60,6 +65,16 @@ public class StudentService : IStudentService
             throw new NullReferenceException($"Student({id}) was not found");
 
         student = _mapper.Map(model, student);
+
+        // Disable Email confirm field if Email was changed
+        if (student.Email != model.Email) student.EmailConfirmed = false;
+
+        // Disable PhoneNumber confirm field if Email was changed
+        if (student.PhoneNumber != model.PhoneNumber) student.PhoneNumberConfirmed = false;
+
+        // Change normalized UserName if current UserName was changed
+        if (student.UserName != model.UserName) student.NormalizedUserName = model.UserName.ToUpper();
+
 
         context.StudentUsers.Update(student);
         context.SaveChanges();

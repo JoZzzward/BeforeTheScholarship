@@ -1,8 +1,30 @@
-﻿namespace BeforeTheScholarship.UserAccountService.Models;
+﻿using FluentValidation;
+
+namespace BeforeTheScholarship.UserAccountService.Models;
 
 public class PasswordRecoveryModel
 {
     public string Email { get; set; }
     public string Token { get; set; }
-    public string NewPassword { get; set;}
+    public string NewPassword { get; set; }
+}
+
+public class PasswordRecoveryModelValidator : AbstractValidator<PasswordRecoveryModel>
+{
+    public PasswordRecoveryModelValidator()
+    {
+        RuleFor(x => x.Email)
+                .EmailAddress()
+                .WithMessage("Incorrect email.")
+                .MaximumLength(50).WithMessage("Email length must be less than 50");
+
+        RuleFor(x => x.NewPassword)
+                .MinimumLength(8).WithMessage("Minimum length is 8.")
+                .Must(PasswordHasNumbers).WithMessage("Password must contain numbers.")
+                .Must(PasswordHasLetters).WithMessage("Password must contain letters.");
+    }
+
+    protected bool PasswordHasNumbers(string password) => password.Any(x => char.IsDigit(x));
+
+    protected bool PasswordHasLetters(string password) => password.Any(x => char.IsLetter(x));
 }

@@ -213,7 +213,11 @@
             </summary>
             <param name="id">Unique student identifier</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.UpdateStudent(System.Guid,BeforeTheScholarship.Api.Controllers.Students.UpdateStudentRequest)" -->
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.UpdateStudent(System.Guid,BeforeTheScholarship.Api.Controllers.Students.UpdateStudentRequest)">
+            <summary>
+            HttpPut - Updates existed StudentUser in database
+            </summary>
+        </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.DeleteStudent(System.Nullable{System.Guid})">
             <summary>
             HttpDelete - Deletes existed StudentUser in database
