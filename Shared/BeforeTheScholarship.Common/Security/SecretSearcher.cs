@@ -23,6 +23,6 @@ public static class SecretSearcher
 
         secretValue = File.ReadAllText(path);
 
-        return secretValue;
+        return secretValue.Replace(" ", "");
     }
 }

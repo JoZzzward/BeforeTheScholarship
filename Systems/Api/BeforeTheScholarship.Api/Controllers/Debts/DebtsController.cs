@@ -65,6 +65,7 @@ public class DebtsController : ControllerBase
         _logger.LogInformation("--> Debts belonging to a student(Id: {StudentId} are returned..", studentId);
 
         var debts = await _debtService.GetDebts(studentId);
+
         var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
         _logger.LogInformation("--> Debts belong to a student(Id: {StudentId} was returned successfully.", studentId);

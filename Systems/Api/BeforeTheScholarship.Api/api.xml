@@ -120,6 +120,18 @@
             </summary>
             <param name="app">Web application</param>
         </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.ValidatorConfiguration">
+            <summary>
+            Validator Configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.ValidatorConfiguration.AddValidator(Microsoft.Extensions.DependencyInjection.IMvcBuilder)">
+            <summary>
+            Adds validator to app
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
         <member name="T:BeforeTheScholarship.Api.Configuration.VersioningConfiguration">
             <summary>
             Versioning configuration
@@ -201,19 +213,7 @@
             </summary>
             <param name="id">Unique student identifier</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.CreateStudent(BeforeTheScholarship.Api.Controllers.Students.AddStudentRequest)">
-            <summary>
-            HttpPost - Adds new StudentUser to database
-            TODO: Delete this method instead of future AccountController
-            </summary>
-            <param name="request"></param>
-        </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.UpdateStudent(System.Guid,BeforeTheScholarship.Api.Controllers.Students.UpdateStudentRequest)">
-            <summary>
-            HttpPut - Updates existed StudentUser in database
-            TODO: Delete this method instead of future AccountController
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.UpdateStudent(System.Guid,BeforeTheScholarship.Api.Controllers.Students.UpdateStudentRequest)" -->
         <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.DeleteStudent(System.Nullable{System.Guid})">
             <summary>
             HttpDelete - Deletes existed StudentUser in database

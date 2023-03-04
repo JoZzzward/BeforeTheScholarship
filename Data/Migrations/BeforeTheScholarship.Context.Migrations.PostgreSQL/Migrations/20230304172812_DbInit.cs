@@ -61,11 +61,11 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false),
                     Borrowed = table.Column<decimal>(type: "numeric", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: true),
                     BorrowedFromWho = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     EmailSended = table.Column<bool>(type: "boolean", nullable: false),
-                    WhenBorrowed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    WhenToPayback = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    WhenBorrowed = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    WhenToPayback = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     Uid = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>

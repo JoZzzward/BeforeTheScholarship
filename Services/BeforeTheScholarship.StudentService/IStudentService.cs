@@ -12,11 +12,6 @@ public interface IStudentService
     /// </summary>
     Task<StudentModel> GetStudentById(Guid id);
     /// <summary>
-    /// Adds a new student to the database
-    /// </summary>
-    /// <param name="model">Limited <see cref="StudentModel"/> model that contains only initial information for <see cref="StudentModel"/></param>
-    Task<StudentModel> CreateStudent(AddStudentModel model);
-    /// <summary>
     /// Updates a <see cref="StudentModel"/> in database with the same <paramref name="id"/>
     /// </summary>
     Task UpdateStudent(Guid id, UpdateStudentModel model);

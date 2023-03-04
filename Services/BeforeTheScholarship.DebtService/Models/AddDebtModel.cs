@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Entities;
 using FluentValidation;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace BeforeTheScholarship.DebtService;
 
 public class AddDebtModel
 {
-    public int StudentId { get; set; }  
+    public Guid StudentId { get; set; }  
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
     public string BorrowedFromWho { get; set; }
@@ -24,17 +26,25 @@ public class AddDebtModelValidator : AbstractValidator<AddDebtModel>
 
         RuleFor(x => x.BorrowedFromWho)
             .MaximumLength(30)
-            .NotEmpty() // Maybe be can be modified to Length(1, 30) thats all.
+            .NotEmpty()
             .WithMessage("The value from who borrowed must be less than 30 and not empty.");
 
         RuleFor(x => x.Phone)
-            .Length(10, 12)
-            .NotEmpty() // Maybe be this function can be deleted (?)
-            .WithMessage("Phone number length must be 10-12 numbers.");
+            .MaximumLength(12)
+            .WithMessage("Phone number length must be less than 12 numbers.");
 
         RuleFor(x => x.Phone)
-            .Must(x => int.TryParse(x, out _))
+            .Must(CorrectPhone)
             .WithMessage("Phone number must contain only numbers.");
+    }
+
+    // Check is Phone field contains only numbers
+    public static bool CorrectPhone(string number)
+    {
+        if (string.IsNullOrEmpty(number))
+            return true;
+
+        return int.TryParse(number, out _);
     }
 }
 

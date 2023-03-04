@@ -50,12 +50,16 @@ public class TaskEmailSender : ITaskEmailSender
                         if (student.Email != null &&
                             emailService != null)
                         {
-                            var content = GetContentMessage(isDevelopment);
+                            string path = Directory.GetCurrentDirectory() + "\\EmailTask\\EmailContentPages\\debtNotification.html";
+
+                            if (!File.Exists(path)) path = "/app/emailspages/debtNotification.html";
+
+                            string content = File.ReadAllText(path);
 
                             content = content.Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
-                                             .Replace("STUDENTNAME", $"{student.FirstName ?? student.UserName}")
+                                             .Replace("STUDENTNAME", $"{student.UserName}")
                                              .Replace("BORROWED", $"{debt.Borrowed}")
-                                             .Replace("WHENTOPAYBACK", $"{debt.WhenToPayback.ToShortDateString()}");
+                                             .Replace("WHENTOPAYBACK", $"{debt.WhenToPayback.DateTime.ToShortDateString()}");
 
                             await emailService.SendEmail(
                                 new EmailModel()
@@ -78,18 +82,5 @@ public class TaskEmailSender : ITaskEmailSender
                 throw new Exception(e.Message);
             }
         }
-    }
-
-    private static string GetContentMessage(bool isDevelopment)
-    {
-        string path;
-        if (isDevelopment)
-            path = Directory.GetCurrentDirectory() + "\\EmailTask\\EmailContentPages\\debtNotification.html";
-        else
-            path = "/app/emailpages/debtNotification.html";
-
-        string content = File.ReadAllText(path);
-
-        return content;
     }
 }

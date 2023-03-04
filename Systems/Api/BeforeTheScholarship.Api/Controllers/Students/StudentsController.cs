@@ -67,26 +67,6 @@ public class StudentsController : ControllerBase
         return data;
     }
 
-    /// <summary>
-    /// HttpPost - Adds new StudentUser to database
-    /// TODO: Delete this method instead of future AccountController
-    /// </summary>
-    /// <param name="request"></param>
-    [HttpPost("")]
-    public async Task<StudentResponse> CreateStudent([FromBody]AddStudentRequest request)
-    {
-        _logger.LogInformation("--> Trying to create student(Id: {StudentId})", request.UserName);
-
-        var model = _mapper.Map<AddStudentModel>(request);
-        var student = await _studentService.CreateStudent(model);
-        var response = _mapper.Map<StudentResponse>(student);
-
-        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully created.", response.Id);
-
-        return response;
-    }
-
-    /// <summary>
     /// HttpPut - Updates existed StudentUser in database
     /// TODO: Delete this method instead of future AccountController
     /// </summary>

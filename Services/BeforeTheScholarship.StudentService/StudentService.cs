@@ -47,19 +47,6 @@ public class StudentService : IStudentService
 
         return data;
     }
-
-    public async Task<StudentModel> CreateStudent(AddStudentModel model)
-    {
-        //TODO: Add student with IS4 by usermanager and other service
-        using var context = await _dbContext.CreateDbContextAsync();
-
-        var data = _mapper.Map<StudentUser>(model);
-
-        await context.StudentUsers.AddAsync(data);
-        context.SaveChanges();
-
-        return _mapper.Map<StudentModel>(model);
-    }
  
     public async Task UpdateStudent(Guid id, UpdateStudentModel model)
     {

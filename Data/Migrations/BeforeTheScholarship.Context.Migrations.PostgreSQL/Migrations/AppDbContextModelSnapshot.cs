@@ -42,7 +42,6 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("StudentId")
@@ -51,10 +50,10 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                     b.Property<Guid>("Uid")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("WhenBorrowed")
+                    b.Property<DateTimeOffset>("WhenBorrowed")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("WhenToPayback")
+                    b.Property<DateTimeOffset>("WhenToPayback")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");

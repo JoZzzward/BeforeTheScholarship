@@ -9,7 +9,8 @@ public class UpdateDebtModel
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
     public string BorrowedFromWho { get; set; }
-    public DateTime WhenToPayback { get; set; }
+    public bool EmailSended { get; set; } // Using on EmailWorker service
+    public DateTimeOffset WhenToPayback { get; set; }
 }
 
 public class UpdateDebtModelValidator : AbstractValidator<UpdateDebtModel>
@@ -27,18 +28,22 @@ public class UpdateDebtModelValidator : AbstractValidator<UpdateDebtModel>
             .WithMessage("The value from who borrowed must be less than 30 and not empty.");
 
         RuleFor(x => x.Phone)
-            .Length(10, 12)
-            .NotEmpty() // Maybe be this function can be deleted (?)
-            .WithMessage("Phone number length must be 10-12 numbers.");
-        RuleFor(x => x.Phone)
-            .Must(x => int.TryParse(x, out _))
-            .WithMessage("Phone number must contain only numbers.");
+            .MaximumLength(12)
+            .WithMessage("Phone number length must be less than 12 numbers.");
 
-        RuleFor(x => x.WhenToPayback).Must(DateSettings).NotEmpty();
+        RuleFor(x => x.Phone)
+            .Must(CorrectPhone)
+            .WithMessage("Phone number must contain only numbers.");
     }
 
-    // Checks if the payback date is more than 1 day from current moment.
-    protected bool DateSettings(DateTime date) => date >= DateTime.Now.ToLocalTime().AddDays(1);
+    // Check is Phone field contains only numbers
+    public static bool CorrectPhone(string number)
+    {
+        if (string.IsNullOrEmpty(number))
+            return true;
+
+        return int.TryParse(number, out _);
+    }
 }
 
 public class UpdateDebtModelProfile : Profile

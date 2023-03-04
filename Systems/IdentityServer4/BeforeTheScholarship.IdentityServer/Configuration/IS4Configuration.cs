@@ -20,6 +20,7 @@ public static class IS4Configuration
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddUserManager<UserManager<StudentUser>>()
+            .AddSignInManager<SignInManager<StudentUser>>()
             .AddDefaultTokenProviders()
             ;
 

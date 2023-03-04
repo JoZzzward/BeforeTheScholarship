@@ -1,11 +1,11 @@
 ﻿namespace BeforeTheScholarship.Services.UserAccount;
 
 using AutoMapper;
+using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.UserAccountService.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 
@@ -13,30 +13,36 @@ public class UserAccountService : IUserAccountService
 {
     private readonly IMapper _mapper;
     private readonly UserManager<StudentUser> _userManager;
-    private readonly ILogger<UserAccountService> _logger;
+    private readonly SignInManager<StudentUser> _signInManager;
     private readonly IEmailSender _emailSender;
+    private readonly IModelValidator<RegisterUserAccountModel> _registerModelValidator;
+    private readonly IModelValidator<LoginUserAccountModel> _loginModelValidator;
 
     public UserAccountService(
         IMapper mapper,
         UserManager<StudentUser> userManager,
-        ILogger<UserAccountService> logger,
-        IEmailSender emailSender
-    )
+        SignInManager<StudentUser> signInManager,
+        IEmailSender emailSender,
+        IModelValidator<RegisterUserAccountModel> registerModelValidator,
+        IModelValidator<LoginUserAccountModel> loginModelValidator
+        )
     {
         _mapper = mapper;
-        _userManager = userManager; 
-        _logger = logger;
+        _userManager = userManager;
+        _signInManager = signInManager;
         _emailSender = emailSender;
+        _registerModelValidator = registerModelValidator;
+        _loginModelValidator = loginModelValidator;
     }
 
     public async Task<UserAccountModel> RegisterUser(RegisterUserAccountModel model)
     {
-        if (model.ConfirmPassword != model.Password)
-            throw new Exception($"Password and confirm password must be equals");
+        _registerModelValidator.CheckValidation(model);
 
         model.Email = model.Email.Replace(" ", "");
-        
+
         var user = await _userManager.FindByEmailAsync(model.Email);
+        
         if (user != null)
             throw new Exception($"User account with email {model.Email} already exist.");
 
@@ -50,9 +56,9 @@ public class UserAccountService : IUserAccountService
             PhoneNumber = null,
             PhoneNumberConfirmed = false,
         };
-
+         
         var result = await _userManager.CreateAsync(user, model.Password);
-
+        
         if (!result.Succeeded)
             throw new Exception($"Creating user account is wrong. {string.Join(", ", result.Errors.Select(s => s.Description))}");
 
@@ -62,26 +68,16 @@ public class UserAccountService : IUserAccountService
 
             // Gets a path of html page for mail content
             var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\emailConfirmation.html";
-            
-            string content;
+
+            if (!File.Exists(path)) path = "/app/emailpages/emailConfirmation.html";
 
             // Filling content
-            // TODO: Fix this big blog with reading
-            try
-            {
-                content = File.ReadAllText(path);
-            }
-            catch
-            {
-                path = "/app/emailpages/emailConfirmation.html";
-                content = File.ReadAllText(path);
-            }
+            var content = File.ReadAllText(path);
 
             content = content.Replace("QUERYEMAIL", user.Email)
                          .Replace("QUERYTOKEN", token)
                          .Replace("DATENOW", DateTime.Now.ToLocalTime().ToShortDateString().ToString())
                          ;
-
 
             // Sending mail to user email for confirmation
             _emailSender?.SendEmail(new EmailModel()
@@ -93,6 +89,25 @@ public class UserAccountService : IUserAccountService
         }
 
         return _mapper.Map<UserAccountModel>(user);
+    }
+
+    public async Task<UserAccountModel> LoginUser(LoginUserAccountModel model)
+    {
+        _loginModelValidator.CheckValidation(model);
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user is null)
+            throw new ArgumentNullException($"User with email {model.Email} not found.");
+
+        var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
+
+        if (!result.Succeeded)
+            throw new Exception($"Invalid email or password.");
+
+        var data = _mapper.Map<UserAccountModel>(user);
+
+        return data;
     }
 
     public async Task ConfirmEmail(ConfirmationEmailModel confirmationEmail)

@@ -53,6 +53,20 @@ public class AccountsController : ControllerBase
         return response;
     }
 
+    [HttpPost("login")]
+    public async Task<UserAccountResponse> Login([FromQuery] LoginUserAccountRequest request)
+    {
+        _logger.LogInformation("--> User(Email: {UserEmail}) trying to sign in.", request.Email);
+
+        var user = await _userAccountService.LoginUser(_mapper.Map<LoginUserAccountModel>(request));
+
+        var response = _mapper.Map<UserAccountResponse>(user);
+
+        _logger.LogInformation("--> User(Email: {UserEmail}) was succesfully sign in.", user.UserName);
+
+        return response;
+    }
+
     /// <summary>
     /// Confirm email with token that was given on account registration and sended to user email
     /// </summary>

@@ -11,7 +11,7 @@ public static class AppApiClients
     {
         var configuration = provider.GetRequiredService<IConfiguration>();
 
-        var clientSecret = SecretSearcher.SearchSecret("ClientSecretValue:IdentitySettings", "clientsecret", configuration);
+        string clientSecret = SecretSearcher.SearchSecret("ClientSecretValue:IdentitySettings", "clientsecret", configuration);
 
         var clients = new List<Client>()
             {
@@ -20,7 +20,8 @@ public static class AppApiClients
                     ClientId = "swagger",
                     ClientSecrets =
                     {
-                        new Secret(clientSecret.Sha256())
+                        // ToString is important
+                        new Secret(clientSecret.ToString().Sha256())
                     },
                     AccessTokenLifetime = 3600,
 
@@ -38,7 +39,8 @@ public static class AppApiClients
                     ClientId= "mobile_app",
                     ClientSecrets =
                     {
-                        new Secret(clientSecret.Sha256())
+                        // ToString is important
+                        new Secret(clientSecret.ToString().Sha256())
                     },
 
                     AccessTokenLifetime = 3600,
