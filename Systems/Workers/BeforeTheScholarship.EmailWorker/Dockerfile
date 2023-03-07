@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-VOLUME /EmailTask/EmailContentPages /app/emailspages
-COPY ["Systems/Workers/BeforeTheScholarship.EmailWorker/EmailTask/EmailContentPages","/app/emailspages"]
+VOLUME /EmailTask/EmailContentPages /app/emailpages
+COPY ["Systems/Workers/BeforeTheScholarship.EmailWorker/EmailTask/EmailContentPages","/app/emailpages"]
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build

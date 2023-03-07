@@ -2,6 +2,7 @@
 using BeforeTheScholarship.StudentService;
 using BeforeTheScholarship.Services.EmailSender;
 using AutoMapper;
+using BeforeTheScholarship.Common.Extensions;
 
 namespace BeforeTheScholarship.EmailWorker.EmailTask;
 
@@ -50,16 +51,13 @@ public class TaskEmailSender : ITaskEmailSender
                         if (student.Email != null &&
                             emailService != null)
                         {
-                            string path = Directory.GetCurrentDirectory() + "\\EmailTask\\EmailContentPages\\debtNotification.html";
-
-                            if (!File.Exists(path)) path = "/app/emailspages/debtNotification.html";
-
-                            string content = File.ReadAllText(path);
-
-                            content = content.Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
-                                             .Replace("STUDENTNAME", $"{student.UserName}")
-                                             .Replace("BORROWED", $"{debt.Borrowed}")
-                                             .Replace("WHENTOPAYBACK", $"{debt.WhenToPayback.DateTime.ToShortDateString()}");
+                            var content = PathReader.ReadContent(
+                                                Path.Combine(Directory.GetCurrentDirectory(), "\\EmailTask\\EmailContentPages\\debtNotification.html"),
+                                                "/app/emailpages/debtNotification.html")
+                                                .Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
+                                                .Replace("STUDENTNAME", $"{student.UserName}")
+                                                .Replace("BORROWED", $"{debt.Borrowed}")
+                                                .Replace("WHENTOPAYBACK", $"{debt.WhenToPayback.DateTime.ToShortDateString()}"); ;
 
                             await emailService.SendEmail(
                                 new EmailModel()

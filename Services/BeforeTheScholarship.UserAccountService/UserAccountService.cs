@@ -1,6 +1,7 @@
 ﻿namespace BeforeTheScholarship.Services.UserAccount;
 
 using AutoMapper;
+using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.EmailSender;
@@ -86,20 +87,16 @@ public class UserAccountService : IUserAccountService
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            // Gets a path of html page for mail content
-            var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\emailConfirmation.html";
-
-            if (!File.Exists(path)) path = "/app/emailpages/emailConfirmation.html";
-
-            // Filling content
-            var content = File.ReadAllText(path);
+            var content = PathReader.ReadContent(
+                                Path.Combine(Directory.GetCurrentDirectory(), "\\EmailPages\\emailConfirmation.html"),
+                                "/app/emailpages/emailConfirmation.html");
 
             content = content.Replace("QUERYEMAIL", user.Email)
-                         .Replace("QUERYTOKEN", token)
-                         .Replace("DATENOW", DateTime.Now.ToLocalTime().ToShortDateString().ToString())
-                         ;
+                             .Replace("QUERYTOKEN", token)
+                             .Replace("DATENOW", DateTime.Now.ToLocalTime().ToShortDateString().ToString())
+                             ;
 
-            // Sending mail to user email for confirmation
+            // Sending email confirmation mail for current user
             _emailSender?.SendEmail(new EmailModel()
             {
                 EmailTo = user.Email,
@@ -152,12 +149,10 @@ public class UserAccountService : IUserAccountService
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-        // Gets a path of html page for mail content
-        var path = $"{Directory.GetCurrentDirectory()}\\EmailPages\\passwordRecovery.html";
+        var content = PathReader.ReadContent(
+                                Path.Combine(Directory.GetCurrentDirectory(), "\\EmailPages\\passwordRecovery.html"),
+                                "/app/emailpages/passwordRecovery.html");
 
-        if (!File.Exists(path)) path = "/app/emailpages/passwordRecovery.html";
-
-        var content = File.ReadAllText(path);
         content = content.Replace("QUERYEMAIL", user.Email)
                          .Replace("QUERYTOKEN", token)
                          .Replace("DATENOW", DateTimeOffset.Now.LocalDateTime.ToShortDateString().ToString())
