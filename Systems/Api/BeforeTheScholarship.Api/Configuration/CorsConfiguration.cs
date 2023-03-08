@@ -13,11 +13,12 @@ public static class CorsConfiguration
     {
         services.AddCors(builder =>
         {
-            builder.AddDefaultPolicy(pol =>
+            builder.AddPolicy(CorsSettings.DefaultOriginName, policy => 
             {
-                pol.AllowAnyHeader();
-                pol.AllowAnyMethod();
-                pol.AllowAnyOrigin();
+                policy.WithOrigins("http://localhost:7001",
+                                   "http://localhost:7002")
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader(); 
             });
         });
         return services;
@@ -29,6 +30,6 @@ public static class CorsConfiguration
     /// <param name="app">Application</param>
     public static void UseAppCors(this IApplicationBuilder app)
     {
-        app.UseCors();
+        app.UseCors(CorsSettings.DefaultOriginName);
     }
 }

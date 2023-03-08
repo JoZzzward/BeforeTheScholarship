@@ -4,6 +4,7 @@ using AutoMapper;
 using BeforeTheScholarship.Api.Controllers.Account.Models;
 using BeforeTheScholarship.Services.UserAccount;
 using BeforeTheScholarship.UserAccountService.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 [Produces("application/json")]
 [Route("api/v{version:apiVersion}/account")]
 [ApiController]
+[EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
 [ApiVersion("1.0")]
 public class AccountsController : ControllerBase
 {

@@ -21,7 +21,6 @@ public static class SwaggerConfiguration
     /// </summary>  
     /// <param name="services">Services collection</param>
     /// <param name="identitySettings"></param>
-    /// <param name="swaggerSettings"></param>
     public static IServiceCollection AddAppSwagger(this IServiceCollection services, IdentitySettings identitySettings)
     {
         services

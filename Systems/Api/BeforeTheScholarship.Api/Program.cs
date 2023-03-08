@@ -26,8 +26,9 @@ services.RegisterAppServices();
 
 services.AddAppAutoMapper();
 
-services.AddControllers().AddValidator();
+services.AddControllersAndViews();
 
+services.AddValidator();
 
 var app = builder.Build();
 
@@ -38,7 +39,7 @@ app.UseHealthChecks();
 app.UseAppAuth();
 app.UseAppSwagger();
 
-app.MapControllers();
+app.UseControllersAndViews();
 
 DbInitializer.Execute(app.Services);
 
