@@ -2,9 +2,6 @@
 
 using BeforeTheScholarship.Common.Validation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc;
-using BeforeTheScholarship.Common.Exceptions;
 
 /// <summary>
 /// Validator Configuration
@@ -12,7 +9,7 @@ using BeforeTheScholarship.Common.Exceptions;
 public static class ValidatorConfiguration
 {
 
-    /*public static IServiceCollection AddValidator(this IServiceCollection services)
+    public static IServiceCollection AddValidator(this IServiceCollection services)
     {
         services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
@@ -21,14 +18,14 @@ public static class ValidatorConfiguration
         services.AddSingleton(typeof(IModelValidator<>), typeof(ModelValidator<>));
 
         return services;
-    }*/
+    }
 
     /// <summary>
     /// Adds validator to app
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IMvcBuilder AddValidator(this IMvcBuilder builder)
+    /*public static IMvcBuilder AddValidator(this IMvcBuilder builder)
     {
         builder.ConfigureApiBehaviorOptions(options =>
         {
@@ -68,5 +65,5 @@ public static class ValidatorConfiguration
         builder.Services.AddSingleton(typeof(IModelValidator<>), typeof(ModelValidator<>));
 
         return builder;
-    }
+    }*/
 }

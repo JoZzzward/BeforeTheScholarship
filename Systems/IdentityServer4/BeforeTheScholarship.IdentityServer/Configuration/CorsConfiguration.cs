@@ -20,20 +20,13 @@ public static class CorsConfiguration
 
             return new DefaultCorsPolicyService(logger) 
             {
-                AllowAll = true
+                AllowedOrigins = new[]
+                {
+                    "http://localhost:7000"
+                }
             };
         });
 
         return services;
-    }
-
-    /// <summary>
-    /// Using App Cors
-    /// </summary>
-    /// <param name="app">Application</param>
-    /// <returns></returns>
-    public static void UseAppCors(this IApplicationBuilder app)
-    {
-
     }
 }

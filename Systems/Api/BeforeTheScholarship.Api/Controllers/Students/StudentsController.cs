@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Api.Controllers.Debts;
 using BeforeTheScholarship.StudentService;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeforeTheScholarship.Api.Controllers.Students;
@@ -10,6 +11,7 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 /// </summary>
 [Produces("application/json")]
 [ApiController]
+[EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/students")]
 public class StudentsController : ControllerBase
