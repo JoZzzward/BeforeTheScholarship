@@ -36,6 +36,16 @@ services:
     env_file:
       - env.identityserver
 
+  beforethescholarship_rabbitmq:
+    ports:
+      - "5672:5672"
+      - "5673:5673"
+      - "15672:15672" 
+    networks:
+      - beforethescholarship_network
+    volumes:      
+      - ./rabbitmq:/var/lib/rabbitmq
+
 networks:
   beforethescholarship_network:
     name: beforethescholarship

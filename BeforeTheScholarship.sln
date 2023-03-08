@@ -43,9 +43,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Settin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Common", "Shared\BeforeTheScholarship.Common\BeforeTheScholarship.Common.csproj", "{3E49583F-01F7-4D76-A7D1-DCBEB7978C1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.UserAccountService", "Services\BeforeTheScholarship.UserAccountService\BeforeTheScholarship.UserAccountService.csproj", "{6E0D1AD9-8DC7-406A-BDCD-E6BF482F1342}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.UserAccountService", "Services\BeforeTheScholarship.UserAccountService\BeforeTheScholarship.UserAccountService.csproj", "{6E0D1AD9-8DC7-406A-BDCD-E6BF482F1342}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Services.Settings", "Services\BeforeTheScholarship.Settings\BeforeTheScholarship.Services.Settings.csproj", "{08A65F25-DDA1-4047-B12E-E896C92EB35C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Services.Settings", "Services\BeforeTheScholarship.Settings\BeforeTheScholarship.Services.Settings.csproj", "{08A65F25-DDA1-4047-B12E-E896C92EB35C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Actions", "Services\BeforeTheScholarship.Actions\BeforeTheScholarship.Actions.csproj", "{63FCE967-12D8-48A6-A4BC-7AC3461CF41E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.RabbitMq", "Services\BeforeTheScholarship.RabbitMq\BeforeTheScholarship.RabbitMq.csproj", "{1E3EBD1C-65D7-49D4-96BC-E053E21EC811}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +113,14 @@ Global
 		{08A65F25-DDA1-4047-B12E-E896C92EB35C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08A65F25-DDA1-4047-B12E-E896C92EB35C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08A65F25-DDA1-4047-B12E-E896C92EB35C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63FCE967-12D8-48A6-A4BC-7AC3461CF41E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63FCE967-12D8-48A6-A4BC-7AC3461CF41E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63FCE967-12D8-48A6-A4BC-7AC3461CF41E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63FCE967-12D8-48A6-A4BC-7AC3461CF41E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E3EBD1C-65D7-49D4-96BC-E053E21EC811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3EBD1C-65D7-49D4-96BC-E053E21EC811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3EBD1C-65D7-49D4-96BC-E053E21EC811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3EBD1C-65D7-49D4-96BC-E053E21EC811}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +143,8 @@ Global
 		{3E49583F-01F7-4D76-A7D1-DCBEB7978C1F} = {AC4B384F-BEED-4BAD-922E-6DBF496BF6E9}
 		{6E0D1AD9-8DC7-406A-BDCD-E6BF482F1342} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
 		{08A65F25-DDA1-4047-B12E-E896C92EB35C} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
+		{63FCE967-12D8-48A6-A4BC-7AC3461CF41E} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
+		{1E3EBD1C-65D7-49D4-96BC-E053E21EC811} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37ACCB9C-F5D9-4B83-AC74-C538F7149F3C}

@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Actions;
+using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
+using BeforeTheScholarship.Services.EmailSender;
+using BeforeTheScholarship.StudentService;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeforeTheScholarship.DebtService;
@@ -9,19 +13,25 @@ namespace BeforeTheScholarship.DebtService;
 public class DebtService : IDebtService
 {
     private readonly IDbContextFactory<AppDbContext> _dbContext;
+    private readonly IStudentService _studentService;
     private readonly IMapper _mapper;
+    private readonly IActionsService _actionService;
     private readonly IModelValidator<AddDebtModel> _addDebtModelValidator;
     private readonly IModelValidator<UpdateDebtModel> _updateDebtModelValidator;
 
     public DebtService(
         IDbContextFactory<AppDbContext> dbContext,
+        IStudentService studentService,
         IMapper mapper,
+        IActionsService actionService,
         IModelValidator<AddDebtModel> addDebtModelValidator,
         IModelValidator<UpdateDebtModel> updateDebtModelValidator
         )
     {
         _dbContext = dbContext;
+        _studentService = studentService;
         _mapper = mapper;
+        _actionService = actionService;
         _addDebtModelValidator = addDebtModelValidator;
         _updateDebtModelValidator = updateDebtModelValidator;
     }
@@ -62,8 +72,26 @@ public class DebtService : IDebtService
 
         var data = _mapper.Map<Debts>(model);
 
+        var delay = (data.WhenToPayback - data.WhenToPayback.AddDays(-1)).TotalMilliseconds;
+
         await context.Debts.AddAsync(data);
         context.SaveChanges();
+
+        var student = await _studentService.GetStudentById(data.StudentId);
+        var content = PathReader.ReadContent(
+                                        Path.Combine(Directory.GetCurrentDirectory(), "\\EmailPages\\debtNotification.html"),
+                                        "/app/emailpages/debtNotification.html")
+                                        .Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
+                                        .Replace("STUDENTNAME", $"{student.UserName}")
+                                        .Replace("BORROWED", $"{data.Borrowed}")
+                                        .Replace("WHENTOPAYBACK", $"{data.WhenToPayback.DateTime.ToShortDateString()}");
+
+        await _actionService.SendEmail(new EmailModel()
+        {
+            EmailTo = student.Email,
+            Subject = "One of your debts is about to expire",
+            Message = content
+        }, delay);
 
         return _mapper.Map<DebtModel>(data);
     }

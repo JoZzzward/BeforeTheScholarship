@@ -1,4 +1,6 @@
-﻿using BeforeTheScholarship.DebtService;
+﻿using BeforeTheScholarship.Actions;
+using BeforeTheScholarship.DebtService;
+using BeforeTheScholarship.RabbitMq;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.Settings;
 using BeforeTheScholarship.Services.UserAccount;
@@ -18,11 +20,13 @@ public static class Bootstrapper
     {
         services.AddIdentitySettings()
             .AddSwaggerSettings()
+            .AddRabbitMqService()
+            .AddActionsService()
+            .AddEmailSender()
 
             .AddStudentService()
             .AddDebtService()
 
-            .AddEmailSender()
             .AddUserAccountService();
 
         return services;

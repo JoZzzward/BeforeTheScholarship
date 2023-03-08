@@ -22,6 +22,6 @@ var app = builder.Build();
 
 app.UseHealthChecks();
 
-app.Services.GetRequiredService<ITaskEmailSender>().Start(builder.Environment.IsDevelopment());
+app.Services.GetRequiredService<ITaskEmailSender>().Start();
 
 app.Run();

@@ -2,5 +2,5 @@
 
 public interface ITaskEmailSender
 {
-    Task Start(bool isDevelopment);
+    void Start();
 }

@@ -3,6 +3,7 @@ using BeforeTheScholarship.DebtService;
 using BeforeTheScholarship.StudentService;
 using BeforeTheScholarship.EmailWorker.EmailTask;
 using BeforeTheScholarship.Api.Configuration;
+using BeforeTheScholarship.RabbitMq;
 
 namespace BeforeTheScholarship.EmailWorker;
 
@@ -13,6 +14,7 @@ public static class Bootstrapper
         services
             .AddDebtService()
             .AddStudentService()
+            .AddRabbitMqService()
             .AddEmailSender()
             .AddAppAutoMapper()
             ;
