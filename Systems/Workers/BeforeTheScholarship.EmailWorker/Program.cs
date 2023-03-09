@@ -16,8 +16,6 @@ services.AddAppDbContext(builder.Configuration);
 
 services.RegisterAppServices();
 
-services.AddValidator();
-
 var app = builder.Build();
 
 app.UseHealthChecks();
