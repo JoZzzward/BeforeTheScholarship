@@ -1,6 +1,4 @@
-﻿using BeforeTheScholarship.Entities;
-
-namespace BeforeTheScholarship.DebtService;
+﻿namespace BeforeTheScholarship.DebtService;
 
 public interface IDebtService
 {

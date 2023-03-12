@@ -72,26 +72,10 @@ public class DebtService : IDebtService
 
         var data = _mapper.Map<Debts>(model);
 
-        var delay = (data.WhenToPayback - data.WhenToPayback.AddDays(-1)).TotalMilliseconds;
-
         await context.Debts.AddAsync(data);
         context.SaveChanges();
 
-        var student = await _studentService.GetStudentById(data.StudentId);
-        var content = PathReader.ReadContent(
-                                        Path.Combine(Directory.GetCurrentDirectory(), "\\EmailPages\\debtNotification.html"),
-                                        "/app/emailpages/debtNotification.html")
-                                        .Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
-                                        .Replace("STUDENTNAME", $"{student.UserName}")
-                                        .Replace("BORROWED", $"{data.Borrowed}")
-                                        .Replace("WHENTOPAYBACK", $"{data.WhenToPayback.DateTime.ToShortDateString()}");
-
-        await _actionService.SendEmail(new EmailModel()
-        {
-            EmailTo = student.Email,
-            Subject = "One of your debts is about to expire",
-            Message = content
-        }, delay);
+        await CreateDebtSendEmailAction(data);
 
         return _mapper.Map<DebtModel>(data);
     }
@@ -106,12 +90,37 @@ public class DebtService : IDebtService
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (debt is null)
-            throw new NullReferenceException($"Debt({id}) was not found");
+            throw new NullReferenceException($"Debt({id}) was not found, incorrect id");
 
         debt = _mapper.Map(model, debt);
 
         context.Debts.Update(debt);
         context.SaveChanges();
+
+        await CreateDebtSendEmailAction(debt);
+    }
+
+    private async Task CreateDebtSendEmailAction(Debts data)
+    {
+        var delay = (data.WhenToPayback - data.WhenToPayback.AddDays(-1)).TotalMilliseconds;
+
+        var student = await _studentService.GetStudentById(data.StudentId);
+
+        var content = PathReader.ReadContent(
+                                        Directory.GetCurrentDirectory() + "\\EmailPages\\debtNotification.html",
+                                        "/app/emailpages/debtNotification.html")
+                                        .Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
+                                        .Replace("STUDENTNAME", $"{student.UserName}")
+                                        .Replace("BORROWED", $"{data.Borrowed}")
+                                        .Replace("WHENTOPAYBACK", $"{data.WhenToPayback.DateTime.ToShortDateString()}");
+
+        await _actionService.SendDebtEmail(new DebtEmailModel()
+        {
+            EmailTo = student.Email,
+            Subject = "One of your debts is about to expire",
+            Message = content,
+            WhenToPayback = data.WhenToPayback
+        }, delay);
     }
 
     public async Task DeleteDebt(int? id)

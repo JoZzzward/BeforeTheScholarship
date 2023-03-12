@@ -4,5 +4,5 @@ namespace BeforeTheScholarship.Actions;
 
 public interface IActionsService
 {
-    Task SendEmail(EmailModel model, double delay);
+    Task SendDebtEmail(DebtEmailModel model, double delay);
 }

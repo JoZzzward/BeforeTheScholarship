@@ -43,6 +43,23 @@
             Adds AutoMapper to domain assemblies which names starts with "beforethescholarship."
             </summary>
         </member>
+        <member name="T:BeforeTheScholarship.Api.Configuration.ControllersAndViewsConfiguration">
+            <summary>
+            Controllers and Views Configuration
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.ControllersAndViewsConfiguration.AddControllersAndViews(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds controller and views setup
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Configuration.ControllersAndViewsConfiguration.UseControllersAndViews(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            Adds controller and views setup
+            </summary>
+            <param name="app"></param>
+        </member>
         <member name="T:BeforeTheScholarship.Api.Configuration.CorsConfiguration">
             <summary>
             CORS configuration
@@ -112,7 +129,6 @@
             </summary>  
             <param name="services">Services collection</param>
             <param name="identitySettings"></param>
-            <param name="swaggerSettings"></param>
         </member>
         <member name="M:BeforeTheScholarship.Api.Configuration.SwaggerConfiguration.UseAppSwagger(Microsoft.AspNetCore.Builder.WebApplication)">
             <summary>
@@ -125,9 +141,9 @@
             Validator Configuration
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Configuration.ValidatorConfiguration.AddValidator(Microsoft.Extensions.DependencyInjection.IMvcBuilder)">
+        <member name="M:BeforeTheScholarship.Api.Configuration.ValidatorConfiguration.AddValidator(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Adds validator to app
+            Adds Fluent Validation to project services
             </summary>
             <param name="services"></param>
             <returns></returns>

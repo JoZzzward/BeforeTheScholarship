@@ -14,7 +14,7 @@ services:
     image: postgres:15.1
 
   beforethescholarship_rabbitmq:
-    image: rabbitmq:management
+    image: beforethescholarshiprabbitmq:management
     build:
       context: .
       dockerfile: Services/BeforeTheScholarship.RabbitMq/Dockerfile

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\BeforeTheScholarship.Common\BeforeTheScholarship.Common.csproj" />
     <ProjectReference Include="..\BeforeTheScholarship.EmailSender\BeforeTheScholarship.EmailSender.csproj" />
     <ProjectReference Include="..\BeforeTheScholarship.RabbitMq\BeforeTheScholarship.RabbitMq.csproj" />
   </ItemGroup>

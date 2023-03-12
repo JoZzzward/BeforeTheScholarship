@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using BeforeTheScholarship.Common.Consts;
+﻿using BeforeTheScholarship.Common.Consts;
+using BeforeTheScholarship.DebtService;
 using BeforeTheScholarship.RabbitMq;
 using BeforeTheScholarship.Services.EmailSender;
 
@@ -9,29 +9,43 @@ public class TaskEmailSender : ITaskEmailSender
 {
     private readonly ILogger<TaskEmailSender> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IMapper _mapper;
+    private readonly IDebtService _debtService;
     private readonly IRabbitMqService _rabbitMqService;
 
     public TaskEmailSender(
         ILogger<TaskEmailSender> logger,
         IServiceProvider serviceProvider,
-        IMapper mapper,
+        IDebtService debtService,
         IRabbitMqService rabbitMqService
         )
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
-        _mapper = mapper;
+        _debtService = debtService;
         _rabbitMqService = rabbitMqService;
     }
 
     public void Start()
     {
-        _rabbitMqService.Subscribe<EmailModel>(ActionConsts.SEND_DEBT_EMAIL, async data
+        _rabbitMqService.Subscribe<DebtEmailModel>(ActionConsts.SEND_DEBT_EMAIL, async data
             => await Execute<IEmailSender>(async service =>
             {
+                _logger.LogInformation("--> RABBITMQ: TRYING TO SEND NOTIFICATION ABOUT DEBT TO: {EmailTo}", data.EmailTo);
+
+                var debts = await _debtService.GetDebts();
+
+                var debt = debts.FirstOrDefault(x => x.WhenToPayback.DateTime.ToLocalTime().ToString("MM/dd/yy H:mm")
+                                               == data.WhenToPayback.DateTime.ToLocalTime().ToString("MM/dd/yy H:mm"));
+                
+                if (debt == null)
+                {
+                    _logger.LogInformation("The notification of the debt to be repaid with one day was not sent. Debt with specified data was not found ({DataTime})", data.WhenToPayback.ToString("MM/dd/yy H:mm"));
+                    return;
+                }
+                    
+                await service.SendDebtEmail(data);
+
                 _logger.LogInformation("--> RABBITMQ: NOTIFICATION ABOUT DEBT SENT TO: {EmailTo}", data.EmailTo);
-                await service.SendEmail(data);
             }));
     }
 
@@ -49,7 +63,7 @@ public class TaskEmailSender : ITaskEmailSender
         }
         catch (Exception e)
         {
-            _logger.LogError("Error: {ActionConstSendDebt}: {e.Message}", ActionConsts.SEND_DEBT_EMAIL, e.Message);
+            _logger.LogError("Error: {ActionConstSendDebt}: Exception: {ExceptionMessage}. StackTrace: {StackTrace}", ActionConsts.SEND_DEBT_EMAIL, e.Message, e.StackTrace);
             throw;
         }
     }

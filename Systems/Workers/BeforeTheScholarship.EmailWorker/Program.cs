@@ -1,3 +1,4 @@
+using BeforeTheScholarship.Api.Configuration;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.EmailWorker;
 using BeforeTheScholarship.EmailWorker.Configuration;
@@ -15,6 +16,8 @@ services.AddAppHealthChecks();
 services.AddAppDbContext(builder.Configuration);
 
 services.RegisterAppServices();
+
+services.AddValidator();
 
 var app = builder.Build();
 

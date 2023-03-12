@@ -15,7 +15,7 @@ public class ActionsService : IActionsService
         _rabbitMqService = rabbitMqService;
     }
 
-    public async Task SendEmail(EmailModel model, double delay)
+    public async Task SendDebtEmail(DebtEmailModel model, double delay)
     {
         await _rabbitMqService.PushAsync(ActionConsts.SEND_DEBT_EMAIL, model, delay);
     }
