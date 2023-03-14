@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Api.Controllers.Debts;
 using BeforeTheScholarship.Api.Controllers.Debts.Models;
 using BeforeTheScholarship.Common.Security;
-using BeforeTheScholarship.DebtService;
+using BeforeTheScholarship.Services.CacheService;
+using BeforeTheScholarship.Services.DebtService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BeforeTheScholarship.Api.Controllers.Debts;
+namespace BeforeTheScholarship.Services.Api.Controllers.Debts;
 
 /// <summary>
 /// Debts ApiController
@@ -22,6 +24,7 @@ public class DebtsController : ControllerBase
     private readonly IDebtService _debtService;
     private readonly ILogger<DebtsController> _logger;
     private readonly IMapper _mapper;
+    private readonly ICacheService _cacheService;
 
     /// <summary>
     /// Debts constructor that implements services
@@ -29,12 +32,14 @@ public class DebtsController : ControllerBase
     public DebtsController(
         IDebtService debtService,
         ILogger<DebtsController> logger,
-        IMapper mapper
+        IMapper mapper,
+        ICacheService cacheService
         )
     {
         _debtService = debtService;
         _logger = logger;
         _mapper = mapper;
+        _cacheService = cacheService;
     }
 
     /// <summary>

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Api.Controllers.Debts;
-using BeforeTheScholarship.StudentService;
+using BeforeTheScholarship.Services.Api.Controllers.Debts;
+using BeforeTheScholarship.Services.CacheService;
+using BeforeTheScholarship.Services.StudentService;
+using BeforeTheScholarship.Services.StudentService.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +21,7 @@ public class StudentsController : ControllerBase
     private readonly IStudentService _studentService;
     private readonly ILogger<DebtsController> _logger;
     private readonly IMapper _mapper;
+    private readonly ICacheService _cacheService;
 
     /// <summary>
     /// Students constructor that implements services
@@ -26,11 +29,13 @@ public class StudentsController : ControllerBase
     public StudentsController(
         IStudentService studentService,
         ILogger<DebtsController> logger,
-        IMapper mapper)
+        IMapper mapper,
+        ICacheService cacheService)
     {
         _studentService = studentService;
         _logger = logger;
         _mapper = mapper;
+        _cacheService = cacheService;
     }
 
     /// <summary>

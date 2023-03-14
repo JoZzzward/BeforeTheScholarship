@@ -1,10 +1,11 @@
-﻿using BeforeTheScholarship.Actions;
-using BeforeTheScholarship.DebtService;
-using BeforeTheScholarship.RabbitMq;
+﻿using BeforeTheScholarship.Services.Actions;
+using BeforeTheScholarship.Services.CacheService;
+using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.EmailSender;
+using BeforeTheScholarship.Services.RabbitMqService;
 using BeforeTheScholarship.Services.Settings;
+using BeforeTheScholarship.Services.StudentService;
 using BeforeTheScholarship.Services.UserAccount;
-using BeforeTheScholarship.StudentService;
 
 namespace BeforeTheScholarship.Api;
 
@@ -23,6 +24,7 @@ public static class Bootstrapper
             .AddRabbitMqService()
             .AddActionsService()
             .AddEmailSender()
+            .AddCacheService()
 
             .AddStudentService()
             .AddDebtService()

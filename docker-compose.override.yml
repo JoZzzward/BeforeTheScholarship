@@ -45,6 +45,17 @@ services:
       - beforethescholarship_network
     volumes:      
       - ./rabbitmq:/var/lib/rabbitmq
+    restart: always
+
+  beforethescholarship_redis:
+    command: redis-server
+    ports:
+      - '6379:6379'
+    volumes:      
+      - ~/.docker-conf/redis/data/:/data
+    networks:
+      - beforethescholarship_network
+    restart: always
 
 networks:
   beforethescholarship_network:

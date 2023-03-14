@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Services.DebtService;
 
 namespace BeforeTheScholarship.Api.Controllers.Debts.Models;
 
@@ -17,6 +18,6 @@ public class DebtResponseProfile : Profile
 {
     public DebtResponseProfile()
     {
-        CreateMap<DebtService.DebtModel, DebtResponse>();
+        CreateMap<DebtModel, DebtResponse>();
     }
 }

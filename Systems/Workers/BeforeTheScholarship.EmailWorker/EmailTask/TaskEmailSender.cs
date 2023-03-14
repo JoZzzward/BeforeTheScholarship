@@ -1,7 +1,7 @@
 ﻿using BeforeTheScholarship.Common.Consts;
-using BeforeTheScholarship.DebtService;
-using BeforeTheScholarship.RabbitMq;
+using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.EmailSender;
+using BeforeTheScholarship.Services.RabbitMqService;
 
 namespace BeforeTheScholarship.EmailWorker.EmailTask;
 

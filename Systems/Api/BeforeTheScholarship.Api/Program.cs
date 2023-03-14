@@ -9,7 +9,7 @@ builder.AddLogger();
 
 var services = builder.Services;
 
-var identitySettings = Settings.Load<IdentitySettings>("IdentitySettings");
+var identitySettings = AppSettings.Load<IdentitySettings>("IdentitySettings");
 
 services.AddHttpContextAccessor();
 services.AddAppCors();

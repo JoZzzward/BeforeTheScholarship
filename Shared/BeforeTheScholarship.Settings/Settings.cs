@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Configuration;
 
-public abstract class Settings
+public abstract class AppSettings
 {
     /// <summary>
     /// Method that loads environment variables from configuration(appsettings.json) by using <paramref name="key"/> to instance of <typeparamref name="T"/> and than returns.

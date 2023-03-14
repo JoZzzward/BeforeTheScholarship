@@ -20,11 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\BeforeTheScholarship.Context\BeforeTheScholarship.Context.csproj" />
-    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.Actions\BeforeTheScholarship.Actions.csproj" />
-    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.DebtService\BeforeTheScholarship.DebtService.csproj" />
-    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.EmailSender\BeforeTheScholarship.EmailSender.csproj" />
-    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.RabbitMq\BeforeTheScholarship.RabbitMq.csproj" />
-    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.StudentService\BeforeTheScholarship.StudentService.csproj" />
+    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.Services.DebtService\BeforeTheScholarship.Services.DebtService.csproj" />
+    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.Services.RabbitMqService\BeforeTheScholarship.Services.RabbitMqService.csproj" />
+    <ProjectReference Include="..\..\..\Services\BeforeTheScholarship.Services.StudentService\BeforeTheScholarship.Services.StudentService.csproj" />
     <ProjectReference Include="..\..\..\Shared\BeforeTheScholarship.Common\BeforeTheScholarship.Common.csproj" />
   </ItemGroup>
 

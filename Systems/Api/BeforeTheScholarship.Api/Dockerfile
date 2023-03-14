@@ -11,12 +11,15 @@ COPY ["Data/BeforeTheScholarship.Context/BeforeTheScholarship.Context.csproj", "
 COPY ["Shared/BeforeTheScholarship.Settings/BeforeTheScholarship.Settings.csproj", "Shared/BeforeTheScholarship.Settings/"]
 COPY ["Data/BeforeTheScholarship.Entities/BeforeTheScholarship.Entities.csproj", "Data/BeforeTheScholarship.Entities/"]
 COPY ["Data/Migrations/BeforeTheScholarship.Context.Migrations.PostgreSQL/BeforeTheScholarship.Context.Migrations.PostgreSQL.csproj", "Data/Migrations/BeforeTheScholarship.Context.Migrations.PostgreSQL/"]
-COPY ["Services/BeforeTheScholarship.DebtService/BeforeTheScholarship.DebtService.csproj", "Services/BeforeTheScholarship.DebtService/"]
-COPY ["Services/BeforeTheScholarship.Settings/BeforeTheScholarship.Services.Settings.csproj", "Services/BeforeTheScholarship.Settings/"]
-COPY ["Services/BeforeTheScholarship.StudentService/BeforeTheScholarship.StudentService.csproj", "Services/BeforeTheScholarship.StudentService/"]
-COPY ["Services/BeforeTheScholarship.UserAccountService/BeforeTheScholarship.UserAccountService.csproj", "Services/BeforeTheScholarship.UserAccountService/"]
+COPY ["Services/BeforeTheScholarship.Services.CacheService/BeforeTheScholarship.Services.CacheService.csproj", "Services/BeforeTheScholarship.Services.CacheService/"]
+COPY ["Services/BeforeTheScholarship.Services.Settings/BeforeTheScholarship.Services.Settings.csproj", "Services/BeforeTheScholarship.Services.Settings/"]
+COPY ["Services/BeforeTheScholarship.Services.DebtService/BeforeTheScholarship.Services.DebtService.csproj", "Services/BeforeTheScholarship.Services.DebtService/"]
+COPY ["Services/BeforeTheScholarship.Services.Actions/BeforeTheScholarship.Services.Actions.csproj", "Services/BeforeTheScholarship.Services.Actions/"]
+COPY ["Services/BeforeTheScholarship.Services.EmailSender/BeforeTheScholarship.Services.EmailSender.csproj", "Services/BeforeTheScholarship.Services.EmailSender/"]
 COPY ["Shared/BeforeTheScholarship.Common/BeforeTheScholarship.Common.csproj", "Shared/BeforeTheScholarship.Common/"]
-COPY ["Services/BeforeTheScholarship.EmailSender/BeforeTheScholarship.EmailSender.csproj", "Services/BeforeTheScholarship.EmailSender/"]
+COPY ["Services/BeforeTheScholarship.Services.RabbitMqService/BeforeTheScholarship.Services.RabbitMqService.csproj", "Services/BeforeTheScholarship.Services.RabbitMqService/"]
+COPY ["Services/BeforeTheScholarship.Services.StudentService/BeforeTheScholarship.Services.StudentService.csproj", "Services/BeforeTheScholarship.Services.StudentService/"]
+COPY ["Services/BeforeTheScholarship.Services.UserAccountService/BeforeTheScholarship.Services.UserAccountService.csproj", "Services/BeforeTheScholarship.Services.UserAccountService/"]
 RUN dotnet restore "Systems/Api/BeforeTheScholarship.Api/BeforeTheScholarship.Api.csproj"
 COPY . .
 WORKDIR "/src/Systems/Api/BeforeTheScholarship.Api"

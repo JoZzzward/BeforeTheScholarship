@@ -17,10 +17,12 @@ services:
     image: beforethescholarshiprabbitmq:management
     build:
       context: .
-      dockerfile: Services/BeforeTheScholarship.RabbitMq/Dockerfile
+      dockerfile: Services/BeforeTheScholarship.Services.RabbitMqService/Dockerfile
     environment:
       - TZ=Europe/Moscow
-    
+  
+  beforethescholarship_redis:
+    image: redis:alpine
 
   beforethescholarship_api:
     image: ${DOCKER_REGISTRY-}beforethescholarshipapi

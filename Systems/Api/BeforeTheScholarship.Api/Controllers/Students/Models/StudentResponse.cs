@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Services.StudentService.Models;
 
 namespace BeforeTheScholarship.Api.Controllers.Students;
 
@@ -15,7 +16,7 @@ public class StudentResponseProfile : Profile
 {
     public StudentResponseProfile()
     {
-        CreateMap<StudentService.StudentModel, StudentResponse>();
-        CreateMap<StudentResponse, StudentService.StudentModel>();
+        CreateMap<StudentModel, StudentResponse>();
+        CreateMap<StudentResponse, StudentModel>();
     }
 }

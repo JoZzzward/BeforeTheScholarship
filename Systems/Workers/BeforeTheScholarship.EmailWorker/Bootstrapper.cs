@@ -1,10 +1,10 @@
-﻿using BeforeTheScholarship.Actions;
-using BeforeTheScholarship.Api.Configuration;
-using BeforeTheScholarship.DebtService;
+﻿using BeforeTheScholarship.Api.Configuration;
 using BeforeTheScholarship.EmailWorker.EmailTask;
-using BeforeTheScholarship.RabbitMq;
+using BeforeTheScholarship.Services.Actions;
+using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.EmailSender;
-using BeforeTheScholarship.StudentService;
+using BeforeTheScholarship.Services.RabbitMqService;
+using BeforeTheScholarship.Services.StudentService;
 
 namespace BeforeTheScholarship.EmailWorker;
 
