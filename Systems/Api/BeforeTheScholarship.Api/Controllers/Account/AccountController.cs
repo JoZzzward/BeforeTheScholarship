@@ -1,11 +1,10 @@
-﻿namespace BeforeTheScholarship.API.Controllers;
-
-using AutoMapper;
-using BeforeTheScholarship.Api.Controllers.Account.Models;
+﻿using AutoMapper;
 using BeforeTheScholarship.Services.UserAccount;
 using BeforeTheScholarship.UserAccountService.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+
+namespace BeforeTheScholarship.Api.Controllers.Accounts;
 
 /// <summary>
 /// Controller to manage account

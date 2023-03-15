@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Api.Controllers.Debts;
-using BeforeTheScholarship.Api.Controllers.Debts.Models;
 using BeforeTheScholarship.Common.Security;
 using BeforeTheScholarship.Services.DebtService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BeforeTheScholarship.Services.Api.Controllers.Debts;
+namespace BeforeTheScholarship.Api.Controllers.Debts;
 
 /// <summary>
 /// Debts ApiController

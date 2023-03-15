@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Services.DebtService;
 
-namespace BeforeTheScholarship.Api.Controllers.Debts.Models;
+namespace BeforeTheScholarship.Api.Controllers.Debts;
 
 public class DebtResponse
 {

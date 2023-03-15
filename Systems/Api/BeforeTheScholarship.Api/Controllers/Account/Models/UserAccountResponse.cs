@@ -1,7 +1,7 @@
-﻿namespace BeforeTheScholarship.Api.Controllers.Account.Models;
-
-using AutoMapper;
+﻿using AutoMapper;
 using BeforeTheScholarship.UserAccountService.Models;
+
+namespace BeforeTheScholarship.Api.Controllers.Account;
 
 public class UserAccountResponse
 {

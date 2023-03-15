@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Services.Api.Controllers.Debts;
 using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.StudentService;
 using BeforeTheScholarship.Services.StudentService.Models;
@@ -19,7 +18,7 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 public class StudentsController : ControllerBase
 {
     private readonly IStudentService _studentService;
-    private readonly ILogger<DebtsController> _logger;
+    private readonly ILogger<StudentsController> _logger;
     private readonly IMapper _mapper;
     private readonly ICacheService _cacheService;
 
@@ -28,7 +27,7 @@ public class StudentsController : ControllerBase
     /// </summary>
     public StudentsController(
         IStudentService studentService,
-        ILogger<DebtsController> logger,
+        ILogger<StudentsController> logger,
         IMapper mapper,
         ICacheService cacheService)
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.UserAccountService.Models;
 
-namespace BeforeTheScholarship.Api.Controllers.Account.Models;
+namespace BeforeTheScholarship.Api.Controllers.Account;
 
 public class ChangePasswordRequest
 {
