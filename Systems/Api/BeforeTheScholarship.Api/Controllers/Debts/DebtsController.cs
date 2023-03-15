@@ -2,7 +2,6 @@
 using BeforeTheScholarship.Api.Controllers.Debts;
 using BeforeTheScholarship.Api.Controllers.Debts.Models;
 using BeforeTheScholarship.Common.Security;
-using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.DebtService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -15,7 +14,7 @@ namespace BeforeTheScholarship.Services.Api.Controllers.Debts;
 /// </summary>
 [Route("api/v{version:apiVersion}/debts")]
 [Produces("application/json")]
-[Authorize]
+//[Authorize]
 [ApiController]
 [EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
 [ApiVersion("1.0")]
@@ -24,7 +23,6 @@ public class DebtsController : ControllerBase
     private readonly IDebtService _debtService;
     private readonly ILogger<DebtsController> _logger;
     private readonly IMapper _mapper;
-    private readonly ICacheService _cacheService;
 
     /// <summary>
     /// Debts constructor that implements services
@@ -32,14 +30,12 @@ public class DebtsController : ControllerBase
     public DebtsController(
         IDebtService debtService,
         ILogger<DebtsController> logger,
-        IMapper mapper,
-        ICacheService cacheService
+        IMapper mapper
         )
     {
         _debtService = debtService;
         _logger = logger;
         _mapper = mapper;
-        _cacheService = cacheService;
     }
 
     /// <summary>
@@ -47,7 +43,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("")]
     public async Task<IEnumerable<DebtResponse>> GetDebts()
     {
@@ -59,13 +55,13 @@ public class DebtsController : ControllerBase
         _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully.", data.Count());
         return data;
     }
-
+    
     /// <summary>
     /// HttpGet - Returns debts that owned by StudentUser with <paramref name="studentId"/>
     /// </summary>
     /// <param name="studentId">Unique student identifier</param>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("{studentId}")]
     public async Task<IEnumerable<DebtResponse>> GetDebts([FromRoute] Guid? studentId)
     {
@@ -84,7 +80,7 @@ public class DebtsController : ControllerBase
     /// HttpPost - Adds new debt to database
     /// </summary>
     /// <param name="request"></param>
-    [Authorize(Policy = AppScopes.DebtsWrite)]
+    //[Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPost("")]
     public async Task<DebtResponse> CreateDebt([FromBody] AddDebtRequest request)
     {
@@ -104,7 +100,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <param name="id">Unique debt identifier</param>
     /// <param name="request">Request body</param>
-    [Authorize(Policy = AppScopes.DebtsWrite)]
+    //[Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtsRequest request)
     {
@@ -122,7 +118,7 @@ public class DebtsController : ControllerBase
     /// HttpDelete - Deletes existing debt in database
     /// </summary>
     /// <param name="id">Unique debt identifier</param>
-    [Authorize(Policy = AppScopes.DebtsWrite)]
+    //[Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDebt([FromRoute] int? id)
     {
@@ -140,7 +136,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
     /// <param name="overdue">Whether the deadline for debt is overdue</param>
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("urgently-repay")]
     public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] Guid studentId, [FromQuery] bool overdue)
     {

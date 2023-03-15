@@ -1,4 +1,5 @@
-﻿using BeforeTheScholarship.Services.Settings;
+﻿using BeforeTheScholarship.Common.CacheConstKeys;
+using BeforeTheScholarship.Services.Settings;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System.Text.Json;
@@ -11,7 +12,8 @@ public class CacheService : ICacheService
     private readonly CacheSettings _settings;
     private IDatabase cacheStorage;
 
-    private readonly ConnectionMultiplexer _redis;
+    private static string redisUri;
+    private static Lazy<ConnectionMultiplexer> Connection = new(() => ConnectionMultiplexer.Connect(redisUri));
 
     public CacheService(
         ILogger<CacheService> logger,
@@ -21,12 +23,13 @@ public class CacheService : ICacheService
         _logger = logger;
         _settings = settings;
 
-        _redis = ConnectionMultiplexer.Connect(
-        $"{_settings.Host}:{_settings.Port},password={_settings.Password}"
-        );
+        redisUri = _settings.Uri;
 
-        cacheStorage = _redis.GetDatabase();
+        cacheStorage = Connection.Value.GetDatabase();
     }
+
+    public async Task<bool> RemoveByKey(string key ) => 
+        await cacheStorage.KeyDeleteAsync( key );
 
     public async Task<T?> GetStringAsync<T>(string key)
     {
@@ -50,7 +53,16 @@ public class CacheService : ICacheService
         _logger.LogInformation("Trying to set data with key({Key}) to cache", key);
         var jsonData = JsonSerializer.Serialize(data);
 
-        await cacheStorage.StringSetAsync(key, jsonData, absoluteExpireTime ?? _settings.CacheLifetime);
+        await cacheStorage.StringSetAsync(key, jsonData, absoluteExpireTime ?? TimeSpan.FromMinutes(_settings.CacheLifetime));
         _logger.LogInformation("Cached data with specified key({Key}) was set successfully", key);
+    }
+
+    public async Task ClearStorage()
+    {
+        await RemoveByKey(DebtsCacheKeys.AllDebtsKey);
+        await RemoveByKey(DebtsCacheKeys.DebtsWithSpecifiedStudentKey);
+        await RemoveByKey(DebtsCacheKeys.UrgentlyRepaidDebtsKey);
+
+        _logger.LogInformation("Storage was successfully cleared");
     }
 }

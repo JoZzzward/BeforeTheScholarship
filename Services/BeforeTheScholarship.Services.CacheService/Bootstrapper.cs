@@ -10,8 +10,8 @@ public static class Bootstrapper
     public static IServiceCollection AddCacheService(this IServiceCollection services, IConfiguration configuration = null)
     {
         var settings = AppSettings.Load<CacheSettings>("CacheSettings", configuration);
-
         services.AddSingleton(settings);
+
         services.AddSingleton<ICacheService, CacheService>();
 
         return services;

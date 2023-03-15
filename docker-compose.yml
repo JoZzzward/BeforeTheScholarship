@@ -22,7 +22,7 @@ services:
       - TZ=Europe/Moscow
   
   beforethescholarship_redis:
-    image: redis:alpine
+    image: redis
 
   beforethescholarship_api:
     image: ${DOCKER_REGISTRY-}beforethescholarshipapi

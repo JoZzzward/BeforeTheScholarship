@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BeforeTheScholarship.Services.Actions\BeforeTheScholarship.Services.Actions.csproj" />
+    <ProjectReference Include="..\BeforeTheScholarship.Services.CacheService\BeforeTheScholarship.Services.CacheService.csproj" />
     <ProjectReference Include="..\BeforeTheScholarship.Services.EmailSender\BeforeTheScholarship.Services.EmailSender.csproj" />
     <ProjectReference Include="..\BeforeTheScholarship.Services.StudentService\BeforeTheScholarship.Services.StudentService.csproj" />
   </ItemGroup>

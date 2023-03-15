@@ -164,7 +164,7 @@
             Students controller
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.Services.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.Services.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper,BeforeTheScholarship.Services.CacheService.ICacheService)">
             <summary>
             Students constructor that implements services
             </summary>

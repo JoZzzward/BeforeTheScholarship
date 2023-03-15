@@ -1,6 +1,7 @@
 ﻿using BeforeTheScholarship.Api.Configuration;
 using BeforeTheScholarship.EmailWorker.EmailTask;
 using BeforeTheScholarship.Services.Actions;
+using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.RabbitMqService;
@@ -16,8 +17,11 @@ public static class Bootstrapper
             .AddRabbitMqService()
             .AddActionsService()
             .AddEmailSender()
+            .AddCacheService()
+
             .AddStudentService()
             .AddDebtService()
+
             .AddAppAutoMapper()
             ;
 
