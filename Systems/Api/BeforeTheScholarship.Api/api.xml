@@ -159,12 +159,104 @@
             </summary>
             <param name="services"></param>
         </member>
+        <member name="T:BeforeTheScholarship.Api.Controllers.Account.AccountsController">
+            <summary>
+            Controller to manage account
+            </summary>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Account.AccountsController},BeforeTheScholarship.Services.UserAccount.IUserAccountService)">
+            <summary>
+            Accounts constructor that implements services
+            </summary>
+            <param name="mapper"></param>
+            <param name="logger"></param>
+            <param name="userAccountService"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.Register(BeforeTheScholarship.Api.Controllers.Account.RegisterUserAccountRequest)">
+            <summary>
+            Creates new user account and send email 
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Account.ConfirmationEmailRequest)">
+            <summary>
+            Confirm email with token that was given on account registration and sended to user email
+            </summary>
+            <param name="request">Contains email and token for confirmation</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Account.PasswordRecoveryMailRequest)">
+            <summary>
+            Sending password recovery mail on user email that specified in <paramref name="request"/>
+            </summary>
+            <param name="request">Contains user email to send the mail to</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.RecoverPassword(BeforeTheScholarship.Api.Controllers.Account.PasswordRecoveryRequest)">
+            <summary>
+            Recover password on new password from request to user with given email.
+            </summary>
+            <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.ChangePassword(BeforeTheScholarship.Api.Controllers.Account.ChangePasswordRequest)">
+            <summary>
+            Changes user with given email old password on new password.
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BeforeTheScholarship.Api.Controllers.Debts.DebtsController">
+            <summary>
+            Debts ApiController
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.#ctor(BeforeTheScholarship.Services.DebtService.IDebtService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
+            <summary>
+            Debts constructor that implements services
+            </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetDebts">
+            <summary>
+            HttpGet - Gettings debts from database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetDebts(System.Nullable{System.Guid})">
+            <summary>
+            HttpGet - Returns debts that owned by StudentUser with <paramref name="studentId"/>
+            </summary>
+            <param name="studentId">Unique student identifier</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.CreateDebt(BeforeTheScholarship.Api.Controllers.Debts.AddDebtRequest)">
+            <summary>
+            HttpPost - Adds new debt to database
+            </summary>
+            <param name="request"></param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Int32},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtsRequest)">
+            <summary>
+            HttpPut - Updates existing debt with <paramref name="id"/> in database
+            </summary>
+            <param name="id">Unique debt identifier</param>
+            <param name="request">Request body</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.DeleteDebt(System.Nullable{System.Int32})">
+            <summary>
+            HttpDelete - Deletes existing debt in database
+            </summary>
+            <param name="id">Unique debt identifier</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Guid,System.Boolean)">
+            <summary>
+            Returns debts that need to be urgently repaid
+            </summary>
+            <param name="studentId">Identifier of the student whose debts must be repaid</param>
+            <param name="overdue">Whether the deadline for debt is overdue</param>
+        </member>
         <member name="T:BeforeTheScholarship.Api.Controllers.Students.StudentsController">
             <summary>
             Students controller
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.Services.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper,BeforeTheScholarship.Services.CacheService.ICacheService)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.Services.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Students.StudentsController},AutoMapper.IMapper,BeforeTheScholarship.Services.CacheService.ICacheService)">
             <summary>
             Students constructor that implements services
             </summary>
@@ -192,98 +284,6 @@
             TODO: Delete this method instead of future AccountController
             </summary>
             <returns></returns>
-        </member>
-        <member name="T:BeforeTheScholarship.API.Controllers.AccountsController">
-            <summary>
-            Controller to manage account
-            </summary>
-            <response code="401">Unauthorized</response>
-        </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.API.Controllers.AccountsController},BeforeTheScholarship.Services.UserAccount.IUserAccountService)">
-            <summary>
-            Accounts constructor that implements services
-            </summary>
-            <param name="mapper"></param>
-            <param name="logger"></param>
-            <param name="userAccountService"></param>
-        </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.Register(BeforeTheScholarship.Api.Controllers.Account.Models.RegisterUserAccountRequest)">
-            <summary>
-            Creates new user account and send email 
-            </summary>
-        </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Account.Models.ConfirmationEmailRequest)">
-            <summary>
-            Confirm email with token that was given on account registration and sended to user email
-            </summary>
-            <param name="request">Contains email and token for confirmation</param>
-        </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Account.Models.PasswordRecoveryMailRequest)">
-            <summary>
-            Sending password recovery mail on user email that specified in <paramref name="request"/>
-            </summary>
-            <param name="request">Contains user email to send the mail to</param>
-        </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.RecoverPassword(BeforeTheScholarship.Api.Controllers.Account.Models.PasswordRecoveryRequest)">
-            <summary>
-            Recover password on new password from request to user with given email.
-            </summary>
-            <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
-        </member>
-        <member name="M:BeforeTheScholarship.API.Controllers.AccountsController.ChangePassword(BeforeTheScholarship.Api.Controllers.Account.Models.ChangePasswordRequest)">
-            <summary>
-            Changes user with given email old password on new password.
-            </summary>
-            <param name="request"></param>
-            <returns></returns>
-        </member>
-        <member name="T:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController">
-            <summary>
-            Debts ApiController
-            </summary>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.#ctor(BeforeTheScholarship.Services.DebtService.IDebtService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
-            <summary>
-            Debts constructor that implements services
-            </summary>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.GetDebts">
-            <summary>
-            HttpGet - Gettings debts from database
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.GetDebts(System.Nullable{System.Guid})">
-            <summary>
-            HttpGet - Returns debts that owned by StudentUser with <paramref name="studentId"/>
-            </summary>
-            <param name="studentId">Unique student identifier</param>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.CreateDebt(BeforeTheScholarship.Api.Controllers.Debts.AddDebtRequest)">
-            <summary>
-            HttpPost - Adds new debt to database
-            </summary>
-            <param name="request"></param>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Int32},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtsRequest)">
-            <summary>
-            HttpPut - Updates existing debt with <paramref name="id"/> in database
-            </summary>
-            <param name="id">Unique debt identifier</param>
-            <param name="request">Request body</param>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.DeleteDebt(System.Nullable{System.Int32})">
-            <summary>
-            HttpDelete - Deletes existing debt in database
-            </summary>
-            <param name="id">Unique debt identifier</param>
-        </member>
-        <member name="M:BeforeTheScholarship.Services.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Guid,System.Boolean)">
-            <summary>
-            Returns debts that need to be urgently repaid
-            </summary>
-            <param name="studentId">Identifier of the student whose debts must be repaid</param>
-            <param name="overdue">Whether the deadline for debt is overdue</param>
         </member>
     </members>
 </doc>
