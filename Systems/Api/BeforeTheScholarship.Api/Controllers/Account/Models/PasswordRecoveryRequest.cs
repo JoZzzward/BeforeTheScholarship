@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.UserAccountService.Models;
 
-namespace BeforeTheScholarship.Api.Controllers.Account;
+namespace BeforeTheScholarship.Api.Controllers.Accounts;
 
 public class PasswordRecoveryRequest
 {

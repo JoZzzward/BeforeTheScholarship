@@ -100,7 +100,7 @@ public class DebtsController : ControllerBase
     /// <param name="request">Request body</param>
     [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtsRequest request)
+    public async Task<IActionResult> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtRequest request)
     {
         _logger.LogInformation("--> Trying to update debt(Id: {DebtId})..", id);
 

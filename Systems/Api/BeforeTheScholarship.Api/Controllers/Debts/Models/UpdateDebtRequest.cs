@@ -3,7 +3,7 @@ using BeforeTheScholarship.Services.DebtService;
 
 namespace BeforeTheScholarship.Api.Controllers.Debts;
 
-public class UpdateDebtsRequest
+public class UpdateDebtRequest
 {
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
@@ -15,6 +15,6 @@ public class UpdateDebtsRequestProfile : Profile
 {
     public UpdateDebtsRequestProfile()
     {
-        CreateMap<UpdateDebtsRequest, UpdateDebtModel>();
+        CreateMap<UpdateDebtRequest, UpdateDebtModel>();
     }
 }

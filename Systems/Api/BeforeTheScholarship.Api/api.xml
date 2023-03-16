@@ -159,13 +159,13 @@
             </summary>
             <param name="services"></param>
         </member>
-        <member name="T:BeforeTheScholarship.Api.Controllers.Account.AccountsController">
+        <member name="T:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController">
             <summary>
             Controller to manage account
             </summary>
             <response code="401">Unauthorized</response>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Account.AccountsController},BeforeTheScholarship.Services.UserAccount.IUserAccountService)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Accounts.AccountsController},BeforeTheScholarship.Services.UserAccount.IUserAccountService)">
             <summary>
             Accounts constructor that implements services
             </summary>
@@ -173,30 +173,30 @@
             <param name="logger"></param>
             <param name="userAccountService"></param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.Register(BeforeTheScholarship.Api.Controllers.Account.RegisterUserAccountRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.Register(BeforeTheScholarship.Api.Controllers.Accounts.RegisterUserAccountRequest)">
             <summary>
             Creates new user account and send email 
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Account.ConfirmationEmailRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.ConfirmationEmailRequest)">
             <summary>
             Confirm email with token that was given on account registration and sended to user email
             </summary>
             <param name="request">Contains email and token for confirmation</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Account.PasswordRecoveryMailRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Accounts.PasswordRecoveryMailRequest)">
             <summary>
             Sending password recovery mail on user email that specified in <paramref name="request"/>
             </summary>
             <param name="request">Contains user email to send the mail to</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.RecoverPassword(BeforeTheScholarship.Api.Controllers.Account.PasswordRecoveryRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.RecoverPassword(BeforeTheScholarship.Api.Controllers.Accounts.PasswordRecoveryRequest)">
             <summary>
             Recover password on new password from request to user with given email.
             </summary>
             <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Account.AccountsController.ChangePassword(BeforeTheScholarship.Api.Controllers.Account.ChangePasswordRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.ChangePassword(BeforeTheScholarship.Api.Controllers.Accounts.ChangePasswordRequest)">
             <summary>
             Changes user with given email old password on new password.
             </summary>
@@ -231,7 +231,7 @@
             </summary>
             <param name="request"></param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Int32},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtsRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Int32},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtRequest)">
             <summary>
             HttpPut - Updates existing debt with <paramref name="id"/> in database
             </summary>
@@ -256,7 +256,7 @@
             Students controller
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.Services.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Students.StudentsController},AutoMapper.IMapper,BeforeTheScholarship.Services.CacheService.ICacheService)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.#ctor(BeforeTheScholarship.Services.StudentService.IStudentService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Students.StudentsController},AutoMapper.IMapper)">
             <summary>
             Students constructor that implements services
             </summary>

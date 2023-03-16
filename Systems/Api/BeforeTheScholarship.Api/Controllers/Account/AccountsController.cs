@@ -4,7 +4,7 @@ using BeforeTheScholarship.UserAccountService.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BeforeTheScholarship.Api.Controllers.Account;
+namespace BeforeTheScholarship.Api.Controllers.Accounts;
 
 /// <summary>
 /// Controller to manage account

@@ -10,7 +10,6 @@ public class Debts : BaseEntity
     public decimal Borrowed { get; set; }
     public string? Phone { get; set; }
     public string BorrowedFromWho { get; set; }
-    public bool EmailSended { get; set; } // Email sended once when the debt payback date is less than 1 day.
     public DateTimeOffset WhenBorrowed { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset WhenToPayback { get; set; } = DateTimeOffset.UtcNow.AddDays(3);
 }

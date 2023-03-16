@@ -11,7 +11,6 @@ public class DebtModel
     public decimal Borrowed { get; set; }
     public string PhoneNumber { get; set; }
     public string BorrowedFromWho { get; set; }
-    public bool EmailSended { get; set; }
     public DateTimeOffset WhenBorrowed { get; set; }
     public DateTimeOffset WhenToPayback { get; set; }
 }

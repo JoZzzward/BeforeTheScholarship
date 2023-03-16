@@ -20,7 +20,6 @@ public class StudentsController : ControllerBase
     private readonly IStudentService _studentService;
     private readonly ILogger<StudentsController> _logger;
     private readonly IMapper _mapper;
-    private readonly ICacheService _cacheService;
 
     /// <summary>
     /// Students constructor that implements services
@@ -28,13 +27,11 @@ public class StudentsController : ControllerBase
     public StudentsController(
         IStudentService studentService,
         ILogger<StudentsController> logger,
-        IMapper mapper,
-        ICacheService cacheService)
+        IMapper mapper)
     {
         _studentService = studentService;
         _logger = logger;
         _mapper = mapper;
-        _cacheService = cacheService;
     }
 
     /// <summary>

@@ -9,7 +9,6 @@ public class DebtResponse
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
     public string BorrowedFromWho { get; set; }
-    public bool EmailSended { get; set; }
     public DateTimeOffset WhenBorrowed { get; set; }
     public DateTimeOffset WhenToPayback { get; set; }
 }

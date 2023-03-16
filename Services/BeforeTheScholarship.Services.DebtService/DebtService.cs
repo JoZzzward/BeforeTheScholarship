@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Services.Actions;
+using BeforeTheScholarship.Common.CacheConstKeys;
 using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
+using BeforeTheScholarship.Services.Actions;
+using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.StudentService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using BeforeTheScholarship.Services.CacheService;
-using BeforeTheScholarship.Common.CacheConstKeys;
 
 namespace BeforeTheScholarship.Services.DebtService;
 
@@ -94,6 +94,7 @@ public class DebtService : IDebtService
         if (cachedDataExists != null)
             return cachedDataExists;
 
+        // TODO: Think about optimization. Divide this method on two different. One with overdue and one without
         var debts = await GetDebts(studentId);
 
         var daysOff = overdue ? 0 : 3;

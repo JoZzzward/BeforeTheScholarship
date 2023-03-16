@@ -9,7 +9,6 @@ public class UpdateDebtModel
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
     public string BorrowedFromWho { get; set; }
-    public bool EmailSended { get; set; } // Using on EmailWorker service
     public DateTimeOffset WhenToPayback { get; set; }
 }
 
