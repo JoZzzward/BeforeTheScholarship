@@ -49,11 +49,15 @@ public class AccountsController : ControllerBase
 
         var response = _mapper.Map<UserAccountResponse>(user);
 
-        _logger.LogInformation("--> User(UserName: {UserUserName}) was succesfully registered.", user.UserName);
+        _logger.LogInformation("--> User(UserName: {UserUserName}) was successfully registered.", user.UserName);
 
         return response;
     }
 
+    /// <summary>
+    /// Performs login for the user with the specified email
+    /// </summary>
+    /// <param name="request">Contains user email and password</param>
     [HttpPost("login")]
     public async Task<UserAccountResponse> Login([FromQuery] LoginUserAccountRequest request)
     {
@@ -63,7 +67,7 @@ public class AccountsController : ControllerBase
 
         var response = _mapper.Map<UserAccountResponse>(user);
 
-        _logger.LogInformation("--> User(Email: {UserEmail}) was succesfully sign in.", user.UserName);
+        _logger.LogInformation("--> User(Email: {UserEmail}) was successfully sign in.", user.UserName);
 
         return response;
     }
@@ -124,11 +128,11 @@ public class AccountsController : ControllerBase
     [HttpPost("change-password")]
     public async Task ChangePassword([FromQuery] ChangePasswordRequest request)
     {
-        _logger.LogInformation("User(Email: {UserEmail}) trying to change his password.", request.Email);
+        _logger.LogInformation("--> User(Email: {UserEmail}) trying to change his password.", request.Email);
         var model = _mapper.Map<ChangePasswordModel>(request);
 
         var response = await _userAccountService.ChangePassword(model);
 
-        _logger.LogInformation("Password of User(Email: {UserEmail}) was successfully changed.", response.Email);
+        _logger.LogInformation("--> Password of User(Email: {UserEmail}) was successfully changed.", response.Email);
     }
 }
