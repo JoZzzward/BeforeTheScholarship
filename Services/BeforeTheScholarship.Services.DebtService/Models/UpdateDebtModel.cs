@@ -50,6 +50,5 @@ public class UpdateDebtModelProfile : Profile
 	public UpdateDebtModelProfile()
 	{
 		CreateMap<UpdateDebtModel, Debts>();
-		CreateMap<DebtModel, UpdateDebtModel>();
     }
 }

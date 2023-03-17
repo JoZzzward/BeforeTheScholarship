@@ -1,6 +1,6 @@
-﻿using BeforeTheScholarship.UserAccountService.Models;
+﻿using BeforeTheScholarship.Services.UserAccountService.Models;
 
-namespace BeforeTheScholarship.Services.UserAccount;
+namespace BeforeTheScholarship.Services.UserAccountService;
 
 public interface IUserAccountService
 {
@@ -8,19 +8,19 @@ public interface IUserAccountService
     /// Confirms user email 
     /// </summary>
     /// <param name="confirmationEmail">Contains a email that need to confirm by given token</param>
-    Task ConfirmEmail(ConfirmationEmailModel confirmationEmail);
+    Task<ConfirmationEmailResponse> ConfirmEmail(ConfirmationEmailModel confirmationEmail);
 
     /// <summary>
     /// Registers new user. Sends mail with ConfirmationLink on user email if it was provided.
     /// </summary>
     /// <param name="request">Contains username, email and password of user that want to register</param>
-    Task<UserAccountModel> RegisterUser(RegisterUserAccountModel request);
+    Task<RegisterUserAccountResponse> RegisterUser(RegisterUserAccountModel request);
 
     /// <summary>
     /// Sign in user with given Email
     /// </summary>
     /// <param name="request">Contains user email and password that want to sign in</param>
-    Task<UserAccountModel> LoginUser(LoginUserAccountModel request);
+    Task<LoginUserAccountResponse> LoginUser(LoginUserAccountModel request);
 
     /// <summary>
     /// Finding user by email. Generates token for password resetting and recovers password with given new one.

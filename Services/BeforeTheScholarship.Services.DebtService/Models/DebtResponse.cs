@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Services.DebtService;
+using BeforeTheScholarship.Entities;
 
-namespace BeforeTheScholarship.Api.Controllers.Debts;
+namespace BeforeTheScholarship.Services.DebtService;
 
 public class DebtResponse
 {
@@ -17,6 +17,6 @@ public class DebtResponseProfile : Profile
 {
     public DebtResponseProfile()
     {
-        CreateMap<DebtModel, DebtResponse>();
+        CreateMap<Debts, DebtResponse>();
     }
 }

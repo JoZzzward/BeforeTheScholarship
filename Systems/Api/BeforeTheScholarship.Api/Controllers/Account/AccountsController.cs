@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Services.UserAccount;
-using BeforeTheScholarship.UserAccountService.Models;
+using BeforeTheScholarship.Services.UserAccountService;
+using BeforeTheScholarship.Services.UserAccountService.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,8 +49,6 @@ public class AccountsController : ControllerBase
 
         var response = _mapper.Map<UserAccountResponse>(user);
 
-        _logger.LogInformation("--> User(UserName: {UserUserName}) was successfully registered.", user.UserName);
-
         return response;
     }
 
@@ -59,15 +57,13 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains user email and password</param>
     [HttpPost("login")]
-    public async Task<UserAccountResponse> Login([FromQuery] LoginUserAccountRequest request)
+    public async Task<LoginUserAccountResponse> Login([FromQuery] LoginUserAccountRequest request)
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to sign in.", request.Email);
 
         var user = await _userAccountService.LoginUser(_mapper.Map<LoginUserAccountModel>(request));
 
-        var response = _mapper.Map<UserAccountResponse>(user);
-
-        _logger.LogInformation("--> User(Email: {UserEmail}) was successfully sign in.", user.UserName);
+        var response = _mapper.Map<LoginUserAccountResponse>(user);
 
         return response;
     }
@@ -77,15 +73,15 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains email and token for confirmation</param>
     [HttpPost("confirmemail")]
-    public async Task ConfirmEmail([FromBody] ConfirmationEmailRequest request)
+    public async Task<ConfirmationEmailResponse> ConfirmEmail([FromBody] ConfirmationEmailRequest request)
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to confirm email.", request.Email);
         
         var confirmEmailModel = _mapper.Map<ConfirmationEmailModel>(request);
 
-        await _userAccountService.ConfirmEmail(confirmEmailModel);
+        var response = await _userAccountService.ConfirmEmail(confirmEmailModel);
 
-        _logger.LogInformation("--> User(Email: {UserEmail}) successfully confirm his email.", request.Email);
+        return response;
     }
 
     /// <summary>
@@ -93,7 +89,7 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains user email to send the mail to</param>
     [HttpPost("recover-password-mail")]
-    public async Task SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
+    public async Task<PasswordRecoveryResponse> SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to send password recover message on his email.", request.Email);
 
@@ -101,7 +97,7 @@ public class AccountsController : ControllerBase
 
         var response = await _userAccountService.SendRecoveryPasswordEmail(model);
 
-        _logger.LogInformation("--> Password message was successfully sended to User(Email: {UserEmail})", response.Email);
+        return response;
     }
 
     /// <summary>
@@ -109,7 +105,7 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
     [HttpPost("recover-password")]
-    public async Task RecoverPassword([FromBody] PasswordRecoveryRequest request)
+    public async Task<PasswordRecoveryResponse> RecoverPassword([FromBody] PasswordRecoveryRequest request)
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to recover his password.", request.Email);
 
@@ -117,7 +113,7 @@ public class AccountsController : ControllerBase
 
         var response = await _userAccountService.RecoverPassword(model);
 
-        _logger.LogInformation("--> Password of User(Email: {UserEmail}) was successfully recovered.", response.Email);
+        return response;
     }
 
     /// <summary>
@@ -126,13 +122,13 @@ public class AccountsController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost("change-password")]
-    public async Task ChangePassword([FromQuery] ChangePasswordRequest request)
+    public async Task<ChangePasswordResponse> ChangePassword([FromQuery] ChangePasswordRequest request)
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to change his password.", request.Email);
         var model = _mapper.Map<ChangePasswordModel>(request);
 
         var response = await _userAccountService.ChangePassword(model);
 
-        _logger.LogInformation("--> Password of User(Email: {UserEmail}) was successfully changed.", response.Email);
+        return response;
     }
 }

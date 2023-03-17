@@ -1,22 +1,20 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Entities;
 using FluentValidation;
-using System.Numerics;
-using System.Text.RegularExpressions;
 
 namespace BeforeTheScholarship.Services.DebtService;
 
-public class AddDebtModel
+public class CreateDebtModel
 {
-    public Guid StudentId { get; set; }  
+    public Guid StudentId { get; set; }
     public decimal Borrowed { get; set; }
     public string Phone { get; set; }
     public string BorrowedFromWho { get; set; }
 }
 
-public class AddDebtModelValidator : AbstractValidator<AddDebtModel>
+public class CreateDebtModelValidator : AbstractValidator<CreateDebtModel>
 {
-    public AddDebtModelValidator()
+    public CreateDebtModelValidator()
     {
         RuleFor(x => x.Borrowed).NotEmpty()
             .WithMessage("Borrowed money must be not empty.");
@@ -48,10 +46,10 @@ public class AddDebtModelValidator : AbstractValidator<AddDebtModel>
     }
 }
 
-public class AddDebtModelProfile : Profile
+public class CreateDebtModelProfile : Profile
 {
-	public AddDebtModelProfile()
+	public CreateDebtModelProfile()
 	{
-		CreateMap<AddDebtModel, Debts>();
+		CreateMap<CreateDebtModel, Debts>();
     }
 }

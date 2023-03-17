@@ -5,7 +5,7 @@ using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.RabbitMqService;
 using BeforeTheScholarship.Services.Settings;
 using BeforeTheScholarship.Services.StudentService;
-using BeforeTheScholarship.Services.UserAccount;
+using BeforeTheScholarship.Services.UserAccountService;
 
 namespace BeforeTheScholarship.Api;
 

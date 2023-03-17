@@ -37,6 +37,8 @@ public class UpdateStudentModelProfile : Profile
 {
     public UpdateStudentModelProfile()
     {
-        CreateMap<UpdateStudentModel, StudentUser>();
+        CreateMap<UpdateStudentModel, StudentUser>()
+            .ForMember(x => x.NormalizedUserName, opt => opt.MapFrom(x => x.UserName.ToUpper()))
+            .ForMember(x => x.NormalizedEmail, opt => opt.MapFrom(x => x.Email.ToUpper()));
     }
 }

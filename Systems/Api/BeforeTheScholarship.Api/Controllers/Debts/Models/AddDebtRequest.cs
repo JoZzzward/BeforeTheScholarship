@@ -15,6 +15,6 @@ public class AddDebtRequestProfile : Profile
 {
     public AddDebtRequestProfile()
     {
-        CreateMap<AddDebtRequest, AddDebtModel>();
+        CreateMap<AddDebtRequest, CreateDebtModel>();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Entities;
 
-namespace BeforeTheScholarship.UserAccountService.Models;
+namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
 public class PasswordRecoveryResponse
 {
@@ -13,6 +13,6 @@ public class PasswordRecoveryResponseProfile : Profile
 {
     public PasswordRecoveryResponseProfile()
     {
-        CreateMap<StudentUser, PasswordRecoveryResponse>();
+        CreateMap<SendPasswordRecoveryModel, PasswordRecoveryResponse>();
     }
 }

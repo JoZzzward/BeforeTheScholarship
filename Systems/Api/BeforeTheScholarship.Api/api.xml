@@ -165,7 +165,7 @@
             </summary>
             <response code="401">Unauthorized</response>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Accounts.AccountsController},BeforeTheScholarship.Services.UserAccount.IUserAccountService)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.#ctor(AutoMapper.IMapper,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Accounts.AccountsController},BeforeTheScholarship.Services.UserAccountService.IUserAccountService)">
             <summary>
             Accounts constructor that implements services
             </summary>
@@ -177,6 +177,12 @@
             <summary>
             Creates new user account and send email 
             </summary>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.Login(BeforeTheScholarship.Api.Controllers.Accounts.LoginUserAccountRequest)">
+            <summary>
+            Performs login for the user with the specified email
+            </summary>
+            <param name="request">Contains user email and password</param>
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.ConfirmationEmailRequest)">
             <summary>

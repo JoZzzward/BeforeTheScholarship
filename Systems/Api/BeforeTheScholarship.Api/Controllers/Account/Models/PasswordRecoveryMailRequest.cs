@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.UserAccountService.Models;
+using BeforeTheScholarship.Services.UserAccountService.Models;
 
 namespace BeforeTheScholarship.Api.Controllers.Accounts;
 

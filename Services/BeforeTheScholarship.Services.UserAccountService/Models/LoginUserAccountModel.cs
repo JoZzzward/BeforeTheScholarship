@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace BeforeTheScholarship.UserAccountService.Models;
+namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
 public class LoginUserAccountModel
 {

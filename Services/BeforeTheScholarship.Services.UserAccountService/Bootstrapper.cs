@@ -1,4 +1,4 @@
-﻿namespace BeforeTheScholarship.Services.UserAccount;
+﻿namespace BeforeTheScholarship.Services.UserAccountService;
 
 using Microsoft.Extensions.DependencyInjection;
 

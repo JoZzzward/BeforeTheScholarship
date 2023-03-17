@@ -16,9 +16,9 @@ public interface IStudentService
     /// <summary>
     /// Updates a <see cref="StudentModel"/> in database with the same <paramref name="id"/>
     /// </summary>
-    Task UpdateStudent(Guid id, UpdateStudentModel model);
+    Task<UpdateStudentResponse> UpdateStudent(Guid id, UpdateStudentModel model);
     /// <summary>
     /// Removes a <see cref="StudentModel"/> in database with the same <paramref name="id"/>.
     /// </summary>
-    Task DeleteStudent(Guid? id);
+    Task<DeleteStudentResponse> DeleteStudent(Guid? id);
 }

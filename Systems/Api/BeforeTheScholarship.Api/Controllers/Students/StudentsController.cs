@@ -45,11 +45,9 @@ public class StudentsController : ControllerBase
         _logger.LogInformation("--> Trying to return all students..");
 
         var students = await _studentService.GetStudents();
-        var data = students.Select(x => _mapper.Map<StudentResponse>(x));
+        var response = students.Select(_mapper.Map<StudentResponse>);
 
-        _logger.LogInformation("--> Students(Count: {StudentsCount}) was returned successfully!", data.Count());
-
-        return data;
+        return response;
     }
 
     /// <summary>
@@ -63,27 +61,24 @@ public class StudentsController : ControllerBase
 
         var student = await _studentService.GetStudentById(id);
             
-        var data = _mapper.Map<StudentResponse>(student);
+        var response = _mapper.Map<StudentResponse>(student);
 
-        _logger.LogInformation("--> The student(Id: {StudentId}) was successfully returned!", id);
-
-        return data;
+        return response;
     }
 
     /// <summary>
     /// HttpPut - Updates existed StudentUser in database
     /// </summary>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
+    public async Task<UpdateStudentResponse> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
     {
         _logger.LogInformation("--> Trying to update student(Id: {StudentId})", id);
 
         var model = _mapper.Map<UpdateStudentModel>(request);
-        await _studentService.UpdateStudent(id, model);
 
-        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully updated.", id);
+        var response = await _studentService.UpdateStudent(id, model);
 
-        return Ok();
+        return response;
     }
 
     /// <summary>
@@ -92,14 +87,12 @@ public class StudentsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteStudent([FromRoute] Guid? id)
+    public async Task<DeleteStudentResponse> DeleteStudent([FromRoute] Guid? id)
     {
         _logger.LogInformation("--> Trying to remove student(Id: {StudentId})", id);
 
-        await _studentService.DeleteStudent(id);
+        var response = await _studentService.DeleteStudent(id);
 
-        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully removed.", id);
-
-        return Ok();
+        return response;
     }
 }

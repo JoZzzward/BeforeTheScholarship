@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Common.Security;
 using BeforeTheScholarship.Services.DebtService;
+using BeforeTheScholarship.Services.DebtService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -48,10 +49,10 @@ public class DebtsController : ControllerBase
         _logger.LogInformation("--> Trying to return all debts..");
 
         var debts = await _debtService.GetDebts();
-        var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
-        _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully.", data.Count());
-        return data;
+        var response = debts.Select(x => _mapper.Map<DebtResponse>(x));
+
+        return response;
     }
     
     /// <summary>
@@ -67,11 +68,11 @@ public class DebtsController : ControllerBase
 
         var debts = await _debtService.GetDebts(studentId);
 
-        var data = debts.Select(x => _mapper.Map<DebtResponse>(x));
+        var response = debts.Select(x => _mapper.Map<DebtResponse>(x));
 
         _logger.LogInformation("--> Debts belong to a student(Id: {StudentId} was returned successfully.", studentId);
 
-        return data;
+        return response;
     }
 
     /// <summary>
@@ -80,15 +81,13 @@ public class DebtsController : ControllerBase
     /// <param name="request"></param>
     [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPost("")]
-    public async Task<DebtResponse> CreateDebt([FromBody] AddDebtRequest request)
+    public async Task<CreateDebtResponse> CreateDebt([FromBody] AddDebtRequest request)
     {
         _logger.LogInformation("--> Trying to create debt(StudentId: {StudentId})..", request.StudentId);
 
-        var model = _mapper.Map<AddDebtModel>(request);
-        var debts = await _debtService.CreateDebt(model);
-        var response = _mapper.Map<DebtResponse>(debts);
+        var model = _mapper.Map<CreateDebtModel>(request);
 
-        _logger.LogInformation("--> Debt was successfully created.");
+        var response = await _debtService.CreateDebt(model);
 
         return response;
     }
@@ -100,16 +99,15 @@ public class DebtsController : ControllerBase
     /// <param name="request">Request body</param>
     [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtRequest request)
+    public async Task<UpdateDebtResponse> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtRequest request)
     {
         _logger.LogInformation("--> Trying to update debt(Id: {DebtId})..", id);
 
         var model = _mapper.Map<UpdateDebtModel>(request);
-        await _debtService.UpdateDebt(id, model);
+        
+        var response = await _debtService.UpdateDebt(id, model);
 
-        _logger.LogInformation("--> Debt(Id: {DebtId}) was successfully updated.", id);
-
-        return Ok();
+        return response;
     }
 
     /// <summary>
@@ -118,15 +116,13 @@ public class DebtsController : ControllerBase
     /// <param name="id">Unique debt identifier</param>
     [Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteDebt([FromRoute] int? id)
+    public async Task<DeleteDebtResponse> DeleteDebt([FromRoute] int? id)
     {
         _logger.LogInformation("--> Trying to remove debt(Id: {DebtId})..", id);
 
-        await _debtService.DeleteDebt(id);
+        var response = await _debtService.DeleteDebt(id);
 
-        _logger.LogInformation("--> Debt(Id: {DebtId}) was successfully removed.", id);
-
-        return Ok();
+        return response;
     }
 
     /// <summary>
@@ -142,10 +138,8 @@ public class DebtsController : ControllerBase
 
         var debts = await _debtService.GetUrgentlyRepaidDebts(studentId, overdue);
 
-        var data = debts.ToList().Select(x => _mapper.Map<DebtResponse>(x));
+        var response = debts.ToList().Select(x => _mapper.Map<DebtResponse>(x));
 
-        _logger.LogInformation("--> Student(Id: {StudentId}) debts that need to be repaid urgently or that were overdue have been successfully returned.", studentId);
-
-        return data;
+        return response;
     }
 }
