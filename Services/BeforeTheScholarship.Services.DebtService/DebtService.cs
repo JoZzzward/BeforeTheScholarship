@@ -30,7 +30,7 @@ public class DebtService : Manager, IDebtService
         ICacheService cacheService,
         IModelValidator<CreateDebtModel> addDebtResponseValidator,
         IModelValidator<UpdateDebtModel> updateDebtResponseValidator
-        ) : base (dbContext, studentService, logger, mapper, actionService, cacheService)
+        ) : base(dbContext, studentService, logger, mapper, actionService, cacheService)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -51,7 +51,7 @@ public class DebtService : Manager, IDebtService
         }
 
         var response = await GetDebtsResponse();
-       
+
         _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully", response.Count());
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.AllDebtsKey, response);
@@ -78,39 +78,6 @@ public class DebtService : Manager, IDebtService
         return response;
     }
 
-    // TODO: Think about optimization. Divide this method on two different. One with overdue and one without
-    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid studentId, bool overdue)
-    {
-        var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.UrgentlyRepaidDebtsKey);
-
-        if (cachedDataExists != null)
-        {
-            _logger.LogInformation("--> Urgently repaid debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
-            return cachedDataExists;
-        }
-
-        var debts = await GetDebts(studentId);
-
-        var daysOff = overdue ? 0 : 3;
-
-        var result = new List<DebtResponse>();
-
-        foreach (var debt in debts)
-        {
-            var subtractDate = debt.WhenToPayback.Subtract(DateTime.Now.ToLocalTime());
-
-            if (subtractDate.TotalDays <= daysOff && subtractDate.Seconds < 1 && overdue)
-                result.Add(debt);
-            else if (subtractDate.TotalDays <= daysOff && subtractDate.Seconds >= 0)
-                result.Add(debt);
-        }
-        var response = _mapper.Map<IEnumerable<DebtResponse>>(result);
-        
-        _logger.LogInformation("--> Student(Id: {StudentId}) debts that need to be repaid urgently or that were overdue have been successfully returned.", studentId);
-
-        return response;
-    }
-
     public async Task<CreateDebtResponse> CreateDebt(CreateDebtModel model)
     {
         _addDebtResponseValidator.CheckValidation(model);
@@ -131,7 +98,7 @@ public class DebtService : Manager, IDebtService
         _logger.LogInformation("--> Debt(Id: {DebtId}) was successfully created.", data.Id);
 
         return response;
-    }      
+    }
 
     public async Task<UpdateDebtResponse> UpdateDebt(int? id, UpdateDebtModel model)
     {
@@ -182,10 +149,54 @@ public class DebtService : Manager, IDebtService
         context.SaveChanges();
 
         await _cacheService.ClearStorage();
-        
+
         _logger.LogInformation("--> Debt(Id: {DebtId}) was successfully removed.", id);
 
         var response = _mapper.Map<DeleteDebtResponse>(debt);
+        return response;
+    }
+
+    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid studentId)
+    {
+        var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.UrgentlyRepaidDebtsKey);
+
+        if (cachedDataExists != null)
+        {
+            _logger.LogInformation("--> Urgently repaid debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
+            return cachedDataExists;
+        }
+
+        var debts = await GetDebts(studentId);
+
+        // Generates a list of debts with 1 day or less left to the repayment date
+        debts = debts.Where(x => x.WhenToPayback > DateTimeOffset.UtcNow && x.WhenToPayback <= DateTimeOffset.UtcNow.AddDays(1));
+
+        var response = _mapper.Map<IEnumerable<DebtResponse>>(debts);
+
+        _logger.LogInformation("--> The list of urgently repaid debts of the specified student(Id: {StudentId}) has been successfully returned", studentId);
+
+        return response;
+    }
+    
+    public async Task<IEnumerable<DebtResponse>> GetOverdueDebts(Guid studentId)
+    {
+        var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.OverdueDebtsKey);
+
+        if (cachedDataExists != null)
+        {
+            _logger.LogInformation("--> Overdue debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
+            return cachedDataExists;
+        }
+
+        var debts = await GetDebts(studentId);
+
+        // Generates a list of overdue debts
+        debts = debts.Where(x => (x.WhenToPayback - DateTimeOffset.Now).TotalDays <= 0);
+
+        var response = _mapper.Map<IEnumerable<DebtResponse>>(debts);
+
+        _logger.LogInformation("--> The list of overdue debts(Count: {DebtsCount}) of the specified student(Id: {StudentId}) has been successfully returned", response.Count(), studentId);
+
         return response;
     }
 }

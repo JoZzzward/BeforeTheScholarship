@@ -27,5 +27,9 @@ public interface IDebtService
     /// <summary>
     /// Returns debts that need to be urgently repaid
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid studentId, bool overdue);
+    Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid studentId);
+    /// <summary>
+    /// Returns debts that must be overdue
+    /// </summary>
+    Task<IEnumerable<DebtResponse>> GetOverdueDebts(Guid studentId);
 }

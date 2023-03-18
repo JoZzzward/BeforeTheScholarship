@@ -50,7 +50,7 @@ public class DebtsController : ControllerBase
 
         var debts = await _debtService.GetDebts();
 
-        var response = debts.Select(x => _mapper.Map<DebtResponse>(x));
+        var response = debts.Select(_mapper.Map<DebtResponse>);
 
         return response;
     }
@@ -68,7 +68,7 @@ public class DebtsController : ControllerBase
 
         var debts = await _debtService.GetDebts(studentId);
 
-        var response = debts.Select(x => _mapper.Map<DebtResponse>(x));
+        var response = debts.Select(_mapper.Map<DebtResponse>);
 
         _logger.LogInformation("--> Debts belong to a student(Id: {StudentId} was returned successfully.", studentId);
 
@@ -126,19 +126,35 @@ public class DebtsController : ControllerBase
     }
 
     /// <summary>
+    /// Returns overdue debts that belong to student with <paramref name="studentId"/>
+    /// </summary>
+    /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
+    [Authorize(Policy = AppScopes.DebtsRead)]
+    [HttpGet("overdue")]
+    public async Task<IEnumerable<DebtResponse>> GetOverdueDebts([FromQuery] Guid studentId)
+    {
+        _logger.LogInformation("--> Trying to pay back student(Id: {StudentId}) debts that have been overdue", studentId);
+
+        var debts = await _debtService.GetOverdueDebts(studentId);
+
+        var response = debts.ToList().Select(_mapper.Map<DebtResponse>);
+
+        return response;
+    }
+
+    /// <summary>
     /// Returns debts that need to be urgently repaid
     /// </summary>
     /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
-    /// <param name="overdue">Whether the deadline for debt is overdue</param>
     [Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("urgently-repay")]
-    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] Guid studentId, [FromQuery] bool overdue)
+    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] Guid studentId)
     {
-        _logger.LogInformation("--> Attempting to pay back student(Id: {StudentId}) debts that need to be repaid urgently or that have been overdue..", studentId);
+        _logger.LogInformation("--> Trying to pay back student(Id: {StudentId}) debts that need to be repaid urgently", studentId);
 
-        var debts = await _debtService.GetUrgentlyRepaidDebts(studentId, overdue);
+        var debts = await _debtService.GetUrgentlyRepaidDebts(studentId);
 
-        var response = debts.ToList().Select(x => _mapper.Map<DebtResponse>(x));
+        var response = debts.ToList().Select(_mapper.Map<DebtResponse>);
 
         return response;
     }
