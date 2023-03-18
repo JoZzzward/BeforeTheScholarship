@@ -39,7 +39,7 @@ public class TaskEmailSender : ITaskEmailSender
                 
                 if (debt == null)
                 {
-                    _logger.LogInformation("The notification of the debt to be repaid with one day was not sent. Debt with specified data was not found ({DataTime})", data.WhenToPayback.ToString("MM/dd/yy H:mm"));
+                    _logger.LogInformation("--> The notification of the debt to be repaid with one day was not sent. Debt with specified data was not found ({DataTime})", data.WhenToPayback.DateTime.ToLocalTime().ToString("MM/dd/yy H:mm"));
                     return;
                 }
                     
@@ -51,20 +51,17 @@ public class TaskEmailSender : ITaskEmailSender
 
     private async Task Execute<T>(Func<T, Task> action)
     {
-        try
-        {
-            using var scope = _serviceProvider.CreateScope();
+        using var scope = _serviceProvider.CreateScope();
 
-            var service = scope.ServiceProvider.GetService<T>();
-            if (service != null)
-                await action(service);
-            else
-                _logger.LogError("Error: {Action} wasn`t resolved", action);
-        }
-        catch (Exception e)
+        var service = scope.ServiceProvider.GetService<T>();
+
+        if (service == null)
         {
-            _logger.LogError("Error: {ActionConstSendDebt}: Exception: {ExceptionMessage}. StackTrace: {StackTrace}", ActionConsts.SEND_DEBT_EMAIL, e.Message, e.StackTrace);
-            throw;
+            _logger.LogError("Error: {Service} not found", service);
+
+            throw new NullReferenceException($"Specified service {typeof(T)} not found");
         }
+
+        await action(service);
     }
 }

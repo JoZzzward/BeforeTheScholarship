@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using BeforeTheScholarship.Entities;
+using FluentValidation;
 
 namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
@@ -32,4 +34,14 @@ public class RegisterUserAccountModelValidator : AbstractValidator<RegisterUserA
     protected bool PasswordHasNumbers(string password) => password.Any(x => char.IsDigit(x));
 
     protected bool PasswordHasLetters(string password) => password.Any(x => char.IsLetter(x));
+}
+
+public class RegisterUserAccountModelProfile : Profile
+{
+    public RegisterUserAccountModelProfile()
+    {
+        CreateMap<RegisterUserAccountModel, StudentUser>()
+            .ForSourceMember(dest => dest.Password, opt => opt.DoNotValidate())
+            .ForSourceMember(dest => dest.ConfirmPassword, opt => opt.DoNotValidate());
+    }
 }

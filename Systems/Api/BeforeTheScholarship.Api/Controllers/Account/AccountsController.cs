@@ -41,13 +41,13 @@ public class AccountsController : ControllerBase
     /// Creates new user account and send email 
     /// </summary>
     [HttpPost("register")]
-    public async Task<UserAccountResponse> Register([FromQuery] RegisterUserAccountRequest request)
+    public async Task<RegisterUserAccountResponse> Register([FromQuery] RegisterUserAccountRequest request)
     {
         _logger.LogInformation("--> User(UserName: {UserUserName}) trying to register.", request.UserName);
 
         var user = await _userAccountService.RegisterUser(_mapper.Map<RegisterUserAccountModel>(request));
 
-        var response = _mapper.Map<UserAccountResponse>(user);
+        var response = _mapper.Map<RegisterUserAccountResponse>(user);
 
         return response;
     }

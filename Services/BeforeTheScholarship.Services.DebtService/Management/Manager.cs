@@ -79,6 +79,6 @@ public abstract class Manager
             Subject = "One of your debts is about to expire",
             Message = content,
             WhenToPayback = data.WhenToPayback
-        }, delay);
+        }, 30000);
     }
 }

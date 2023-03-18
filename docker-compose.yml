@@ -17,7 +17,7 @@ services:
     image: beforethescholarshiprabbitmq:management
     build:
       context: .
-      dockerfile: Services/BeforeTheScholarship.Services.RabbitMqService/Dockerfile
+      dockerfile: Systems/Api/BeforeTheScholarship.Api/Configuration/RabbitMqSetup/Dockerfile
     environment:
       - TZ=Europe/Moscow
   

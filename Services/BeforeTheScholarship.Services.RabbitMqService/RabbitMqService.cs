@@ -1,4 +1,5 @@
 ﻿using BeforeTheScholarship.Services.Settings;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
@@ -14,12 +15,16 @@ public class RabbitMqService : IRabbitMqService, IDisposable
 
     private IModel channel;
     private const string exchangeName = "delayedDebtExchange";
-    
+
+    private readonly ILogger<RabbitMqService> _logger;
     private readonly RabbitMqSettings _settings;
 
-    public RabbitMqService(RabbitMqSettings settings)
+    public RabbitMqService(
+        RabbitMqSettings settings,
+        ILogger<RabbitMqService> logger)
     {
         _settings = settings;
+        _logger = logger;
     }
 
     public async Task Subscribe<T>(string queueName, OnMessageReceive<T> onReceive)
@@ -78,6 +83,8 @@ public class RabbitMqService : IRabbitMqService, IDisposable
         consumer.Received += onReceive;
 
         channel.BasicConsume(queueName, false, consumer);
+
+        _logger.LogInformation("--> Subscribes on listening in queue(Name: {QueueName})", queueName);
     }
 
     public async Task PushAsync<T>(string queueName, T data, double delay)
@@ -107,14 +114,14 @@ public class RabbitMqService : IRabbitMqService, IDisposable
                 UserName = _settings.UserName,
                 Password = _settings.Password,
 
-                AutomaticRecoveryEnabled = true,
                 NetworkRecoveryInterval = TimeSpan.FromSeconds(5)
             };
 
-            var retriesCount = 0;
-            while (retriesCount < 15)
+            var retriesCount = 1;
+            while (retriesCount <= 15)
                 try
                 {
+                    _logger.LogInformation("Trying connect to RabbitMQ. Retries count: {RetriesCount}", retriesCount);
                     if (connection == null)
                     {
                         connection = factory.CreateConnection();

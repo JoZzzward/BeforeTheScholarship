@@ -65,16 +65,7 @@ public class UserAccountService : IUserAccountService
             throw new Exception($"User account with email {model.Email} already exist.");
         }
 
-        user = new StudentUser()
-        {
-            UserName = model.UserName ?? "User", 
-            FirstName = "",
-            LastName = "",
-            Email = model.Email,
-            EmailConfirmed = false,
-            PhoneNumber = null,
-            PhoneNumberConfirmed = false,
-        };
+        user = _mapper.Map<StudentUser>(model);
          
         var result = await _userManager.CreateAsync(user, model.Password);
         
