@@ -1,4 +1,5 @@
 ﻿using BeforeTheScholarship.Common.Consts;
+using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.RabbitMqService;
@@ -34,8 +35,7 @@ public class TaskEmailSender : ITaskEmailSender
 
                 var debts = await _debtService.GetDebts();
 
-                var debt = debts.FirstOrDefault(x => x.WhenToPayback.DateTime.ToLocalTime().ToString("MM/dd/yy H:mm")
-                                               == data.WhenToPayback.DateTime.ToLocalTime().ToString("MM/dd/yy H:mm"));
+                var debt = debts.FirstOrDefault(x => x.WhenToPayback.ToShortStringFormat() == data.WhenToPayback.ToShortStringFormat());
                 
                 if (debt == null)
                 {
@@ -59,7 +59,7 @@ public class TaskEmailSender : ITaskEmailSender
         {
             _logger.LogError("Error: {Service} not found", service);
 
-            throw new NullReferenceException($"Specified service {typeof(T)} not found");
+            throw new NullReferenceException($"Specified service <{typeof(T)}> not found");
         }
 
         await action(service);
