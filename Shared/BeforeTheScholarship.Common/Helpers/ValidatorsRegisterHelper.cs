@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BeforeTheScholarship.Common.Validation;
+namespace BeforeTheScholarship.Common.Helpers;
 
 public static class ValidatorsRegisterHelper
 {

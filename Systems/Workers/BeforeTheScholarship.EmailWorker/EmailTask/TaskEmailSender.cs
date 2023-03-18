@@ -57,7 +57,7 @@ public class TaskEmailSender : ITaskEmailSender
 
         if (service == null)
         {
-            _logger.LogError("Error: {Service} not found", service);
+            _logger.LogError("--> Error: {Service} not found", service);
 
             throw new NullReferenceException($"Specified service <{typeof(T)}> not found");
         }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BeforeTheScholarship.Common.Extensions;
+﻿namespace BeforeTheScholarship.Common.Extensions;
 
 public static class DateTimeExtensions
 {
@@ -9,7 +7,7 @@ public static class DateTimeExtensions
     /// </summary>
     public static string ToShortStringFormat(this DateTime dateTime)
     {
-        var formattedDateTime = dateTime.ToLocalTime().ToString("dd/MM/yy H:mm");
+        var formattedDateTime = dateTime.ToLocalTime().ToString("dd.MM.yy H:mm");
 
         return formattedDateTime;
     }
@@ -23,5 +21,4 @@ public static class DateTimeExtensions
 
         return formattedDateTime;
     }
-
 }

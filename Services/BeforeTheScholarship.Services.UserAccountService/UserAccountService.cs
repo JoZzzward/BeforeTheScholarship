@@ -2,9 +2,11 @@
 
 using AutoMapper;
 using BeforeTheScholarship.Common.Extensions;
+using BeforeTheScholarship.Common.Helpers;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.EmailSender;
+using BeforeTheScholarship.Services.UserAccountService.Helpers;
 using BeforeTheScholarship.Services.UserAccountService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -77,31 +79,7 @@ public class UserAccountService : IUserAccountService
             throw new Exception($"Error at user registration:  {errorList}");
         }
 
-        // TODO: Put in a separate block
-        if (!string.IsNullOrEmpty(model.Email))
-        {
-            _logger.LogInformation("--> Trying to send message with email confirmation link to user (Email: {UserEmail})", user.Email);
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            // TODO: Put in other helper class/library
-            var content = PathReader.ReadContent(
-                                Path.Combine(Directory.GetCurrentDirectory(), "\\EmailPages\\emailConfirmation.html"),
-                                "/app/emailpages/emailConfirmation.html");
-
-            content = content.Replace("QUERYEMAIL", user.Email)
-                             .Replace("QUERYTOKEN", token)
-                             .Replace("DATENOW", DateTime.Now.ToLocalTime().ToShortDateString().ToString());
-
-            // Sending email confirmation mail for current user
-            _emailSender?.SendEmail(new EmailModel()
-            {
-                EmailTo = user.Email,
-                Subject = $"Hello, dear {char.ToUpper(user.UserName[0]) + user.UserName.Substring(1)}!",
-                Message = content
-            });
-
-            _logger.LogInformation("--> Email confirmation message sended to user (Email: {UserEmail})", user.Email);
-        }
+        await SendEmailConfirmationMail(user);
 
         var response = _mapper.Map<RegisterUserAccountResponse>(user);
 
@@ -168,14 +146,7 @@ public class UserAccountService : IUserAccountService
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-        var content = PathReader.ReadContent(
-                                Path.Combine(Directory.GetCurrentDirectory(), "\\EmailPages\\passwordRecovery.html"),
-                                "/app/emailpages/passwordRecovery.html");
-
-        content = content.Replace("QUERYEMAIL", user.Email)
-                         .Replace("QUERYTOKEN", token)
-                         .Replace("DATENOW", DateTimeOffset.Now.LocalDateTime.ToShortDateString().ToString())
-                         ;
+        var content = ContentReader.ReadFromFile("passwordRecovery.html", user.Email, token);
 
         // Sending mail to user email for password recovery
         await _emailSender.SendEmail(new EmailModel()
@@ -190,7 +161,6 @@ public class UserAccountService : IUserAccountService
         _logger.LogInformation("--> Password message was successfully sended to User(Email: {UserEmail})", response.Email);
 
         return response;
-
     }
 
     public async Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryModel model)
@@ -242,5 +212,33 @@ public class UserAccountService : IUserAccountService
         _logger.LogInformation("--> Password of User(Email: {UserEmail}) was successfully changed.", response.Email);
 
         return response;
+    }
+
+    private async Task SendEmailConfirmationMail(StudentUser user)
+    {
+        if (user.Email == null)
+        {
+            _logger.LogInformation("--> Email confirmation mail for user(UserName: {UserUserName}) not sended. Email is empty.", user.UserName);
+            return;
+        }
+
+        _logger.LogInformation("--> Trying to send message with email confirmation link to user (Email: {UserEmail})", user.Email);
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var content = ContentReader.ReadFromFile("emailConfirmation.html", user.Email, token);
+
+        // Setting first letter to uppercase
+        var username = char.ToUpper(user.UserName[0]) + user.UserName.Substring(1);
+
+        // Sending email confirmation mail for current user
+        _emailSender?.SendEmail(new EmailModel()
+        {
+            EmailTo = user.Email,
+            Subject = $"Hello, dear {username}!",
+            Message = content
+        });
+
+        _logger.LogInformation("--> Email confirmation message sended to user (Email: {UserEmail})", user.Email);
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace BeforeTheScholarship.Api.Configuration;
 
+using BeforeTheScholarship.Common.Helpers;
 using BeforeTheScholarship.Common.Validation;
 using FluentValidation.AspNetCore;
 

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Common.Extensions;
-using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.Actions;
 using BeforeTheScholarship.Services.CacheService;
+using BeforeTheScholarship.Services.DebtService.Helpers;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.StudentService;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +45,7 @@ public abstract class Manager
             .AsQueryable();
 
         var response = (studentId is null)
-            ? (await debt.ToListAsync()).Select(s => _mapper.Map<DebtResponse>(s))
+            ? (await debt.ToListAsync()).Select(_mapper.Map<DebtResponse>)
             : (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(s => _mapper.Map<DebtResponse>(s))
             ?? new List<DebtResponse>();
 
@@ -59,19 +59,13 @@ public abstract class Manager
         return cachedData;
     }
 
-    protected async Task CreateDebtSendEmailAction(Debts data)
+    protected async Task CreateSendDebtEmailAction(Debts data)
     {
         var delay = (data.WhenToPayback - data.WhenToPayback.AddDays(-1)).TotalMilliseconds;
 
         var student = await _studentService.GetStudentById(data.StudentId);
 
-        var content = PathReader.ReadContent(
-                                        Directory.GetCurrentDirectory() + "\\EmailPages\\debtNotification.html",
-                                        "/app/emailpages/debtNotification.html")
-                                        .Replace("DATETIMENOW", $"{DateTimeOffset.Now.DateTime.ToShortDateString()}")
-                                        .Replace("STUDENTNAME", $"{student.UserName}")
-                                        .Replace("BORROWED", $"{data.Borrowed}")
-                                        .Replace("WHENTOPAYBACK", $"{data.WhenToPayback.DateTime.ToShortDateString()}");
+        var content = ContentReader.ReadFromFile("debtNotification.html", student.UserName, data);
 
         await _actionService.SendDebtEmail(new DebtEmailModel()
         {
@@ -79,6 +73,9 @@ public abstract class Manager
             Subject = "One of your debts is about to expire",
             Message = content,
             WhenToPayback = data.WhenToPayback
-        }, 30000);
+        }, delay);
+
+        _logger.LogInformation("--> Notification action for student(Id: {StudentId}) created successfully", student.Id);
+        _logger.LogInformation("--> Delay: {Delay}", delay);
     }
 }

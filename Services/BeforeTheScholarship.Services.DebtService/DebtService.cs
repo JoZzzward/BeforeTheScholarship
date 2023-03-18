@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Common.CacheConstKeys;
-using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
@@ -47,13 +46,13 @@ public class DebtService : Manager, IDebtService
 
         if (cachedDataExists != null)
         {
-            _logger.LogInformation("Debts(Count: {DebtsCount}) was successfully returned from cache", cachedDataExists.Count());
+            _logger.LogInformation("--> Debts(Count: {DebtsCount}) was successfully returned from cache", cachedDataExists.Count());
             return cachedDataExists;
         }
 
         var response = await GetDebtsResponse();
        
-        _logger.LogInformation("Debts(Count: {DebtsCount}) was returned successfully", response.Count());
+        _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully", response.Count());
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.AllDebtsKey, response);
 
@@ -66,13 +65,13 @@ public class DebtService : Manager, IDebtService
 
         if (cachedDataExists != null)
         {
-            _logger.LogInformation("Debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
+            _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
             return cachedDataExists;
         }
 
         var response = await GetDebtsResponse(studentId);
 
-        _logger.LogInformation("Debts(Count: {DebtsCount}) was returned successfully", response.Count());
+        _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully", response.Count());
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.DebtsWithSpecifiedStudentKey, response);
 
@@ -86,7 +85,7 @@ public class DebtService : Manager, IDebtService
 
         if (cachedDataExists != null)
         {
-            _logger.LogInformation("Urgently repaid debts({DebtsCount}) was returned from cache", cachedDataExists.Count());
+            _logger.LogInformation("--> Urgently repaid debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
             return cachedDataExists;
         }
 
@@ -125,7 +124,7 @@ public class DebtService : Manager, IDebtService
 
         await _cacheService.ClearStorage();
 
-        await CreateDebtSendEmailAction(data);
+        await CreateSendDebtEmailAction(data);
 
         var response = _mapper.Map<CreateDebtResponse>(data);
 
@@ -145,7 +144,7 @@ public class DebtService : Manager, IDebtService
 
         if (debt is null)
         {
-            _logger.LogError("Debt(Id: {DebtId}) was not found", id);
+            _logger.LogError("--> Debt(Id: {DebtId}) was not found", id);
             throw new NullReferenceException($"Debt({id}) was not found");
         }
 
@@ -156,7 +155,7 @@ public class DebtService : Manager, IDebtService
 
         await _cacheService.ClearStorage();
 
-        await CreateDebtSendEmailAction(debt);
+        await CreateSendDebtEmailAction(debt);
 
         var response = _mapper.Map<UpdateDebtResponse>(debt);
 
@@ -175,8 +174,8 @@ public class DebtService : Manager, IDebtService
 
         if (debt is null)
         {
-            _logger.LogError("Debt(Id: {DebtId}) was not found", id);
-            throw new NullReferenceException($"Debt({id}) was not found");
+            _logger.LogError("--> Debt(Id: {DebtId}) was not found", id);
+            throw new NullReferenceException($"Debt(Id: {id}) was not found");
         }
 
         context.Debts.Remove(debt);

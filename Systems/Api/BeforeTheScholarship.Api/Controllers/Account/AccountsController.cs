@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Services.UserAccountService;
 using BeforeTheScholarship.Services.UserAccountService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +41,7 @@ public class AccountsController : ControllerBase
     /// <summary>
     /// Creates new user account and send email 
     /// </summary>
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<RegisterUserAccountResponse> Register([FromQuery] RegisterUserAccountRequest request)
     {
@@ -56,6 +58,7 @@ public class AccountsController : ControllerBase
     /// Performs login for the user with the specified email
     /// </summary>
     /// <param name="request">Contains user email and password</param>
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<LoginUserAccountResponse> Login([FromQuery] LoginUserAccountRequest request)
     {

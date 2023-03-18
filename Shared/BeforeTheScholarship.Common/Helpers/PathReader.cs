@@ -1,4 +1,4 @@
-﻿namespace BeforeTheScholarship.Common.Extensions;
+﻿namespace BeforeTheScholarship.Common.Helpers;
 
 public static class PathReader
 {
@@ -10,7 +10,7 @@ public static class PathReader
     /// <param name="localPath">Local path from current directory</param>
     /// <param name="productionPath"></param>
     public static string ReadContent(string localPath, string remotePath) =>
-        (File.Exists(localPath))
+        File.Exists(localPath)
             ? File.ReadAllText(localPath)
             : File.ReadAllText(remotePath)
             ?? string.Empty;
