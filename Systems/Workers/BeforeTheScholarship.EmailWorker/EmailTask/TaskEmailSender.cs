@@ -43,7 +43,7 @@ public class TaskEmailSender : ITaskEmailSender
                     return;
                 }
                     
-                await service.SendDebtEmail(data);
+                await service.SendEmail(data);
 
                 _logger.LogInformation("--> RABBITMQ: NOTIFICATION ABOUT DEBT SENT TO: {EmailTo}", data.EmailTo);
             }));
