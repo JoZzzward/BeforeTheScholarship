@@ -63,9 +63,9 @@ public static class AuthConfiguration
         {
             options.AddPolicy(AppScopes.DebtsRead, policy => policy.RequireClaim("scope", AppScopes.DebtsRead));
             options.AddPolicy(AppScopes.DebtsWrite, policy => policy.RequireClaim("scope", AppScopes.DebtsWrite));
-            options.AddPolicy("openid", policy => policy.RequireClaim("scope", "openid"));
-            options.AddPolicy("profile", policy => policy.RequireClaim("scope", "profile"));
-            options.AddPolicy("email", policy => policy.RequireClaim("scope", "email"));
+            options.AddPolicy(AppScopes.OpenId, policy => policy.RequireClaim("scope", AppScopes.OpenId));
+            options.AddPolicy(AppScopes.Profile, policy => policy.RequireClaim("scope", AppScopes.Profile));
+            options.AddPolicy(AppScopes.Email, policy => policy.RequireClaim("scope", AppScopes.Email));
         });
 
         return services;

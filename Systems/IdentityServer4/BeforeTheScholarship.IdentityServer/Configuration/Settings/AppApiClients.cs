@@ -54,9 +54,9 @@ public static class AppApiClients
                     {
                         AppScopes.DebtsRead,
                         AppScopes.DebtsWrite,
-                        "openid",
-                        "profile",
-                        "email"
+                        AppScopes.OpenId,
+                        AppScopes.Profile,
+                        AppScopes.Email,
                     }
                 }
             };

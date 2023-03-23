@@ -67,9 +67,9 @@ public static class SwaggerConfiguration
                         {
                             {AppScopes.DebtsRead, "DebtsRead"},
                             {AppScopes.DebtsWrite, "DebtsWrite"},
-                            {"openid", "OpenId"},
-                            {"profile", "Profile"},
-                            {"email", "Email"}
+                            {AppScopes.OpenId, "OpenId"},
+                            {AppScopes.Profile, "Profile"},
+                            {AppScopes.Email, "Email"}
                         }
                     }
                 }
