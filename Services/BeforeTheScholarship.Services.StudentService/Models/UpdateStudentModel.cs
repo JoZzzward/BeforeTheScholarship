@@ -20,6 +20,12 @@ public class UpdateStudentmodelValidator : AbstractValidator<UpdateStudentModel>
         RuleFor(x => x.UserName)
             .MaximumLength(30).WithMessage("Username length must be less than 30.");
 
+        RuleFor(x => x.FirstName)
+            .MaximumLength(30).WithMessage("Firstname length must be less than 30.");
+
+        RuleFor(x => x.LastName)
+            .MaximumLength(30).WithMessage("Lastname length must be less than 30.");
+
         RuleFor(x => x.Email)
             .EmailAddress()
             .WithMessage("Incorrect email.")
@@ -28,7 +34,7 @@ public class UpdateStudentmodelValidator : AbstractValidator<UpdateStudentModel>
         RuleFor(x => x.PhoneNumber)
             .ForEach(x =>
             {
-                x.Must(x => char.IsDigit(x));
+                x.Must(char.IsDigit);
             }).WithMessage("Phone must contain only numbers.");
     }
 }

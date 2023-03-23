@@ -32,7 +32,7 @@ public interface IUserAccountService
     /// Sending mail on email that contain link with user email and token for password recovery.
     /// </summary>
     /// <param name="request">Contains the email of the user who wants to recover the password</param>
-    Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(SendPasswordRecoveryModel request);
+    Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(PasswordRecoveryMailModel request);
 
     /// <summary>
     /// Changing the password of the user who specified the email address. Checks the old password for correctness.

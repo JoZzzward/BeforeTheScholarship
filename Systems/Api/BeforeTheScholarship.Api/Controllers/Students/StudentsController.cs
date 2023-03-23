@@ -2,6 +2,7 @@
 using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.StudentService;
 using BeforeTheScholarship.Services.StudentService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,11 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 /// Students controller
 /// </summary>
 [Produces("application/json")]
-[ApiController]
-[EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
-[ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/students")]
+[EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
+[ApiController]
+[Authorize]
+[ApiVersion("1.0")]
 public class StudentsController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -35,10 +37,10 @@ public class StudentsController : ControllerBase
     }
 
     /// <summary>
-    /// HttpGet - Gettings students from database
+    /// HttpGet - Returns students from database
     /// </summary>
-    /// <returns></returns>
     [ProducesResponseType(typeof(IEnumerable<StudentModel>), 200)]
+    [AllowAnonymous]
     [HttpGet("")]
     public async Task<IEnumerable<StudentResponse>> GetStudents()
     {
@@ -54,6 +56,8 @@ public class StudentsController : ControllerBase
     /// HttpGet - Returns <see cref="StudentResponse"/> with same <paramref name="id"/>
     /// </summary>
     /// <param name="id">Unique student identifier</param>
+    [ProducesResponseType(typeof(StudentModel), 200)]
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<StudentResponse> GetStudentById([FromRoute] Guid id)
     {
@@ -69,6 +73,7 @@ public class StudentsController : ControllerBase
     /// <summary>
     /// HttpPut - Updates existed StudentUser in database
     /// </summary>
+    [Authorize(CorsSettings.DefaultOriginName)]
     [HttpPut("{id}")]
     public async Task<UpdateStudentResponse> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
     {
@@ -83,9 +88,8 @@ public class StudentsController : ControllerBase
 
     /// <summary>
     /// HttpDelete - Deletes existed StudentUser in database
-    /// TODO: Delete this method instead of future AccountController
     /// </summary>
-    /// <returns></returns>
+    [Authorize(CorsSettings.DefaultOriginName)]
     [HttpDelete("{id}")]
     public async Task<DeleteStudentResponse> DeleteStudent([FromRoute] Guid? id)
     {

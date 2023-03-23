@@ -11,11 +11,11 @@ namespace BeforeTheScholarship.Api.Controllers.Debts;
 /// <summary>
 /// Debts ApiController
 /// </summary>
-[Route("api/v{version:apiVersion}/debts")]
 [Produces("application/json")]
-[Authorize]
-[ApiController]
+[Route("api/v{version:apiVersion}/debts")]
 [EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
+[ApiController]
+[Authorize]
 [ApiVersion("1.0")]
 public class DebtsController : ControllerBase
 {

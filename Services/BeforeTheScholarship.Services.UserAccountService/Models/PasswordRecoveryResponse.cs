@@ -13,6 +13,7 @@ public class PasswordRecoveryResponseProfile : Profile
 {
     public PasswordRecoveryResponseProfile()
     {
-        CreateMap<SendPasswordRecoveryModel, PasswordRecoveryResponse>();
+        CreateMap<StudentUser, PasswordRecoveryResponse>();
+        CreateMap<PasswordRecoveryMailModel, PasswordRecoveryResponse>();
     }
 }

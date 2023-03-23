@@ -207,7 +207,6 @@
             Changes user with given email old password on new password.
             </summary>
             <param name="request"></param>
-            <returns></returns>
         </member>
         <member name="T:BeforeTheScholarship.Api.Controllers.Debts.DebtsController">
             <summary>
@@ -250,12 +249,17 @@
             </summary>
             <param name="id">Unique debt identifier</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Guid,System.Boolean)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetOverdueDebts(System.Guid)">
+            <summary>
+            Returns overdue debts that belong to student with <paramref name="studentId"/>
+            </summary>
+            <param name="studentId">Identifier of the student whose debts must be repaid</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Guid)">
             <summary>
             Returns debts that need to be urgently repaid
             </summary>
             <param name="studentId">Identifier of the student whose debts must be repaid</param>
-            <param name="overdue">Whether the deadline for debt is overdue</param>
         </member>
         <member name="T:BeforeTheScholarship.Api.Controllers.Students.StudentsController">
             <summary>

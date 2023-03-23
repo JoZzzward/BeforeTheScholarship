@@ -13,8 +13,8 @@ namespace BeforeTheScholarship.Api.Controllers.Accounts;
 /// <response code="401">Unauthorized</response>
 [Produces("application/json")]
 [Route("api/v{version:apiVersion}/account")]
-[ApiController]
 [EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
+[ApiController]
 [ApiVersion("1.0")]
 public class AccountsController : ControllerBase
 {
@@ -22,12 +22,6 @@ public class AccountsController : ControllerBase
     private readonly ILogger<AccountsController> _logger;
     private readonly IUserAccountService _userAccountService;
 
-    /// <summary>
-    /// Accounts constructor that implements services
-    /// </summary>
-    /// <param name="mapper"></param>
-    /// <param name="logger"></param>
-    /// <param name="userAccountService"></param>
     public AccountsController(
         IMapper mapper, 
         ILogger<AccountsController> logger, 
@@ -64,7 +58,9 @@ public class AccountsController : ControllerBase
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to sign in.", request.Email);
 
-        var user = await _userAccountService.LoginUser(_mapper.Map<LoginUserAccountModel>(request));
+        var model = _mapper.Map<LoginUserAccountModel>(request);
+
+        var user = await _userAccountService.LoginUser(model);
 
         var response = _mapper.Map<LoginUserAccountResponse>(user);
 
@@ -75,7 +71,7 @@ public class AccountsController : ControllerBase
     /// Confirm email with token that was given on account registration and sended to user email
     /// </summary>
     /// <param name="request">Contains email and token for confirmation</param>
-    [HttpPost("confirmemail")]
+    [HttpPost("confirm-email")]
     public async Task<ConfirmationEmailResponse> ConfirmEmail([FromBody] ConfirmationEmailRequest request)
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to confirm email.", request.Email);
@@ -96,7 +92,7 @@ public class AccountsController : ControllerBase
     {
         _logger.LogInformation("--> User(Email: {UserEmail}) trying to send password recover message on his email.", request.Email);
 
-        var model = _mapper.Map<SendPasswordRecoveryModel>(request);
+        var model = _mapper.Map<PasswordRecoveryMailModel>(request);
 
         var response = await _userAccountService.SendRecoveryPasswordEmail(model);
 
@@ -122,8 +118,7 @@ public class AccountsController : ControllerBase
     /// <summary>
     /// Changes user with given email old password on new password.
     /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
+    /// <param name="request">Contains user credentials for password changing</param>
     [HttpPost("change-password")]
     public async Task<ChangePasswordResponse> ChangePassword([FromQuery] ChangePasswordRequest request)
     {

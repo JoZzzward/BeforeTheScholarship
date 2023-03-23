@@ -24,7 +24,7 @@ public class UserAccountService : IUserAccountService
     private readonly IModelValidator<RegisterUserAccountModel> _registerModelValidator;
     private readonly IModelValidator<LoginUserAccountModel> _loginModelValidator;
     private readonly IModelValidator<ConfirmationEmailModel> _confirmationEmailModelValidator;
-    private readonly IModelValidator<SendPasswordRecoveryModel> _sendPasswordRecoveryModelValidator;
+    private readonly IModelValidator<PasswordRecoveryMailModel> _sendPasswordRecoveryModelValidator;
     private readonly IModelValidator<PasswordRecoveryModel> _passwordRecoveryModelValidator;
     private readonly IModelValidator<ChangePasswordModel> _changePasswordModelValidator;
 
@@ -37,7 +37,7 @@ public class UserAccountService : IUserAccountService
         IModelValidator<RegisterUserAccountModel> registerModelValidator,
         IModelValidator<LoginUserAccountModel> loginModelValidator,
         IModelValidator<ConfirmationEmailModel> confirmationEmailModelValidator,
-        IModelValidator<SendPasswordRecoveryModel> sendPasswordRecoveryModelValidator,
+        IModelValidator<PasswordRecoveryMailModel> sendPasswordRecoveryModelValidator,
         IModelValidator<PasswordRecoveryModel> passwordRecoveryModelValidator,
         IModelValidator<ChangePasswordModel> changePasswordModelValidator
         )
@@ -133,7 +133,7 @@ public class UserAccountService : IUserAccountService
         return response;
     }
 
-    public async Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(SendPasswordRecoveryModel model)
+    public async Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(PasswordRecoveryMailModel model)
     {
         _sendPasswordRecoveryModelValidator.CheckValidation(model);
         var user = await _userManager.FindByEmailAsync(model.Email);
@@ -156,9 +156,9 @@ public class UserAccountService : IUserAccountService
             Message = content
         });
 
-        var response = _mapper.Map<PasswordRecoveryResponse>(model);
+        var response = _mapper.Map<PasswordRecoveryResponse>(user);
 
-        _logger.LogInformation("--> Password message was successfully sended to User(Email: {UserEmail})", response.Email);
+        _logger.LogInformation("--> Password message was successfully sended to User (Email: {UserEmail})", response.Email);
 
         return response;
     }
@@ -205,11 +205,11 @@ public class UserAccountService : IUserAccountService
         var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
 
         if (!result.Succeeded)
-            throw new Exception($"Exception by changing password for email({model.Email}).");
+            throw new Exception($"Exception by changing password for Email ({model.Email}).");
 
         var response = _mapper.Map<ChangePasswordResponse>(user);
         
-        _logger.LogInformation("--> Password of User(Email: {UserEmail}) was successfully changed.", response.Email);
+        _logger.LogInformation("--> Password of User (Email: {UserEmail}) was successfully changed.", response.Email);
 
         return response;
     }

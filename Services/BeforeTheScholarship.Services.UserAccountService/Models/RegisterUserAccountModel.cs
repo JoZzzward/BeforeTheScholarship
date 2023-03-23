@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Entities;
 using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
 public class RegisterUserAccountModel
 {
-    public string UserName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public string ConfirmPassword { get; set; }
+    public string UserName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string ConfirmPassword { get; set; } = string.Empty;
 }
 
 public class RegisterUserAccountModelValidator : AbstractValidator<RegisterUserAccountModel>
@@ -26,15 +27,11 @@ public class RegisterUserAccountModelValidator : AbstractValidator<RegisterUserA
             .MaximumLength(50).WithMessage("Email length must be less than 50");
 
         RuleFor(x => x.Password)
-            .MinimumLength(8).WithMessage("Minimum length is 8")
-            .Equal(x => x.ConfirmPassword).WithMessage("Password and ConfirmPassword must be equals")
-            .Must(PasswordHasNumbers).WithMessage("Password must contain numbers")
-            .Must(PasswordHasLetters).WithMessage("Password must contain letters");
+            .Must(x => new Regex("^(?=.*\\d)(?=.*[a-zA-Z]).{8,30}$").Matches(x).Count() > 0)
+            .WithMessage("Password must be 8 symbols or more")
+            .WithMessage("Password must have minimum 1 lowercase letter")
+            .Equal(x => x.ConfirmPassword).WithMessage("Password and ConfirmPassword must be equals");
     }
-
-    protected bool PasswordHasNumbers(string password) => password.Any(x => char.IsDigit(x));
-
-    protected bool PasswordHasLetters(string password) => password.Any(x => char.IsLetter(x));
 }
 
 public class RegisterUserAccountModelProfile : Profile

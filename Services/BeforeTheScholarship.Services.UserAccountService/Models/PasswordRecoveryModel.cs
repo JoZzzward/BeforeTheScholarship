@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
@@ -18,13 +19,13 @@ public class PasswordRecoveryModelValidator : AbstractValidator<PasswordRecovery
                 .WithMessage("Incorrect email.")
                 .MaximumLength(50).WithMessage("Email length must be less than 50");
 
+        RuleFor(x => x.Token)
+            .NotEmpty()
+            .WithMessage("Email token must be not empty");
+
         RuleFor(x => x.NewPassword)
-                .MinimumLength(8).WithMessage("Minimum length is 8.")
-                .Must(PasswordHasNumbers).WithMessage("Password must contain numbers.")
-                .Must(PasswordHasLetters).WithMessage("Password must contain letters.");
+            .Must(x => new Regex("^(?=.*\\d)(?=.*[a-zA-Z]).{8,30}$").Matches(x).Count() > 0)
+            .WithMessage("Password must be 8 symbols or more")
+            .WithMessage("Password must have minimum 1 lowercase letter");
     }
-
-    protected bool PasswordHasNumbers(string password) => password.Any(x => char.IsDigit(x));
-
-    protected bool PasswordHasLetters(string password) => password.Any(x => char.IsLetter(x));
 }
