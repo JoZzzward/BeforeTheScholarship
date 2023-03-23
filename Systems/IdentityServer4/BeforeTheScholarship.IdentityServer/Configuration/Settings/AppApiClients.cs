@@ -11,17 +11,16 @@ public static class AppApiClients
     {
         var configuration = provider.GetRequiredService<IConfiguration>();
 
-        string clientSecret = SecretSearcher.SearchSecret("ClientSecretValue:IdentitySettings", "clientsecret", configuration);
+        string secret = SecretSearcher.SearchSecret("ClientSecretValue:IdentitySettings", "clientsecret", configuration);
 
         var clients = new List<Client>()
             {
-                new Client()
+                new()
                 {
                     ClientId = "swagger",
                     ClientSecrets =
                     {
-                        // ToString is important
-                        new Secret(clientSecret.ToString().Sha256())
+                        new Secret(secret.Sha256())
                     },
                     AccessTokenLifetime = 3600,
 
@@ -34,13 +33,12 @@ public static class AppApiClients
                     },
                 },
 
-                new Client()
+                new()
                 {
-                    ClientId= "mobile_app",
+                    ClientId= "frontend",
                     ClientSecrets =
                     {
-                        // ToString is important
-                        new Secret(clientSecret.ToString().Sha256())
+                        new Secret(secret.Sha256())
                     },
 
                     AccessTokenLifetime = 3600,
@@ -55,7 +53,10 @@ public static class AppApiClients
                     AllowedScopes =
                     {
                         AppScopes.DebtsRead,
-                        AppScopes.DebtsWrite
+                        AppScopes.DebtsWrite,
+                        "openid",
+                        "profile",
+                        "email"
                     }
                 }
             };

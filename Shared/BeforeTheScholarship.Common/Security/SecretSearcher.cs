@@ -19,10 +19,10 @@ public static class SecretSearcher
         if (!string.IsNullOrEmpty(secretValue))
             return secretValue;
 
-        string path = "/run/secrets/" + productionKey;
+        var path = "/run/secrets/" + productionKey;
 
         secretValue = File.ReadAllText(path);
 
-        return secretValue.Replace(" ", "");
+        return secretValue;
     }
 }
