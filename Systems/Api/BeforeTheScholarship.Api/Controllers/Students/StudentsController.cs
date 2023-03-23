@@ -73,7 +73,6 @@ public class StudentsController : ControllerBase
     /// <summary>
     /// HttpPut - Updates existed StudentUser in database
     /// </summary>
-    [Authorize(CorsSettings.DefaultOriginName)]
     [HttpPut("{id}")]
     public async Task<UpdateStudentResponse> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
     {
@@ -89,7 +88,6 @@ public class StudentsController : ControllerBase
     /// <summary>
     /// HttpDelete - Deletes existed StudentUser in database
     /// </summary>
-    [Authorize(CorsSettings.DefaultOriginName)]
     [HttpDelete("{id}")]
     public async Task<DeleteStudentResponse> DeleteStudent([FromRoute] Guid? id)
     {
