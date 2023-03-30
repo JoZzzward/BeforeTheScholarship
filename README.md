@@ -32,11 +32,13 @@ If you not familiar with Docker, follow [this link](https://docs.docker.com/get-
 
 2. File ```emailpassword.txt``` with information about the specific password for sending out messages.
 
-3. Open main project folder in terminal and than run ```docker-compose up``` command.
+3. Build the project with ```docker-compose build``` command.
+
+4. Open main project folder in terminal and than run ```docker-compose up``` command.
 
 After all off this steps project will run currectly.
 
-> If you want to debug separate service you should run all services in docker and than stop specific service and launch him in IDE. Services support separate debug configuration.
+> If your WebAPI dont start while initializing database you can run WebAPI again and it will start correctly
 
 # How to communicate with project
 
