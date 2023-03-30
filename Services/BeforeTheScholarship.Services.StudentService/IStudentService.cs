@@ -8,17 +8,17 @@ public interface IStudentService
     /// Returns a list of students
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<StudentModel>> GetStudents();
+    Task<IEnumerable<StudentResponse>> GetStudents();
     /// <summary>
-    /// Returns <see cref="StudentModel"/> with same <paramref name="id"/>
+    /// Returns <see cref="StudentResponse"/> with same <paramref name="id"/>
     /// </summary>
-    Task<StudentModel> GetStudentById(Guid id);
+    Task<StudentResponse> GetStudentById(Guid id);
     /// <summary>
-    /// Updates a <see cref="StudentModel"/> in database with the same <paramref name="id"/>
+    /// Updates a <see cref="StudentResponse"/> in database with the same <paramref name="id"/>
     /// </summary>
-    Task<UpdateStudentResponse> UpdateStudent(Guid id, UpdateStudentModel model);
+    Task<UpdateStudentResponse?> UpdateStudent(Guid id, UpdateStudentModel model);
     /// <summary>
-    /// Removes a <see cref="StudentModel"/> in database with the same <paramref name="id"/>.
+    /// Removes a <see cref="StudentResponse"/> in database with the same <paramref name="id"/>.
     /// </summary>
-    Task<DeleteStudentResponse> DeleteStudent(Guid? id);
+    Task<DeleteStudentResponse?> DeleteStudent(Guid? id);
 }

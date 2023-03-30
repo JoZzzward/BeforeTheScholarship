@@ -39,15 +39,14 @@ public class StudentsController : ControllerBase
     /// <summary>
     /// HttpGet - Returns students from database
     /// </summary>
-    [ProducesResponseType(typeof(IEnumerable<StudentModel>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<StudentResponse>), 200)]
     [AllowAnonymous]
     [HttpGet("")]
     public async Task<IEnumerable<StudentResponse>> GetStudents()
     {
         _logger.LogInformation("--> Trying to return all students..");
 
-        var students = await _studentService.GetStudents();
-        var response = students.Select(_mapper.Map<StudentResponse>);
+        var response = await _studentService.GetStudents();
 
         return response;
     }
@@ -56,17 +55,15 @@ public class StudentsController : ControllerBase
     /// HttpGet - Returns <see cref="StudentResponse"/> with same <paramref name="id"/>
     /// </summary>
     /// <param name="id">Unique student identifier</param>
-    [ProducesResponseType(typeof(StudentModel), 200)]
+    [ProducesResponseType(typeof(StudentResponse), 200)]
     [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<StudentResponse> GetStudentById([FromRoute] Guid id)
     {
         _logger.LogInformation("--> Student(Id: {StudentId}) trying to return..", id);
 
-        var student = await _studentService.GetStudentById(id);
+        var response = await _studentService.GetStudentById(id);
             
-        var response = _mapper.Map<StudentResponse>(student);
-
         return response;
     }
 
@@ -74,7 +71,7 @@ public class StudentsController : ControllerBase
     /// HttpPut - Updates existed StudentUser in database
     /// </summary>
     [HttpPut("{id}")]
-    public async Task<UpdateStudentResponse> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
+    public async Task<ActionResult<UpdateStudentResponse>> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
     {
         _logger.LogInformation("--> Trying to update student(Id: {StudentId})", id);
 
@@ -82,19 +79,25 @@ public class StudentsController : ControllerBase
 
         var response = await _studentService.UpdateStudent(id, model);
 
-        return response;
+        if (response is null)
+            return BadRequest();
+
+        return Ok();
     }
 
     /// <summary>
     /// HttpDelete - Deletes existed StudentUser in database
     /// </summary>
     [HttpDelete("{id}")]
-    public async Task<DeleteStudentResponse> DeleteStudent([FromRoute] Guid? id)
+    public async Task<ActionResult<DeleteStudentResponse>> DeleteStudent([FromRoute] Guid? id)
     {
         _logger.LogInformation("--> Trying to remove student(Id: {StudentId})", id);
 
         var response = await _studentService.DeleteStudent(id);
 
-        return response;
+        if (response is null)
+            return BadRequest();
+
+        return Ok();
     }
 }

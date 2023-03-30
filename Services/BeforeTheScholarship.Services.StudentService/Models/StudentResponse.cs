@@ -3,7 +3,7 @@ using BeforeTheScholarship.Entities;
 
 namespace BeforeTheScholarship.Services.StudentService.Models;
 
-public class StudentModel
+public class StudentResponse
 {
     public Guid Id { get; set; }
     public string UserName { get; set; }
@@ -18,6 +18,6 @@ public class StudentModelProfile : Profile
 {
 	public StudentModelProfile()
 	{
-		CreateMap<StudentUser, StudentModel>();
+		CreateMap<StudentUser, StudentResponse>();
 	}
 }

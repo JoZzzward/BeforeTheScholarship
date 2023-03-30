@@ -14,8 +14,7 @@ public class ConfirmationEmailModelValidator : AbstractValidator<ConfirmationEma
     public ConfirmationEmailModelValidator()
     {
         RuleFor(x => x.Email)
-            .EmailAddress()
-            .WithMessage("Incorrect email.")
+            .EmailAddress().WithMessage("Incorrect email.")
             .MaximumLength(50).WithMessage("Email length must be less than 50");
 
         RuleFor(x => x.Token)

@@ -14,12 +14,14 @@ namespace BeforeTheScholarship.Common.Validation
             _validator = validator;
         }
 
-        public void CheckValidation(T model)
+        public async Task<bool> CheckValidation(T model)
         {
-            var result = _validator.Validate(model);
+            var result = await _validator.ValidateAsync(model);
 
             if (!result.IsValid)
                 throw new ValidationException(result.Errors);
+
+            return result.IsValid;
         }
     }
 }

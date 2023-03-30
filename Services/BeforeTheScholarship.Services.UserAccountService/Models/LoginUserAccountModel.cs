@@ -14,12 +14,11 @@ public class LoginUserAccountModelValidator : AbstractValidator<LoginUserAccount
     public LoginUserAccountModelValidator()
     {
         RuleFor(x => x.Email)
-            .EmailAddress()
-            .WithMessage("Incorrect email.")
+            .EmailAddress().WithMessage("Incorrect email.")
             .MaximumLength(50).WithMessage("Email length must be less than 50");
 
         RuleFor(x => x.Password)
-            .Must(x => new Regex("^(?=.*\\d)(?=.*[a-zA-Z]).{8,30}$").Matches(x).Count() > 0)
+            .Must(x => new Regex("^(?=.*\\d)(?=.*[a-zA-Z]).{8,30}$").Matches(x).Any())
             .WithMessage("Password must be 8 symbols or more")
             .WithMessage("Password must have minimum 1 lowercase letter");
     }

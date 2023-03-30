@@ -44,3 +44,4 @@ app.UseControllersAndViews();
 DbInitializer.Execute(app.Services);
 
 app.Run();
+public partial class Program { }

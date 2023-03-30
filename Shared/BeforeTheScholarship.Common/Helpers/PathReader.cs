@@ -12,6 +12,7 @@ public static class PathReader
     public static string ReadContent(string localPath, string remotePath) =>
         File.Exists(localPath)
             ? File.ReadAllText(localPath)
-            : File.ReadAllText(remotePath)
-            ?? string.Empty;
+            : File.Exists(remotePath) 
+                ? File.ReadAllText(remotePath) 
+                : string.Empty;
 }

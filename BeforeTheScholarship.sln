@@ -45,13 +45,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Services.StudentService", "Services\BeforeTheScholarship.Services.StudentService\BeforeTheScholarship.Services.StudentService.csproj", "{39289212-E125-4E4C-88D1-4C9EDB1B1A93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Services.EmailSender", "Services\BeforeTheScholarship.Services.EmailSender\BeforeTheScholarship.Services.EmailSender.csproj", "{553AAF84-658A-4CDB-80B5-80997E6A83A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Services.EmailSender", "Services\BeforeTheScholarship.Services.EmailSender\BeforeTheScholarship.Services.EmailSender.csproj", "{553AAF84-658A-4CDB-80B5-80997E6A83A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Services.UserAccountService", "Services\BeforeTheScholarship.Services.UserAccountService\BeforeTheScholarship.Services.UserAccountService.csproj", "{CF7ABEC8-BBA7-4CF3-B0F4-38F1F53A2495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Services.UserAccountService", "Services\BeforeTheScholarship.Services.UserAccountService\BeforeTheScholarship.Services.UserAccountService.csproj", "{CF7ABEC8-BBA7-4CF3-B0F4-38F1F53A2495}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Services.Actions", "Services\BeforeTheScholarship.Services.Actions\BeforeTheScholarship.Services.Actions.csproj", "{8B56CB63-D238-4C16-B6D6-FBEA71815364}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Services.Actions", "Services\BeforeTheScholarship.Services.Actions\BeforeTheScholarship.Services.Actions.csproj", "{8B56CB63-D238-4C16-B6D6-FBEA71815364}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Services.DebtService", "Services\BeforeTheScholarship.Services.DebtService\BeforeTheScholarship.Services.DebtService.csproj", "{E573491F-0131-4FDB-B1BF-2B567459BE53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Services.DebtService", "Services\BeforeTheScholarship.Services.DebtService\BeforeTheScholarship.Services.DebtService.csproj", "{E573491F-0131-4FDB-B1BF-2B567459BE53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F47C732A-6865-4F34-81C5-65B18423074F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Tests", "Tests\BeforeTheScholarship.Tests\BeforeTheScholarship.Tests.csproj", "{2D16580A-4506-4FD7-BF75-23CF424FD872}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +131,10 @@ Global
 		{E573491F-0131-4FDB-B1BF-2B567459BE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E573491F-0131-4FDB-B1BF-2B567459BE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E573491F-0131-4FDB-B1BF-2B567459BE53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D16580A-4506-4FD7-BF75-23CF424FD872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D16580A-4506-4FD7-BF75-23CF424FD872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D16580A-4506-4FD7-BF75-23CF424FD872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D16580A-4506-4FD7-BF75-23CF424FD872}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +160,7 @@ Global
 		{CF7ABEC8-BBA7-4CF3-B0F4-38F1F53A2495} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
 		{8B56CB63-D238-4C16-B6D6-FBEA71815364} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
 		{E573491F-0131-4FDB-B1BF-2B567459BE53} = {CCDF7DDD-8E34-45B2-8A21-71F3E8B70CB9}
+		{2D16580A-4506-4FD7-BF75-23CF424FD872} = {F47C732A-6865-4F34-81C5-65B18423074F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37ACCB9C-F5D9-4B83-AC74-C538F7149F3C}

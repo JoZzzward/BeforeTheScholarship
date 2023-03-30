@@ -12,36 +12,38 @@ namespace BeforeTheScholarship.Api.Controllers.Accounts;
 /// </summary>
 /// <response code="401">Unauthorized</response>
 [Produces("application/json")]
-[Route("api/v{version:apiVersion}/account")]
+[Route("api/v{version:apiVersion}/accounts")]
 [EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
 [ApiController]
 [ApiVersion("1.0")]
 public class AccountsController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly ILogger<AccountsController> _logger;
+    private readonly IMapper _mapper;
     private readonly IUserAccountService _userAccountService;
 
     public AccountsController(
-        IMapper mapper, 
-        ILogger<AccountsController> logger, 
-        IUserAccountService userAccountService)
+        IUserAccountService userAccountService,
+        IMapper mapper,
+        ILogger<AccountsController> logger)
     {
+        _userAccountService = userAccountService;
         _mapper = mapper;
         _logger = logger;
-        _userAccountService = userAccountService;
     }
 
     /// <summary>
-    /// Creates new user account and send email 
+    /// Creates new user account and send email
     /// </summary>
-    [AllowAnonymous]
+    [ProducesResponseType(typeof(RegisterUserAccountResponse), 200)]
     [HttpPost("register")]
-    public async Task<RegisterUserAccountResponse> Register([FromQuery] RegisterUserAccountRequest request)
+    public async Task<RegisterUserAccountResponse> Register([FromBody] RegisterUserAccountRequest request)
     {
-        _logger.LogInformation("--> User(UserName: {UserUserName}) trying to register.", request.UserName);
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to register.", request.Email);
 
-        var user = await _userAccountService.RegisterUser(_mapper.Map<RegisterUserAccountModel>(request));
+        var model = _mapper.Map<RegisterUserAccountModel>(request);
+
+        var user = await _userAccountService.RegisterUser(model);
 
         var response = _mapper.Map<RegisterUserAccountResponse>(user);
 
@@ -52,11 +54,11 @@ public class AccountsController : ControllerBase
     /// Performs login for the user with the specified email
     /// </summary>
     /// <param name="request">Contains user email and password</param>
-    [AllowAnonymous]
+    [ProducesResponseType(typeof(LoginUserAccountResponse), 200)]
     [HttpPost("login")]
-    public async Task<LoginUserAccountResponse> Login([FromQuery] LoginUserAccountRequest request)
+    public async Task<LoginUserAccountResponse> Login([FromBody] LoginUserAccountRequest request)
     {
-        _logger.LogInformation("--> User(Email: {UserEmail}) trying to sign in.", request.Email);
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to sign in.", request.Email);
 
         var model = _mapper.Map<LoginUserAccountModel>(request);
 
@@ -68,14 +70,15 @@ public class AccountsController : ControllerBase
     }
 
     /// <summary>
-    /// Confirm email with token that was given on account registration and sended to user email
+    /// Confirm email with token that was given on account registration and send to user email
     /// </summary>
     /// <param name="request">Contains email and token for confirmation</param>
+    [ProducesResponseType(typeof(ConfirmationEmailResponse), 200)]
     [HttpPost("confirm-email")]
     public async Task<ConfirmationEmailResponse> ConfirmEmail([FromBody] ConfirmationEmailRequest request)
     {
-        _logger.LogInformation("--> User(Email: {UserEmail}) trying to confirm email.", request.Email);
-        
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to confirm email.", request.Email);
+
         var confirmEmailModel = _mapper.Map<ConfirmationEmailModel>(request);
 
         var response = await _userAccountService.ConfirmEmail(confirmEmailModel);
@@ -84,13 +87,15 @@ public class AccountsController : ControllerBase
     }
 
     /// <summary>
-    /// Sending password recovery mail on user email that specified in <paramref name="request"/>
+    /// Sending password recovery mail on user email that specified in <paramref name="request" />
     /// </summary>
     /// <param name="request">Contains user email to send the mail to</param>
+    [ProducesResponseType(typeof(PasswordRecoveryResponse), 200)]
     [HttpPost("recover-password-mail")]
     public async Task<PasswordRecoveryResponse> SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
     {
-        _logger.LogInformation("--> User(Email: {UserEmail}) trying to send password recover message on his email.", request.Email);
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to send password recover message on his email.",
+            request.Email);
 
         var model = _mapper.Map<PasswordRecoveryMailModel>(request);
 
@@ -103,10 +108,11 @@ public class AccountsController : ControllerBase
     /// Recover password on new password from request to user with given email.
     /// </summary>
     /// <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
+    [ProducesResponseType(typeof(PasswordRecoveryResponse), 200)]
     [HttpPost("recover-password")]
     public async Task<PasswordRecoveryResponse> RecoverPassword([FromBody] PasswordRecoveryRequest request)
     {
-        _logger.LogInformation("--> User(Email: {UserEmail}) trying to recover his password.", request.Email);
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to recover his password.", request.Email);
 
         var model = _mapper.Map<PasswordRecoveryModel>(request);
 
@@ -119,10 +125,12 @@ public class AccountsController : ControllerBase
     /// Changes user with given email old password on new password.
     /// </summary>
     /// <param name="request">Contains user credentials for password changing</param>
+    [ProducesResponseType(typeof(ChangePasswordResponse), 200)]
+    [Authorize]
     [HttpPost("change-password")]
-    public async Task<ChangePasswordResponse> ChangePassword([FromQuery] ChangePasswordRequest request)
+    public async Task<ChangePasswordResponse> ChangePassword([FromBody] ChangePasswordRequest request)
     {
-        _logger.LogInformation("--> User(Email: {UserEmail}) trying to change his password.", request.Email);
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to change his password.", request.Email);
         var model = _mapper.Map<ChangePasswordModel>(request);
 
         var response = await _userAccountService.ChangePassword(model);

@@ -2,6 +2,6 @@
 {
     public interface IModelValidator<T> where T : class
     {
-        void CheckValidation(T model);
+        Task<bool> CheckValidation(T model);
     }
 }

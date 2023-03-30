@@ -15,7 +15,7 @@ public class Manager
         _logger = logger;
     }
 
-    protected async Task<StudentUser> FindStudentById(Guid? id)
+    protected async Task<StudentUser?> FindStudentById(Guid? id)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
@@ -24,11 +24,8 @@ public class Manager
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (student is null)
-        {
             _logger.LogError("--> Student(Id: {StudentId}) was not found", id);
-            throw new NullReferenceException($"Student({id}) was not found");
-        }
-
+    
         return student;
     }
 }

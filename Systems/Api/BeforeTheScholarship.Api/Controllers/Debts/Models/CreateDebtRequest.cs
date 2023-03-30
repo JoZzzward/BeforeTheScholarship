@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace BeforeTheScholarship.Api.Controllers.Debts;
 
-public class AddDebtRequest
+public class CreateDebtRequest
 {
     public Guid StudentId { get; set; }
     public decimal Borrowed { get; set; }
@@ -12,9 +12,9 @@ public class AddDebtRequest
     public string BorrowedFromWho { get; set; }
 }
 
-public class AddDebtRequestValidator : AbstractValidator<AddDebtRequest>
+public class CreateDebtRequestValidator : AbstractValidator<CreateDebtRequest>
 {
-    public AddDebtRequestValidator()
+    public CreateDebtRequestValidator()
     {
         RuleFor(x => x.Borrowed).NotEmpty()
             .WithMessage("Borrowed money must be not empty.");
@@ -39,10 +39,10 @@ public class AddDebtRequestValidator : AbstractValidator<AddDebtRequest>
     }
 }
 
-public class AddDebtRequestProfile : Profile
+public class CreateDebtRequestProfile : Profile
 {
-    public AddDebtRequestProfile()
+    public CreateDebtRequestProfile()
     {
-        CreateMap<AddDebtRequest, CreateDebtModel>();
+        CreateMap<CreateDebtRequest, CreateDebtModel>();
     }
 }

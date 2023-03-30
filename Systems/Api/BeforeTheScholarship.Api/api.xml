@@ -167,7 +167,7 @@
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.Register(BeforeTheScholarship.Api.Controllers.Accounts.RegisterUserAccountRequest)">
             <summary>
-            Creates new user account and send email 
+            Creates new user account and send email
             </summary>
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.Login(BeforeTheScholarship.Api.Controllers.Accounts.LoginUserAccountRequest)">
@@ -178,13 +178,13 @@
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.ConfirmationEmailRequest)">
             <summary>
-            Confirm email with token that was given on account registration and sended to user email
+            Confirm email with token that was given on account registration and send to user email
             </summary>
             <param name="request">Contains email and token for confirmation</param>
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Accounts.PasswordRecoveryMailRequest)">
             <summary>
-            Sending password recovery mail on user email that specified in <paramref name="request"/>
+            Sending password recovery mail on user email that specified in <paramref name="request" />
             </summary>
             <param name="request">Contains user email to send the mail to</param>
         </member>
@@ -222,7 +222,19 @@
             </summary>
             <param name="studentId">Unique student identifier</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.CreateDebt(BeforeTheScholarship.Api.Controllers.Debts.AddDebtRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetOverdueDebts(System.Nullable{System.Guid})">
+            <summary>
+            Returns overdue debts that belong to student with <paramref name="studentId"/>
+            </summary>
+            <param name="studentId">Identifier of the student whose debts must be repaid</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Nullable{System.Guid})">
+            <summary>
+            Returns debts that need to be urgently repaid
+            </summary>
+            <param name="studentId">Identifier of the student whose debts must be repaid</param>
+        </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.CreateDebt(BeforeTheScholarship.Api.Controllers.Debts.CreateDebtRequest)">
             <summary>
             HttpPost - Adds new debt to database
             </summary>
@@ -241,18 +253,6 @@
             </summary>
             <param name="id">Unique debt identifier</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetOverdueDebts(System.Guid)">
-            <summary>
-            Returns overdue debts that belong to student with <paramref name="studentId"/>
-            </summary>
-            <param name="studentId">Identifier of the student whose debts must be repaid</param>
-        </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetUrgentlyRepaidDebts(System.Guid)">
-            <summary>
-            Returns debts that need to be urgently repaid
-            </summary>
-            <param name="studentId">Identifier of the student whose debts must be repaid</param>
-        </member>
         <member name="T:BeforeTheScholarship.Api.Controllers.Students.StudentsController">
             <summary>
             Students controller
@@ -270,7 +270,7 @@
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Students.StudentsController.GetStudentById(System.Guid)">
             <summary>
-            HttpGet - Returns <see cref="T:BeforeTheScholarship.Api.Controllers.Students.StudentResponse"/> with same <paramref name="id"/>
+            HttpGet - Returns <see cref="T:BeforeTheScholarship.Services.StudentService.Models.StudentResponse"/> with same <paramref name="id"/>
             </summary>
             <param name="id">Unique student identifier</param>
         </member>

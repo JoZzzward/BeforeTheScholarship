@@ -17,8 +17,9 @@ public class StudentService : Manager, IStudentService
     public StudentService(
         IDbContextFactory<AppDbContext> dbContext,
         IMapper mapper,
-        IModelValidator<UpdateStudentModel> updateStudentModelValidator,
-        ILogger<StudentService> logger)
+        ILogger<StudentService> logger,
+        IModelValidator<UpdateStudentModel> updateStudentModelValidator
+        )
         : base (dbContext, logger)
     {
         _dbContext = dbContext;
@@ -27,7 +28,7 @@ public class StudentService : Manager, IStudentService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<StudentModel>> GetStudents()
+    public async Task<IEnumerable<StudentResponse>> GetStudents()
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
@@ -35,28 +36,27 @@ public class StudentService : Manager, IStudentService
             .StudentUsers
             .ToListAsync();
 
-        var response = students.Select(_mapper.Map<StudentModel>)
-            ?? new List<StudentModel>();
+        var response = students.Select(_mapper.Map<StudentResponse>);
 
         _logger.LogInformation("--> Students(Count: {StudentsCount}) was returned successfully!", response.Count());
 
         return response;
     }
 
-    public async Task<StudentModel> GetStudentById(Guid id)
+    public async Task<StudentResponse> GetStudentById(Guid id)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
         var student = await FindStudentById(id);
 
-        var response = _mapper.Map<StudentModel>(student);
+        var response = _mapper.Map<StudentResponse>(student);
 
         _logger.LogInformation("--> Student(Id: {StudentId}) was successfully returned!", id);
 
         return response;
     }
 
-    public async Task<UpdateStudentResponse> UpdateStudent(Guid id, UpdateStudentModel model)
+    public async Task<UpdateStudentResponse?> UpdateStudent(Guid id, UpdateStudentModel model)
     {
         _updateStudentModelValidator.CheckValidation(model);
 
@@ -64,9 +64,12 @@ public class StudentService : Manager, IStudentService
 
         var student = await FindStudentById(id);
 
+        if (student is null)
+            return null;    
+
         student = _mapper.Map(model, student);
 
-        context.StudentUsers.Update(student!);
+        context.StudentUsers.Update(student);
         context.SaveChanges();
 
         var response = _mapper.Map<UpdateStudentResponse>(student);
@@ -76,11 +79,14 @@ public class StudentService : Manager, IStudentService
         return response;
     }
 
-    public async Task<DeleteStudentResponse> DeleteStudent(Guid? id)
+    public async Task<DeleteStudentResponse?> DeleteStudent(Guid? id)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
         var student = await FindStudentById(id);
+
+        if (student is null)
+            return null;
 
         context.StudentUsers.Remove(student);
         context.SaveChanges();

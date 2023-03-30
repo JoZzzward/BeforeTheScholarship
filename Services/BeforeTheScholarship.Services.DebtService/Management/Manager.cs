@@ -15,7 +15,7 @@ namespace BeforeTheScholarship.Services.DebtService;
 public abstract class Manager
 {
     private readonly IDbContextFactory<AppDbContext> _dbContext;
-    private readonly IStudentService _studentService;
+    private readonly IStudentService _debtService;
     private readonly ILogger<DebtService> _logger;
     private readonly IMapper _mapper;
     private readonly IActionsService _actionService;
@@ -23,59 +23,80 @@ public abstract class Manager
 
     public Manager(
         IDbContextFactory<AppDbContext> dbContext,
-        IStudentService studentService,
+        IStudentService debtService,
         ILogger<DebtService> logger,
         IMapper mapper,
         IActionsService actionService,
         ICacheService cacheService)
     {
         _dbContext = dbContext;
-        _studentService = studentService;
+        _debtService = debtService;
         _logger = logger;
         _mapper = mapper;
         _actionService = actionService;
         _cacheService = cacheService;
     }
 
-    protected async Task<IEnumerable<DebtResponse>> GetDebtsResponse(Guid? studentId = null)
+    protected async Task<Debts?> FindDebtById(int? id)
+    {
+        using var context = await _dbContext.CreateDbContextAsync();
+
+        var debt = await context
+            .Debts
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (debt is null)
+            _logger.LogError("--> Student(Id: {StudentId}) was not found", id);
+
+        return debt;
+    }
+
+    protected async Task<IEnumerable<DebtResponse>> GetDebtsResponse(Guid? debtId = null)
     {
         using var context = await _dbContext.CreateDbContextAsync();
         var debt = context
             .Debts
             .AsQueryable();
 
-        var response = (studentId is null)
+        var response = (debtId is null)
             ? (await debt.ToListAsync()).Select(_mapper.Map<DebtResponse>)
-            : (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(s => _mapper.Map<DebtResponse>(s))
-            ?? new List<DebtResponse>();
+            : (await debt.ToListAsync()).Where(x => x.StudentId == debtId).Select(_mapper.Map<DebtResponse>);
 
         return response;
     }
 
     protected async Task<IEnumerable<DebtResponse>?> ReturnCachedDebts(string key)
     {
-        var cachedData = await _cacheService.GetStringAsync<IEnumerable<DebtResponse>>(key);
-
-        return cachedData;
+        try
+        {
+            var cachedData = await _cacheService.GetStringAsync<IEnumerable<DebtResponse>>(key);
+            return cachedData;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     protected async Task CreateSendDebtEmailAction(Debts data)
     {
+        // TODO: Put delay time in configuration file
         var delay = (data.WhenToPayback - data.WhenToPayback.AddDays(-1)).TotalMilliseconds;
 
-        var student = await _studentService.GetStudentById(data.StudentId);
+        var debt = await _debtService.GetStudentById(data.StudentId);
 
-        var content = ContentReader.ReadFromFile("debtNotification.html", student.UserName, data);
+        var content = ContentReader.ReadFromFile("debtNotification.html", debt.UserName, data);
 
         await _actionService.SendDebtEmail(new DebtEmailModel()
         {
-            EmailTo = student.Email,
+            EmailTo = debt.Email,
             Subject = "One of your debts is about to expire",
             Message = content,
             WhenToPayback = data.WhenToPayback
         }, delay);
 
-        _logger.LogInformation("--> Notification action for student(Id: {StudentId}) created successfully", student.Id);
+        _logger.LogInformation("--> Notification action for debt(Id: {StudentId}) created successfully", debt.Id);
         _logger.LogInformation("--> Delay: {Delay}", delay);
     }
 }

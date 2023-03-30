@@ -19,17 +19,17 @@ public interface IDebtService
     /// <summary>
     /// Updates a <see cref="DebtResponse"/> in database with the same <paramref name="id"/>
     /// </summary>
-    Task<UpdateDebtResponse> UpdateDebt(int? id, UpdateDebtModel model);
+    Task<UpdateDebtResponse?> UpdateDebt(int? id, UpdateDebtModel model);
     /// <summary>
     /// Removes a <see cref="DebtResponse"/> in database with the same <paramref name="id"/>.
     /// </summary>
-    Task<DeleteDebtResponse> DeleteDebt(int? id);
+    Task<DeleteDebtResponse?> DeleteDebt(int? id);
     /// <summary>
-    /// Returns debts that need to be urgently repaid
+    /// Returns debts with 1 day or less left to the repayment date and that need to be urgently repaid
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid studentId);
+    Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid? studentId);
     /// <summary>
     /// Returns debts that must be overdue
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetOverdueDebts(Guid studentId);
+    Task<IEnumerable<DebtResponse>> GetOverdueDebts(Guid? studentId);
 }
