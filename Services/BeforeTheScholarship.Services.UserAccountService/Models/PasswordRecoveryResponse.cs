@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Entities;
+using System.Text.Json.Serialization;
 
 namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
 public class PasswordRecoveryResponse
 {
-    public string UserName { get; set; }
-    public string Email { get; set; }
+    [JsonPropertyName("username")] public string UserName { get; set; }
+    [JsonPropertyName("email")] public string Email { get; set; }
 }
 
 public class PasswordRecoveryResponseProfile : Profile 

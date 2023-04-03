@@ -12,29 +12,16 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students.Helpers
         {
             using var context = _dbContextHelper.GetContextData();
 
-            var content = new List<StudentResponse>();
-
-            foreach (var item in context.StudentUsers)
+            return context.StudentUsers.Select(item => new StudentResponse
             {
-#pragma warning disable CS8601 // Possible null reference assignment.
-#pragma warning disable CS8601 // Possible null reference assignment.
-#pragma warning disable CS8601 // Possible null reference assignment.
-                content.Add(new StudentResponse
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    UserName = item.UserName,
-                    Email = item.Email,
-                    EmailConfirmed = item.EmailConfirmed,
-                    PhoneNumber = item.PhoneNumber
-                });
-#pragma warning restore CS8601 // Possible null reference assignment.
-#pragma warning restore CS8601 // Possible null reference assignment.
-#pragma warning restore CS8601 // Possible null reference assignment.
-            }
-
-            return content;
+                Id = Guid.NewGuid(),
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                UserName = item.UserName,
+                Email = item.Email,
+                EmailConfirmed = item.EmailConfirmed,
+                PhoneNumber = item.PhoneNumber
+            }).ToList();
         }
     }
 }

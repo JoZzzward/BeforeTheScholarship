@@ -16,8 +16,7 @@ public class LoginUserAccountRequestValidator : AbstractValidator<LoginUserAccou
     public LoginUserAccountRequestValidator()
     {
         RuleFor(x => x.Email)
-            .EmailAddress()
-            .WithMessage("Incorrect email.")
+            .EmailAddress().WithMessage("Incorrect email.")
             .MaximumLength(50).WithMessage("Email length must be less than 50");
 
         // Checks if password was 8-30 symbols and contains minimum 1 lowercase letter 

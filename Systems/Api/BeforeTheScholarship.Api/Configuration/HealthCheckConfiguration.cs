@@ -1,4 +1,6 @@
-﻿namespace BeforeTheScholarship.Api.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace BeforeTheScholarship.Api.Configuration;
 
 /// <summary>
 /// HealthCheck Configuration
@@ -9,10 +11,10 @@ public static class HealthCheckConfiguration
     /// Adds healthchecks settings
     /// </summary>
     /// <param name="services"></param>
-    public static IServiceCollection AddAppHealthChecks(this IServiceCollection services)
+    public static IServiceCollection AddAppHealthChecks(this IServiceCollection services, string name = null)
     {
         services.AddHealthChecks()
-            .AddCheck<HealthCheck>("BeforeTheScholarship.Api");
+            .AddCheck<HealthCheck>(name ?? "BeforeTheScholarship.Api");
         
         return services;
     }

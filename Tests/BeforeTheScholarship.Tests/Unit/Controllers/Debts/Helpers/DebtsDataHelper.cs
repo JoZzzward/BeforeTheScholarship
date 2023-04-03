@@ -11,27 +11,17 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts.Helpers
         {
             using var context = _dbContextHelper.GetContextData();
 
-            var content = new List<DebtResponse>();
-
-            foreach (var item in context.Debts)
-            {
-                if (studentId == null || item.StudentId == studentId)
+            return (from item in context.Debts
+                where studentId == null || item.StudentId == studentId
+                select new DebtResponse()
                 {
-#pragma warning disable CS8601 // Possible null reference assignment.
-                    content.Add(new DebtResponse()
-                    {
-                        Borrowed = item.Borrowed,
-                        BorrowedFromWho = item.BorrowedFromWho,
-                        WhenBorrowed = item.WhenBorrowed,
-                        WhenToPayback = item.WhenToPayback,
-                        Phone = item.Phone,
-                        Id = item.Id
-                    });
-#pragma warning restore CS8601 // Possible null reference assignment.
-                }
-            }
-
-            return content;
+                    Borrowed = item.Borrowed,
+                    BorrowedFromWho = item.BorrowedFromWho,
+                    WhenBorrowed = item.WhenBorrowed,
+                    WhenToPayback = item.WhenToPayback,
+                    Phone = item.Phone,
+                    Id = item.Id
+                }).ToList();
         }
     }
 }

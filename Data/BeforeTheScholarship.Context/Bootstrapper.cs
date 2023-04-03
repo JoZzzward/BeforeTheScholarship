@@ -1,7 +1,6 @@
 ﻿namespace BeforeTheScholarship.Context;
 
 using BeforeTheScholarship.Settings;
-using BeforeTheScholarship.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

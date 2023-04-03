@@ -5,19 +5,21 @@ using BeforeTheScholarship.Services.StudentService;
 using BeforeTheScholarship.Services.StudentService.Models;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Helpers;
+using BeforeTheScholarship.Tests.Unit.Helpers.Configuration;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
 {
+    [Trait("Category", "Unit")]
     public class StudentsControllerTests
     {
         private readonly StudentsController _controller;
 
         private readonly IStudentService _studentService = Substitute.For<IStudentService>();
-        private readonly ILogger<StudentsController> _logger = Substitute.For<ILogger<StudentsController>>();
-        private readonly IMapper _mapper = Substitute.For<IMapper>();
+        private readonly ILogger<StudentsController> _logger = LoggerInitializer.InitializeForType<StudentsController>();
+        private readonly IMapper _mapper = AutoMapperInitializer.Initialize();
 
         private readonly StudentsDataHelper _studentsDataHelper = new();
 

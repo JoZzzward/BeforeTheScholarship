@@ -20,29 +20,12 @@ namespace BeforeTheScholarship.Tests.Unit.Helpers.Data
             return _dbContext;
         }
         
-        public class AppDbContextFactory : IDbContextFactory<AppDbContext>
-        {
-            public AppDbContext CreateDbContext()
-            {
-                return CreateAppDbContext();
-            }
-        }
-
-        public AppDbContext CreateContext()
-        {
-            return CreateAppDbContext();
-        }
-
-        public IDbContextFactory<AppDbContext> CreateDbContextFactory()
-        {
-            return new AppDbContextFactory();
-        }
-
         private static AppDbContext CreateAppDbContext()
         {
+            var databaseName = Guid.NewGuid().Shrink();
             return new AppDbContext(
                 new DbContextOptionsBuilder<AppDbContext>()
-                    .UseInMemoryDatabase(Guid.NewGuid().Shrink())
+                    .UseInMemoryDatabase(databaseName)
                     .Options);
         }
 

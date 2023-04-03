@@ -2,5 +2,5 @@
 
 public class IdentitySettings
 {
-    public string Url { get; private set; }
+    public string Url { get; set; }
 }

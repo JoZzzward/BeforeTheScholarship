@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
 namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
 {
-    /// <inheritdoc />
     public partial class DbRemoveDebtsEmailSendedField : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
@@ -15,7 +11,6 @@ namespace BeforeTheScholarship.Context.Migrations.PostgreSQL.Migrations
                 table: "Debts");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(

@@ -5,19 +5,21 @@ using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.DebtService.Models;
 using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Helpers;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
+using BeforeTheScholarship.Tests.Unit.Helpers.Configuration;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
 {
+    [Trait("Category", "Unit")]
     public class DebtsControllerTests
     {
         private readonly DebtsController _controller;
 
         private readonly IDebtService _debtService = Substitute.For<IDebtService>();
-        private readonly ILogger<DebtsController> _logger = Substitute.For<ILogger<DebtsController>>();
-        private readonly IMapper _mapper = Substitute.For<IMapper>();
+        private readonly ILogger<DebtsController> _logger = LoggerInitializer.InitializeForType<DebtsController>();
+        private readonly IMapper _mapper = AutoMapperInitializer.Initialize();
 
         private readonly DebtsDataHelper _debtsDataHelper = new();
 

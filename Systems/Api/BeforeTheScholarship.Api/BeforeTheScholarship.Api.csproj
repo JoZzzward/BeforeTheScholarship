@@ -50,4 +50,8 @@
 		<ProjectReference Include="..\..\..\Shared\BeforeTheScholarship.Settings\BeforeTheScholarship.Settings.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalVisibleTo Include="BeforeTheScholarship.Tests"/>
+	</ItemGroup>
+
 </Project>
