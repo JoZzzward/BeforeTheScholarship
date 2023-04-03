@@ -51,7 +51,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
             _changePasswordModelValidator = changePasswordModelValidator;
         }
 
-        public async Task<RegisterUserAccountResponse> RegisterUser(RegisterUserAccountModel model)
+        public async Task<RegisterUserAccountResponse?> RegisterUser(RegisterUserAccountModel model)
         {
             _registerModelValidator.CheckValidation(model);
 
@@ -59,8 +59,8 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             if (user != null)
             {
-                _logger.LogError("--> ERROR: User with email {UserEmail} already exist.", model.Email);
-                throw new Exception($"User account with email {model.Email} already exist.");
+                _logger.LogError("--> User (Email: {UserEmail}) already exist.", model.Email);
+                return null;
             }
 
             user = _mapper.Map<StudentUser>(model);
@@ -71,20 +71,20 @@ namespace BeforeTheScholarship.Services.UserAccountService
             {
                 var errorList = string.Join(", ", result.Errors.Select(s => s.Description));
 
-                _logger.LogError("--> ERROR: User with email({UserEmail}) cannot be registered: {ErrorList}", model.Email, errorList);
-                throw new Exception($"Error at user registration:  {errorList}");
+                _logger.LogError("--> User (Email: {UserEmail}) can not be registered. Errors: {ErrorList}", model.Email, errorList);
+                return null;
             }
 
             await SendEmailConfirmationMail(user);
 
             var response = _mapper.Map<RegisterUserAccountResponse>(user);
 
-            _logger.LogInformation("--> User(Email: {UserEmail}) successfully registered", response.Email);
+            _logger.LogInformation("--> User (Email: {UserEmail}) successfully registered", response.Email);
 
             return response;
         }
 
-        public async Task<LoginUserAccountResponse> LoginUser(LoginUserAccountModel model)
+        public async Task<LoginUserAccountResponse?> LoginUser(LoginUserAccountModel model)
         {
             _loginModelValidator.CheckValidation(model);
 
@@ -92,53 +92,61 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             if (user is null)
             {
-                _logger.LogError("--> ERROR: User with email {UserEmail} not found while login in.", model.Email);
-                throw new Exception($"User with email {model.Email} not found.");
+                _logger.LogError("--> User (Email: {UserEmail}) not found while login in.", model.Email);
+                return null;
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
 
             if (!result.Succeeded)
-                throw new Exception($"Invalid email or password.");
+            {
+                _logger.LogError("--> User (Email: {UserEmail}) can not signed in.", model.Email);
+                return null;
+            }
 
             var response = _mapper.Map<LoginUserAccountResponse>(user);
 
-            _logger.LogInformation("--> User(Email: {UserEmail}) successfully logged in.", response.Email);
+            _logger.LogInformation("--> User (Email: {UserEmail}) successfully logged in.", response.Email);
 
             return response;
         }
 
-        public async Task<ConfirmationEmailResponse> ConfirmEmail(ConfirmationEmailModel model)
+        public async Task<ConfirmationEmailResponse?> ConfirmEmail(ConfirmationEmailModel model)
         {
             _confirmationEmailModelValidator.CheckValidation(model);
 
             var user = await _userManager!.FindByEmailAsync(model.Email);
 
-            // TODO: Replace exception with "return null" expression
-            if (user is null)
+            if (user == null)
             {
-                _logger.LogError("--> ERROR: User (Email: {UserEmail}) does not exists.", model.Email);
-                throw new Exception($"User with email - {model.Email} does not exists.");
+                _logger.LogError("--> User (Email: {UserEmail}) does not exists.", model.Email);
+                return null;
             }
 
-            await _userManager.ConfirmEmailAsync(user, model.Token);
+            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+
+            if (!result.Succeeded)
+            {
+                _logger.LogError("--> User (Email: {UserEmail}) can not confirm his email. Errors: {ErrorList}", model.Email, result.Errors);
+                return null;
+            }
 
             var response = _mapper.Map<ConfirmationEmailResponse>(model);
 
-            _logger.LogInformation("--> User with email({UserEmail}) successfully confirmed his email", response.Email);
+            _logger.LogInformation("--> User with email({UserEmail}) successfully confirmed his email.", response.Email);
 
             return response;
         }
 
-        public async Task<PasswordRecoveryResponse> SendRecoveryPasswordEmail(PasswordRecoveryMailModel model)
+        public async Task<PasswordRecoveryResponse?> SendRecoveryPasswordEmail(PasswordRecoveryMailModel model)
         {
             _sendPasswordRecoveryModelValidator.CheckValidation(model);
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user is null)
+            if (user == null)
             {
-                _logger.LogError("--> ERROR: User (Email: {UserEmail}) was not found.", model.Email);
-                throw new Exception($"User (Email: {model.Email}) not found!");
+                _logger.LogError("--> User (Email: {UserEmail}) was not found.", model.Email);
+                return null;
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -160,21 +168,24 @@ namespace BeforeTheScholarship.Services.UserAccountService
             return response;
         }
 
-        public async Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryModel model)
+        public async Task<PasswordRecoveryResponse?> RecoverPassword(PasswordRecoveryModel model)
         {
             _passwordRecoveryModelValidator.CheckValidation(model);
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user is null)
+            if (user == null)
             {
-                _logger.LogError("--> ERROR: User (Email: {UserEmail}) was not found.", model.Email);
-                throw new Exception($"User (Email: {model.Email}) not found!");
+                _logger.LogError("--> User (Email: {UserEmail}) was not found.", model.Email);
+                return null;
             }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
 
             if (!result.Succeeded)
-                throw new Exception($"Exception by recovering password for Email ({model.Email}).");
+            {
+                _logger.LogError("--> User (Email: {UserEmail}) can not recover his password. Errors: {ErrorList}", model.Email, result.Errors);
+                return null;
+            }
 
             var response = _mapper.Map<PasswordRecoveryResponse>(user);
 
@@ -183,15 +194,15 @@ namespace BeforeTheScholarship.Services.UserAccountService
             return response;
         }
 
-        public async Task<ChangePasswordResponse> ChangePassword(ChangePasswordModel model)
+        public async Task<ChangePasswordResponse?> ChangePassword(ChangePasswordModel model)
         {
             _changePasswordModelValidator.CheckValidation(model);
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user is null)
+            if (user == null)
             {
-                _logger.LogError("--> ERROR: User (Email: {UserEmail}) was not found.", model.Email);
-                throw new Exception($"User (Email: {model.Email}) not found!");
+                _logger.LogError("--> User (Email: {UserEmail}) was not found.", model.Email);
+                return null;
             }
 
             // Compares old password with current
@@ -205,7 +216,10 @@ namespace BeforeTheScholarship.Services.UserAccountService
             var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
 
             if (!result.Succeeded)
-                throw new Exception($"Exception by changing password for Email ({model.Email}).");
+            {
+                _logger.LogError("--> User (Email: {UserEmail}) can not change his password. Errors: {ErrorList}", model.Email, result.Errors);
+                return null;
+            }
 
             var response = _mapper.Map<ChangePasswordResponse>(user);
 
@@ -218,7 +232,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
         {
             if (user.Email == null)
             {
-                _logger.LogInformation("--> Email confirmation mail for user(UserName: {UserUserName}) not was sent. Email is empty.", user.UserName);
+                _logger.LogError("--> Email confirmation mail for user(UserName: {UserUserName}) not was sent. Email is empty.", user.UserName);
                 return;
             }
 
