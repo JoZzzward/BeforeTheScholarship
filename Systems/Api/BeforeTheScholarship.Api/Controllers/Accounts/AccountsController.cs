@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Api.Controllers.Accounts.Models;
 using BeforeTheScholarship.Services.UserAccountService;
 using BeforeTheScholarship.Services.UserAccountService.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,7 @@ public class AccountsController : ControllerBase
     /// Creates new user account and send email
     /// </summary>
     [ProducesResponseType(typeof(RegisterUserAccountResponse), 200)]
+    [ProducesResponseType(typeof(RegisterUserAccountResponse), 400)]
     [HttpPost("register")]
     public async Task<ActionResult<RegisterUserAccountResponse>> Register([FromBody] RegisterUserAccountRequest request)
     {
@@ -58,6 +60,7 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains user email and password</param>
     [ProducesResponseType(typeof(LoginUserAccountResponse), 200)]
+    [ProducesResponseType(typeof(LoginUserAccountResponse), 400)]
     [HttpPost("login")]
     public async Task<ActionResult<LoginUserAccountResponse>> Login([FromBody] LoginUserAccountRequest request)
     {
@@ -76,18 +79,40 @@ public class AccountsController : ControllerBase
     }
 
     /// <summary>
+    /// Sending a message has been sent with which the user can confirm his mail
+    /// </summary>
+    /// <param name="request">Contains email and token for confirmation</param>
+    [ProducesResponseType(typeof(ConfirmationEmailResponse), 200)]
+    [ProducesResponseType(typeof(ConfirmationEmailResponse), 400)]
+    [HttpPost("send-confirm-email")]
+    public async Task<ActionResult<SendConfirmationEmailResponse>> SendConfirmEmail([FromBody] SendConfirmationEmailRequest request)
+    {
+        _logger.LogInformation("--> User (Email: {UserEmail}) trying to send confirmation email message.", request.Email);
+
+        var model = _mapper.Map<SendConfirmationEmailModel>(request);
+
+        var response = await _userAccountService.SendConfirmEmail(model);
+
+        if (response == null)
+            return BadRequest(response);
+
+        return Ok(response);
+    }
+
+    /// <summary>
     /// Confirm email with token that was given on account registration and send to user email
     /// </summary>
     /// <param name="request">Contains email and token for confirmation</param>
     [ProducesResponseType(typeof(ConfirmationEmailResponse), 200)]
+    [ProducesResponseType(typeof(ConfirmationEmailResponse), 400)]
     [HttpPost("confirm-email")]
     public async Task<ActionResult<ConfirmationEmailResponse>> ConfirmEmail([FromBody] ConfirmationEmailRequest request)
     {
         _logger.LogInformation("--> User (Email: {UserEmail}) trying to confirm email.", request.Email);
 
-        var confirmEmailModel = _mapper.Map<ConfirmationEmailModel>(request);
+        var model = _mapper.Map<ConfirmationEmailModel>(request);
 
-        var response = await _userAccountService.ConfirmEmail(confirmEmailModel);
+        var response = await _userAccountService.ConfirmEmail(model);
 
         if (response == null)
             return BadRequest(response);
@@ -100,13 +125,14 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains user email to send the mail to</param>
     [ProducesResponseType(typeof(PasswordRecoveryResponse), 200)]
-    [HttpPost("recover-password-mail")]
-    public async Task<ActionResult<PasswordRecoveryResponse>> SendRecoverPassword([FromBody] PasswordRecoveryMailRequest request)
+    [ProducesResponseType(typeof(PasswordRecoveryResponse), 400)]
+    [HttpPost("send-recover-password")]
+    public async Task<ActionResult<PasswordRecoveryResponse>> SendRecoverPassword([FromBody] SendPasswordRecoveryRequest request)
     {
         _logger.LogInformation("--> User (Email: {UserEmail}) trying to send password recover message on his email.",
             request.Email);
 
-        var model = _mapper.Map<PasswordRecoveryMailModel>(request);
+        var model = _mapper.Map<SendPasswordRecoveryModel>(request);
 
         var response = await _userAccountService.SendRecoveryPasswordEmail(model);
 
@@ -121,6 +147,7 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains email on what password will be recovered, token from mail and new password</param>
     [ProducesResponseType(typeof(PasswordRecoveryResponse), 200)]
+    [ProducesResponseType(typeof(PasswordRecoveryResponse), 400)]
     [HttpPost("recover-password")]
     public async Task<ActionResult<PasswordRecoveryResponse>> RecoverPassword([FromBody] PasswordRecoveryRequest request)
     {
@@ -141,6 +168,7 @@ public class AccountsController : ControllerBase
     /// </summary>
     /// <param name="request">Contains user credentials for password changing</param>
     [ProducesResponseType(typeof(ChangePasswordResponse), 200)]
+    [ProducesResponseType(typeof(ChangePasswordResponse), 400)]
     [Authorize]
     [HttpPost("change-password")]
     public async Task<ActionResult<ChangePasswordResponse>> ChangePassword([FromBody] ChangePasswordRequest request)
@@ -156,3 +184,4 @@ public class AccountsController : ControllerBase
         return Ok(response);
     }
 }
+

@@ -29,17 +29,20 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
         }
 
         [Fact]
-        public async Task GetStudents_WithoutData_IEnumerableOfStudentResponse()
+        public async Task GetAllStudents_WithoutData_IEnumerableOfStudentResponse()
         {
             // Arrange
             var content = _studentsDataHelper.GenerateStudentResponses();
-
+            var contentList = content.ToList();
             _studentService.GetStudents().Returns(content);
             // Act 
             var result = await _controller.GetStudents();
 
             // Assert
+            result.Should().NotBeNull();
             result.Count().Should().BeGreaterOrEqualTo(2);
+            result.Any(x => x.Id == ExistedStudentsUuids.FirstGuid);
+            result.Any(x => x.Id == ExistedStudentsUuids.SecondGuid);
         }
 
         [Fact]
@@ -50,6 +53,7 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
 
             var response = new StudentResponse
             {
+                // TODO: Fake values with some libraries
                 Id = id,
                 FirstName = Guid.NewGuid().Shrink().Divide(4),
                 LastName = Guid.NewGuid().Shrink().Divide(4),
@@ -59,6 +63,7 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
                 PhoneNumber = "1234567" + new Random().Next(1000, 9999)
             };
 
+            // TODO: Setup method with return values
             _studentService.GetStudentById(id).Returns(response);
 
             // Act 
@@ -85,7 +90,6 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
             var result = await _controller.UpdateStudent(Guid.NewGuid(), request);
 
             // Assert
-            result.Should().NotBeNull();
             result.Result.Should().BeOfType<OkResult>();
         }
 
@@ -101,7 +105,6 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
             var result = await _controller.DeleteStudent(Guid.NewGuid());
 
             // Assert
-            result.Should().NotBeNull();
             result.Result.Should().BeOfType<OkResult>();
         }
     }

@@ -12,7 +12,7 @@ public interface IStudentService
     /// <summary>
     /// Returns <see cref="StudentResponse"/> with same <paramref name="id"/>
     /// </summary>
-    Task<StudentResponse> GetStudentById(Guid id);
+    Task<StudentResponse?> GetStudentById(Guid id);
     /// <summary>
     /// Updates a <see cref="StudentResponse"/> in database with the same <paramref name="id"/>
     /// </summary>

@@ -43,11 +43,17 @@ public class StudentService : Manager, IStudentService
         return response;
     }
 
-    public async Task<StudentResponse> GetStudentById(Guid id)
+    public async Task<StudentResponse?> GetStudentById(Guid id)
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
         var student = await FindStudentById(id);
+
+        if (student is null)
+        {
+            _logger.LogError("Student (Id: {StudentId}) was not found!", id);
+            return null;
+        }
 
         var response = _mapper.Map<StudentResponse>(student);
 
@@ -65,7 +71,10 @@ public class StudentService : Manager, IStudentService
         var student = await FindStudentById(id);
 
         if (student is null)
-            return null;    
+        {
+            _logger.LogError("Student (Id: {StudentId}) was not found!", id);
+            return null;
+        }
 
         student = _mapper.Map(model, student);
 
@@ -86,7 +95,10 @@ public class StudentService : Manager, IStudentService
         var student = await FindStudentById(id);
 
         if (student is null)
+        {
+            _logger.LogError("Student (Id: {StudentId}) was not found!", id);
             return null;
+        }
 
         context.StudentUsers.Remove(student);
         context.SaveChanges();

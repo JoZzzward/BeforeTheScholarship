@@ -1,12 +1,11 @@
 ﻿using BeforeTheScholarship.Api.Controllers.Accounts;
+using BeforeTheScholarship.Api.Controllers.Accounts.Models;
 using BeforeTheScholarship.Services.UserAccountService.Models;
 using BeforeTheScholarship.Tests.Integration.Base.Data;
+using BeforeTheScholarship.Tests.Integration.Base.Helpers;
+using BeforeTheScholarship.Tests.Integration.Controllers.Accounts.Helpers;
 using BeforeTheScholarship.Tests.Integration.Core;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 
 namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
 {
@@ -14,21 +13,17 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
     public class AccountsControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _client;
+        private readonly DataHelper _sutDataHelper;
 
         public AccountsControllerTests(CustomWebApplicationFactory factory)
         {
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions()
-            {
-                AllowAutoRedirect = false
-            });
-            _client.BaseAddress = new Uri("http://localhost:7000");
-            _client.DefaultRequestVersion = new Version("1.0");
-            _client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            _client = factory.SetupClient();
+
+            _sutDataHelper = new AccountControllerDataHelper(factory.Services);
         }
 
         [Fact]
-        public async Task RegisterUser_Returns200Response()
+        public async Task RegisterUser_WithData_Returns200Response()
         {
             // Arrange
             var model = new RegisterUserAccountRequest
@@ -39,13 +34,11 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
                 ConfirmPassword = StudentConsts.Password
             };
 
-            var body = JsonSerializer.Serialize(model);
-            var request = new StringContent(body, Encoding.UTF8, "application/json");
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
 
             // Act
-            var response = await _client.PostAsync("/api/v1/accounts/register", request);
-            var responseContent = response.Content.ReadAsStringAsync().Result;
-            var content = JsonSerializer.Deserialize<RegisterUserAccountResponse>(responseContent);
+            var response = await _client.PostAsync("accounts/register", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<RegisterUserAccountResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -53,7 +46,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
         }
 
         [Fact]
-        public async Task LoginUser_Returns200Response()
+        public async Task LoginUser_WithData_Returns200Response()
         {
             // Arrange
             var model = new LoginUserAccountRequest
@@ -62,17 +55,122 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
                 Password = StudentConsts.Password
             };
 
-            var body = JsonSerializer.Serialize(model);
-            var request = new StringContent(body, Encoding.UTF8, "application/json");
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
 
             // Act
-            var response = await _client.PostAsync("/api/v1/accounts/login", request);
-            var responseContent = response.Content.ReadAsStringAsync().Result;
-            var content = JsonSerializer.Deserialize<LoginUserAccountResponse>(responseContent);
+            var response = await _client.PostAsync("accounts/login", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<LoginUserAccountResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
             content.Email.Should().Be(model.Email);
+        }
+
+        [Fact]
+        public async Task SendConfirmEmail_WithData_Returns200Response()
+        {
+            // Arrange
+            var model = new SendConfirmationEmailRequest
+            {
+                Email = StudentConsts.Email
+            };
+
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
+
+            // Act
+            var response = await _client.PostAsync("accounts/send-confirm-email", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<SendConfirmationEmailResponse>(response);
+
+            // Asserts
+            response.EnsureSuccessStatusCode();
+            content.Email.Should().Be(model.Email);
+        }
+
+        [Fact]
+        public async Task ConfirmEmail_Returns200Response()
+        {
+            // Arrange;
+            var token = await _sutDataHelper.GenerateUserConfirmationToken(StudentConsts.Email);
+            var model = new ConfirmationEmailRequest
+            {
+                Email = StudentConsts.Email,
+                Token = token
+            };
+
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
+
+            // Act
+            var response = await _client.PostAsync("accounts/confirm-email", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<ConfirmationEmailResponse>(response);
+
+            // Asserts
+            response.EnsureSuccessStatusCode();
+            content.Email.Should().Be(model.Email);
+        }
+
+        [Fact]
+        public async Task SendRecoverPassword_Returns200Response()
+        {
+            // Arrange;
+            var model = new SendPasswordRecoveryRequest
+            {
+                Email = StudentConsts.Email
+            };
+
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
+            // Act
+            var response = await _client.PostAsync("accounts/send-recover-password", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<PasswordRecoveryResponse>(response);
+
+            // Asserts
+            response.EnsureSuccessStatusCode();
+            content.Email.Should().Be(model.Email);
+        }
+
+        [Fact]
+        public async Task RecoverPassword_Returns200Response()
+        {
+            // Arrange;
+            var token = await _sutDataHelper.GenerateUserRecoveryPasswordToken(StudentConsts.Email);
+            var model = new PasswordRecoveryRequest
+            {
+                Email = StudentConsts.Email,
+                Token = token,
+                NewPassword = StudentConsts.NewPassword
+            };
+
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
+
+            // Act
+            var response = await _client.PostAsync("accounts/recover-password", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<PasswordRecoveryResponse>(response);
+
+            // Asserts
+            response.EnsureSuccessStatusCode();
+            content.Email.Should().Be(model.Email);
+        }
+
+        [Fact]
+        public async Task ChangePassword_Returns200Response()
+        {
+            // Arrange;
+            var model = new ChangePasswordRequest
+            {
+                Email = StudentConsts.Email,
+                CurrentPassword = StudentConsts.Password,
+                NewPassword = StudentConsts.NewPassword
+            };
+
+            var request = _sutDataHelper.GenerateRequestFromModel(model);
+            
+            // Act
+            var response = await _client.PostAsync("accounts/change-password", request);
+            var content = _sutDataHelper.GenerateRequestFromModel<ChangePasswordResponse>(response);
+
+            // Asserts
+            response.EnsureSuccessStatusCode();
+            content.Email.Should().Be(model.Email);
+            content.UserName.Should().Be(StudentConsts.UserName);
         }
     }
 }

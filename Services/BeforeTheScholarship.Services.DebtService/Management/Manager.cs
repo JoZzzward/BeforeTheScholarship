@@ -51,7 +51,7 @@ public abstract class Manager
         return debt;
     }
 
-    protected async Task<IEnumerable<DebtResponse>> GetDebtsResponse(Guid? debtId = null)
+    protected async Task<IEnumerable<DebtResponse>?> GetDebtsResponse(Guid? debtId = null)
     {
         using var context = await _dbContext.CreateDbContextAsync();
         var debt = context
@@ -59,24 +59,17 @@ public abstract class Manager
             .AsQueryable();
 
         var response = (debtId is null)
-            ? (await debt.ToListAsync()).Select(_mapper.Map<DebtResponse>)
-            : (await debt.ToListAsync()).Where(x => x.StudentId == debtId).Select(_mapper.Map<DebtResponse>);
+            ? (await debt.ToListAsync()).Select(_mapper.Map<DebtResponse>).ToList()
+            : (await debt.ToListAsync()).Where(x => x.StudentId == debtId).Select(_mapper.Map<DebtResponse>).ToList();
 
-        return response;
+        return !response.Any() ? null : response;
     }
 
     protected async Task<IEnumerable<DebtResponse>?> ReturnCachedDebts(string key)
     {
-        try
-        {
-            var cachedData = await _cacheService.GetStringAsync<IEnumerable<DebtResponse>>(key);
-            return cachedData;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var cachedData = await _cacheService.GetStringAsync<IEnumerable<DebtResponse>>(key);
+
+        return cachedData;
     }
 
     protected async Task CreateSendDebtEmailAction(Debts data)
@@ -97,6 +90,5 @@ public abstract class Manager
         }, delay);
 
         _logger.LogInformation("--> Notification action for debt(Id: {StudentId}) created successfully", debt.Id);
-        _logger.LogInformation("--> Delay: {Delay}", delay);
     }
 }

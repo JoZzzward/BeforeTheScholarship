@@ -24,3 +24,5 @@ app.UseAppHealthChecks();
 app.UseIS4();
 
 app.Run();
+
+public partial class Program { }

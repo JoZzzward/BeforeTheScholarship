@@ -5,7 +5,8 @@
         public static Guid  Id = Guid.NewGuid();
         public const string Email = "testuseremail@test.com";
         public const string UserName = "testusername";
-        public const string Password = "aaaa1111";
+        public static string Password = "aaaa1111";
+        public static string NewPassword = "aaaa2222";
         public const string IncorrectPassword = "aaa";
     }
 }

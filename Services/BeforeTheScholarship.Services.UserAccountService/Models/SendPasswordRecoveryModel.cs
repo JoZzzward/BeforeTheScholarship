@@ -2,12 +2,12 @@
 
 namespace BeforeTheScholarship.Services.UserAccountService.Models;
 
-public class PasswordRecoveryMailModel
+public class SendPasswordRecoveryModel
 {
     public string Email { get; set; }
 }
 
-public class PasswordRecoveryMailModelValidator : AbstractValidator<PasswordRecoveryMailModel>
+public class PasswordRecoveryMailModelValidator : AbstractValidator<SendPasswordRecoveryModel>
 {
     public PasswordRecoveryMailModelValidator()
     {

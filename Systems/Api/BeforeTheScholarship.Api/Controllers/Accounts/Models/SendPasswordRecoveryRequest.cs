@@ -4,12 +4,12 @@ using FluentValidation;
 
 namespace BeforeTheScholarship.Api.Controllers.Accounts;
 
-public class PasswordRecoveryMailRequest
+public class SendPasswordRecoveryRequest
 {
     public string Email { get; set; }
 }
 
-public class PasswordRecoveryMailRequestValidator : AbstractValidator<PasswordRecoveryMailRequest>
+public class PasswordRecoveryMailRequestValidator : AbstractValidator<SendPasswordRecoveryRequest>
 {
     public PasswordRecoveryMailRequestValidator()
     {
@@ -23,6 +23,6 @@ public class PasswordRecoveryMailRequestProfile : Profile
 {
 	public PasswordRecoveryMailRequestProfile()
 	{
-		CreateMap<PasswordRecoveryMailRequest, PasswordRecoveryMailModel>();
+		CreateMap<SendPasswordRecoveryRequest, SendPasswordRecoveryModel>();
 	}
 }

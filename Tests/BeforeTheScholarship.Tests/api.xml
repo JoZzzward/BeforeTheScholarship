@@ -4,5 +4,12 @@
         <name>BeforeTheScholarship.Tests</name>
     </assembly>
     <members>
+        <member name="M:BeforeTheScholarship.Tests.Integration.Core.CustomWebApplicationFactory.SetupClient">
+            <summary>
+            Creates and returns <see cref="T:System.Net.Http.HttpClient"/> with default setup settings.
+            <para></para>
+            Default setup BaseAddress to API is: "http://localhost:7000/api/v1/"
+            </summary>
+        </member>
     </members>
 </doc>

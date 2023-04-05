@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using BeforeTheScholarship.Common.CacheConstKeys;
+﻿using BeforeTheScholarship.Common.CacheConstKeys;
 using BeforeTheScholarship.Services.Settings;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;

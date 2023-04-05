@@ -21,9 +21,9 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
                 opt.UseInMemoryDatabase("InMemoryDb");
             });
 
-            services.CreateStudentUser();
-
             services.InitializeDatabase();
+
+            services.CreateStudentUser();
         }
 
         private static void CreateStudentUser(this IServiceCollection services)
@@ -32,9 +32,9 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
             var userManager = scopeProvider.GetRequiredService<UserManager<StudentUser>>();
             userManager.CreateAsync(new StudentUser
             {
-                UserName = IntegrationDbConsts.StudentUserName,
-                Email = IntegrationDbConsts.StudentEmail
-            }, IntegrationDbConsts.StudentPassword);
+                UserName = StudentConsts.UserName,
+                Email = StudentConsts.Email
+            }, StudentConsts.Password);
         }
 
         private static void InitializeDatabase(this IServiceCollection services)

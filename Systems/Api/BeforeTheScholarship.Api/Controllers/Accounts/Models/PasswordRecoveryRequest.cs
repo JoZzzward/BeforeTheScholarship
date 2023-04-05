@@ -37,6 +37,6 @@ public class PasswordRecoveryRequestProfile : Profile
     public PasswordRecoveryRequestProfile()
     {
         CreateMap<PasswordRecoveryRequest, PasswordRecoveryModel>(); 
-        CreateMap<PasswordRecoveryRequest, PasswordRecoveryMailRequest>(); 
+        CreateMap<PasswordRecoveryRequest, SendPasswordRecoveryRequest>(); 
     }
 }

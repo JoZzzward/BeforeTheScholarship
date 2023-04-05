@@ -2,7 +2,6 @@
 using BeforeTheScholarship.Common.Security;
 using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.DebtService.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +14,7 @@ namespace BeforeTheScholarship.Api.Controllers.Debts;
 [Route("api/v{version:apiVersion}/debts")]
 [EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
 [ApiController]
-[Authorize]
+//[Authorize]
 [ApiVersion("1.0")]
 public class DebtsController : ControllerBase
 {
@@ -42,7 +41,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("")]
     public async Task<IEnumerable<DebtResponse>> GetDebts()
     {
@@ -60,7 +59,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <param name="studentId">Unique student identifier</param>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("{studentId}")]
     public async Task<IEnumerable<DebtResponse>> GetDebts([FromRoute] Guid? studentId)
     {
@@ -70,8 +69,6 @@ public class DebtsController : ControllerBase
 
         var response = debts.Select(_mapper.Map<DebtResponse>);
 
-        _logger.LogInformation("--> Debts belong to a Student (Id: {StudentId} was returned successfully.", studentId);
-
         return response;
     }
 
@@ -80,7 +77,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("overdue")]
     public async Task<IEnumerable<DebtResponse>> GetOverdueDebts([FromQuery] Guid? studentId)
     {
@@ -98,7 +95,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
-    [Authorize(Policy = AppScopes.DebtsRead)]
+    //[Authorize(Policy = AppScopes.DebtsRead)]
     [HttpGet("urgently-repay")]
     public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] Guid? studentId)
     {
@@ -116,7 +113,7 @@ public class DebtsController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     [ProducesResponseType(typeof(CreateDebtResponse), 200)]
-    [Authorize(Policy = AppScopes.DebtsWrite)]
+    //[Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPost("")]
     public async Task<CreateDebtResponse> CreateDebt([FromBody] CreateDebtRequest request)
     {
@@ -136,7 +133,7 @@ public class DebtsController : ControllerBase
     /// <param name="request">Request body</param>
     [ProducesResponseType(typeof(UpdateDebtResponse), 400)]
     [ProducesResponseType(typeof(UpdateDebtResponse), 200)]
-    [Authorize(Policy = AppScopes.DebtsWrite)]
+    //[Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpPut("{id}")]
     public async Task<ActionResult<UpdateDebtResponse>> UpdateDebt([FromRoute] int? id, [FromBody] UpdateDebtRequest request)
     {
@@ -147,9 +144,9 @@ public class DebtsController : ControllerBase
         var response = await _debtService.UpdateDebt(id, model);
 
         if (response is null)
-            return BadRequest();
+            return BadRequest(response);
 
-        return Ok();
+        return Ok(response);
     }
 
     /// <summary>
@@ -158,7 +155,7 @@ public class DebtsController : ControllerBase
     /// <param name="id">Unique debt identifier</param>
     [ProducesResponseType(typeof(DeleteDebtResponse), 400)]
     [ProducesResponseType(typeof(DeleteDebtResponse), 200)]
-    [Authorize(Policy = AppScopes.DebtsWrite)]
+    //[Authorize(Policy = AppScopes.DebtsWrite)]
     [HttpDelete("{id}")]
     public async Task<ActionResult<DeleteDebtResponse>> DeleteDebt([FromRoute] int? id)
     {
@@ -167,8 +164,8 @@ public class DebtsController : ControllerBase
         var response = await _debtService.DeleteDebt(id);
 
         if (response == null)
-            return BadRequest();
+            return BadRequest(response);
 
-        return Ok();
+        return Ok(response);
     }
 }

@@ -176,13 +176,19 @@
             </summary>
             <param name="request">Contains user email and password</param>
         </member>
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.SendConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.Models.SendConfirmationEmailRequest)">
+            <summary>
+            Sending a message has been sent with which the user can confirm his mail
+            </summary>
+            <param name="request">Contains email and token for confirmation</param>
+        </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.ConfirmEmail(BeforeTheScholarship.Api.Controllers.Accounts.ConfirmationEmailRequest)">
             <summary>
             Confirm email with token that was given on account registration and send to user email
             </summary>
             <param name="request">Contains email and token for confirmation</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Accounts.PasswordRecoveryMailRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Accounts.AccountsController.SendRecoverPassword(BeforeTheScholarship.Api.Controllers.Accounts.SendPasswordRecoveryRequest)">
             <summary>
             Sending password recovery mail on user email that specified in <paramref name="request" />
             </summary>

@@ -14,6 +14,12 @@ public interface IUserAccountService
     /// Confirms user email 
     /// </summary>
     /// <param name="confirmationEmail">Contains a email that need to confirm by given token</param>
+    Task<SendConfirmationEmailResponse?> SendConfirmEmail(SendConfirmationEmailModel confirmationEmail);
+
+    /// <summary>
+    /// Confirms user email 
+    /// </summary>
+    /// <param name="confirmationEmail">Contains a email that need to confirm by given token</param>
     Task<ConfirmationEmailResponse?> ConfirmEmail(ConfirmationEmailModel confirmationEmail);
 
     /// <summary>
@@ -32,7 +38,7 @@ public interface IUserAccountService
     /// Sending mail on email that contain link with user email and token for password recovery.
     /// </summary>
     /// <param name="request">Contains the email of the user who wants to recover the password</param>
-    Task<PasswordRecoveryResponse?> SendRecoveryPasswordEmail(PasswordRecoveryMailModel request);
+    Task<PasswordRecoveryResponse?> SendRecoveryPasswordEmail(SendPasswordRecoveryModel request);
 
     /// <summary>
     /// Changing the password of the user who specified the email address. Checks the old password for correctness.

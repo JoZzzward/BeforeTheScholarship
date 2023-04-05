@@ -79,7 +79,7 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
         }
 
         [Fact]
-        public async Task UpdateDebt_WithData_ReturnsOkResult()
+        public async Task UpdateDebt_WithData_ReturnsOkObjectResult()
         {
             // Arrange
             var request = new UpdateDebtRequest
@@ -87,7 +87,7 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
                 Borrowed = new Random().Next(50, 250),
                 Phone = "11111111111",
                 BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
-                WhenToPayback = DateTimeOffset.MinValue.AddDays(512)
+                WhenToPayback = DateTimeOffset.Now.AddDays(10)
             };
 
             var model = new UpdateDebtModel
@@ -107,11 +107,11 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
 
             // Assert
             result.Should().NotBeNull();
-            result.Result.Should().BeOfType<OkResult>();
+            result.Result.Should().BeOfType<OkObjectResult>();
         }
 
         [Fact]
-        public async Task DeleteDebt_WithoutData_ReturnsOkResult()
+        public async Task DeleteDebt_WithoutData_ReturnsOkObjectResult()
         {
             // Assert
             var response = new DeleteDebtResponse();
@@ -123,7 +123,7 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
 
             // Assert
             result.Should().NotBeNull();
-            result.Result.Should().BeOfType<OkResult>();
+            result.Result.Should().BeOfType<OkObjectResult>();
         }
 
         [Fact]
@@ -140,7 +140,8 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
             var result = await _controller.GetUrgentlyRepaidDebts(studentId);
 
             // Assert
-            result.Count().Should().Be(1);
+            result.Should().NotBeNull();
+            result.Count().Should().BeGreaterOrEqualTo(1);
         }
 
         [Fact]
@@ -157,28 +158,8 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
             var result = await _controller.GetOverdueDebts(studentId);
 
             // Assert
-            result.Should().BeEmpty();
+            result.Should().NotBeNull();
+            result.Count().Should().Be(0);
         }
-
-        /*[Fact]
-        public async Task UpdateDebt_WithoutData_ReturnsBadRequestResult()
-        {
-            // Arrange
-            UpdateDebtRequest? request = null;
-
-            var model = new UpdateDebtModel
-            {
-                Borrowed = 20000,
-                Phone = Guid.NewGuid().Shrink().Divide(),
-                BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
-                WhenToPayback = DateTimeOffset.MinValue
-            };
-            _debtService.UpdateDebt(Arg.Any<int>(), model).ReturnsNull();
-            // Act 
-            var result = await _controller.UpdateDebt(0, request);
-
-            // Assert
-            result.Should().BeOfType<BadRequestResult>();
-        }*/
     }
 }

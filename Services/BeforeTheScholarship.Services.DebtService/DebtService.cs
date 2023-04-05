@@ -40,7 +40,7 @@ public class DebtService : Manager, IDebtService
         _updateDebtResponseValidator = updateDebtResponseValidator;
     }
 
-    public async Task<IEnumerable<DebtResponse>> GetDebts()
+    public async Task<IEnumerable<DebtResponse>?> GetDebts()
     {
         var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.AllDebtsKey);
 
@@ -52,14 +52,14 @@ public class DebtService : Manager, IDebtService
 
         var response = await GetDebtsResponse();
 
-        _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully", response.Count());
-
         await _cacheService.SetStringAsync(DebtsCacheKeys.AllDebtsKey, response);
+        
+        _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully", response.Count());
 
         return response;
     }
 
-    public async Task<IEnumerable<DebtResponse>> GetDebts(Guid? studentId)
+    public async Task<IEnumerable<DebtResponse>?> GetDebts(Guid? studentId)
     {
         var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.DebtsWithSpecifiedStudentKey);
 
@@ -71,18 +71,27 @@ public class DebtService : Manager, IDebtService
 
         var response = await GetDebtsResponse(studentId);
 
-        _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned successfully", response.Count());
+        if (response == null)
+            return null;
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.DebtsWithSpecifiedStudentKey, response);
+
+        _logger.LogInformation("--> Debts (Count: {DebtsCount}) belong to a Student (Id: {StudentId} was returned successfully.", studentId, response.Count());
 
         return response;
     }
 
-    public async Task<CreateDebtResponse> CreateDebt(CreateDebtModel model)
+    public async Task<CreateDebtResponse?> CreateDebt(CreateDebtModel model)
     {
         _addDebtResponseValidator.CheckValidation(model);
 
         using var context = await _dbContext.CreateDbContextAsync();
+
+        if (context.Debts.Any(x => x.Equals(model)))
+        {
+            _logger.LogError("--> Error on debt creation: debt already exist");
+            return null;
+        }
 
         var data = _mapper.Map<Debts>(model);
 
@@ -140,13 +149,14 @@ public class DebtService : Manager, IDebtService
 
         await _cacheService.ClearStorage();
 
+        var response = _mapper.Map<DeleteDebtResponse>(debt);
+        
         _logger.LogInformation("--> Debt (Id: {DebtId}) was successfully removed.", id);
 
-        var response = _mapper.Map<DeleteDebtResponse>(debt);
         return response;
     }
 
-    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid? studentId)
+    public async Task<IEnumerable<DebtResponse>?> GetUrgentlyRepaidDebts(Guid? studentId)
     {
         var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.UrgentlyRepaidDebtsKey);
 
@@ -158,6 +168,9 @@ public class DebtService : Manager, IDebtService
 
         var debts = await GetDebts(studentId);
 
+        if (debts == null)
+            return null;
+
         // Generates a list of debts with 1 day or less left to the repayment date
         debts = debts.Where(x => x.WhenToPayback > DateTimeOffset.UtcNow && x.WhenToPayback <= DateTimeOffset.UtcNow.AddDays(1));
 
@@ -168,7 +181,7 @@ public class DebtService : Manager, IDebtService
         return response;
     }
     
-    public async Task<IEnumerable<DebtResponse>> GetOverdueDebts(Guid? studentId)
+    public async Task<IEnumerable<DebtResponse>?> GetOverdueDebts(Guid? studentId)
     {
         var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.OverdueDebtsKey);
 
@@ -180,12 +193,16 @@ public class DebtService : Manager, IDebtService
 
         var debts = await GetDebts(studentId);
 
+        if (debts == null)
+            return null;
+
         // Generates a list of overdue debts
         debts = debts.Where(x => (x.WhenToPayback - DateTimeOffset.Now).TotalDays <= 0);
 
         var response = _mapper.Map<IEnumerable<DebtResponse>>(debts);
 
-        _logger.LogInformation("--> The list of overdue debts(Count: {DebtsCount}) of the specified student(Id: {StudentId}) has been successfully returned", response.Count(), studentId);
+        _logger.LogInformation("--> The list of overdue debts(Count: {DebtsCount}) of the specified student(Id: {StudentId}) has been successfully returned", 
+            response.Count(), studentId);
 
         return response;
     }

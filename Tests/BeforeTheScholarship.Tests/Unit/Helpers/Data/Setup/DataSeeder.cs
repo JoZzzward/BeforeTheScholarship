@@ -53,7 +53,7 @@ namespace BeforeTheScholarship.Tests.Unit.Helpers.Data.Setup
 
         private static void InitializingStudents(out IEnumerable<StudentUser> studentsList)
         {
-            studentsList = new List<StudentUser>()
+            studentsList = new List<StudentUser>
             {
                 new()
                 {

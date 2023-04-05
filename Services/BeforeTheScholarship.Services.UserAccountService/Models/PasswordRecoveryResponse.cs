@@ -15,6 +15,6 @@ public class PasswordRecoveryResponseProfile : Profile
     public PasswordRecoveryResponseProfile()
     {
         CreateMap<StudentUser, PasswordRecoveryResponse>();
-        CreateMap<PasswordRecoveryMailModel, PasswordRecoveryResponse>();
+        CreateMap<SendPasswordRecoveryModel, PasswordRecoveryResponse>();
     }
 }

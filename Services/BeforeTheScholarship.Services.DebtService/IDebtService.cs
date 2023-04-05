@@ -7,15 +7,15 @@ public interface IDebtService
     /// <summary>
     /// Returns a list of Debts
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetDebts();
+    Task<IEnumerable<DebtResponse>?> GetDebts();
     /// <summary>
     /// Returns a list of Debts for Student with <paramref name="studentId"/>
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetDebts(Guid? studentId);
+    Task<IEnumerable<DebtResponse>?> GetDebts(Guid? studentId);
     /// <summary>
     /// Adds a new Debt to the database
     /// </summary>
-    Task<CreateDebtResponse> CreateDebt(CreateDebtModel model);
+    Task<CreateDebtResponse?> CreateDebt(CreateDebtModel model);
     /// <summary>
     /// Updates a <see cref="DebtResponse"/> in database with the same <paramref name="id"/>
     /// </summary>
@@ -27,9 +27,9 @@ public interface IDebtService
     /// <summary>
     /// Returns debts with 1 day or less left to the repayment date and that need to be urgently repaid
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts(Guid? studentId);
+    Task<IEnumerable<DebtResponse>?> GetUrgentlyRepaidDebts(Guid? studentId);
     /// <summary>
     /// Returns debts that must be overdue
     /// </summary>
-    Task<IEnumerable<DebtResponse>> GetOverdueDebts(Guid? studentId);
+    Task<IEnumerable<DebtResponse>?> GetOverdueDebts(Guid? studentId);
 }

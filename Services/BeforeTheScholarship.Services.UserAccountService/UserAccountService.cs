@@ -5,6 +5,7 @@ using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.UserAccountService.Helpers;
 using BeforeTheScholarship.Services.UserAccountService.Models;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -20,9 +21,10 @@ namespace BeforeTheScholarship.Services.UserAccountService
         private readonly IModelValidator<RegisterUserAccountModel> _registerModelValidator;
         private readonly IModelValidator<LoginUserAccountModel> _loginModelValidator;
         private readonly IModelValidator<ConfirmationEmailModel> _confirmationEmailModelValidator;
-        private readonly IModelValidator<PasswordRecoveryMailModel> _sendPasswordRecoveryModelValidator;
+        private readonly IModelValidator<SendPasswordRecoveryModel> _sendPasswordRecoveryModelValidator;
         private readonly IModelValidator<PasswordRecoveryModel> _passwordRecoveryModelValidator;
         private readonly IModelValidator<ChangePasswordModel> _changePasswordModelValidator;
+        private readonly IModelValidator<SendConfirmationEmailModel> _sendConfirmationEmailModelValidator;
 
         public UserAccountService(
             IMapper mapper,
@@ -31,9 +33,10 @@ namespace BeforeTheScholarship.Services.UserAccountService
             IEmailSender emailSender,
             ILogger<UserAccountService> logger,
             IModelValidator<RegisterUserAccountModel> registerModelValidator,
+            IModelValidator<SendConfirmationEmailModel> sendConfirmationEmailModelValidator,
             IModelValidator<LoginUserAccountModel> loginModelValidator,
             IModelValidator<ConfirmationEmailModel> confirmationEmailModelValidator,
-            IModelValidator<PasswordRecoveryMailModel> sendPasswordRecoveryModelValidator,
+            IModelValidator<SendPasswordRecoveryModel> sendPasswordRecoveryModelValidator,
             IModelValidator<PasswordRecoveryModel> passwordRecoveryModelValidator,
             IModelValidator<ChangePasswordModel> changePasswordModelValidator
             )
@@ -44,6 +47,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
             _emailSender = emailSender;
             _logger = logger;
             _registerModelValidator = registerModelValidator;
+            _sendConfirmationEmailModelValidator = sendConfirmationEmailModelValidator;
             _loginModelValidator = loginModelValidator;
             _confirmationEmailModelValidator = confirmationEmailModelValidator;
             _sendPasswordRecoveryModelValidator = sendPasswordRecoveryModelValidator;
@@ -66,7 +70,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
             user = _mapper.Map<StudentUser>(model);
 
             var result = await _userManager.CreateAsync(user, model.Password);
-
+            
             if (!result.Succeeded)
             {
                 var errorList = string.Join(", ", result.Errors.Select(s => s.Description));
@@ -111,6 +115,20 @@ namespace BeforeTheScholarship.Services.UserAccountService
             return response;
         }
 
+        public async Task<SendConfirmationEmailResponse?> SendConfirmEmail(SendConfirmationEmailModel model)
+        {
+            _sendConfirmationEmailModelValidator.CheckValidation(model);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            var resultSucceeded = await SendEmailConfirmationMail(user);
+
+            if (!resultSucceeded)
+                return null;
+
+            var response = _mapper.Map<SendConfirmationEmailResponse>(model);
+            return response;
+        }
+
         public async Task<ConfirmationEmailResponse?> ConfirmEmail(ConfirmationEmailModel model)
         {
             _confirmationEmailModelValidator.CheckValidation(model);
@@ -138,7 +156,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
             return response;
         }
 
-        public async Task<PasswordRecoveryResponse?> SendRecoveryPasswordEmail(PasswordRecoveryMailModel model)
+        public async Task<PasswordRecoveryResponse?> SendRecoveryPasswordEmail(SendPasswordRecoveryModel model)
         {
             _sendPasswordRecoveryModelValidator.CheckValidation(model);
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -228,12 +246,12 @@ namespace BeforeTheScholarship.Services.UserAccountService
             return response;
         }
 
-        private async Task SendEmailConfirmationMail(StudentUser user)
+        private async Task<bool> SendEmailConfirmationMail(StudentUser user)
         {
             if (user.Email == null)
             {
                 _logger.LogError("--> Email confirmation mail for user(UserName: {UserUserName}) not was sent. Email is empty.", user.UserName);
-                return;
+                return false;
             }
 
             _logger.LogInformation("--> Trying to send message with email confirmation link to user (Email: {UserEmail})", user.Email);
@@ -254,6 +272,8 @@ namespace BeforeTheScholarship.Services.UserAccountService
             });
 
             _logger.LogInformation("--> Email confirmation message was sent to user (Email: {UserEmail})", user.Email);
+
+            return true;
         }
     }
 }
