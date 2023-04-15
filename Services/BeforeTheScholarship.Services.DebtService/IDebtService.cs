@@ -1,4 +1,5 @@
-﻿using BeforeTheScholarship.Services.DebtService.Models;
+﻿using BeforeTheScholarship.Entities;
+using BeforeTheScholarship.Services.DebtService.Models;
 
 namespace BeforeTheScholarship.Services.DebtService;
 
@@ -21,7 +22,7 @@ public interface IDebtService
     /// </summary>
     Task<UpdateDebtResponse?> UpdateDebt(int? id, UpdateDebtModel model);
     /// <summary>
-    /// Removes a <see cref="DebtResponse"/> in database with the same <paramref name="id"/>.
+    /// Removes a <see cref="Debts"/> model with the same <paramref name="id"/> from database.
     /// </summary>
     Task<DeleteDebtResponse?> DeleteDebt(int? id);
     /// <summary>

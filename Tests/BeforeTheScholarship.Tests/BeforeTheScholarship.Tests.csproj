@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="DotNet.Testcontainers" Version="1.6.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
@@ -36,9 +37,6 @@
 		<PackageReference Include="NSubstitute" Version="5.0.0">
 			<TreatAsUsed>true</TreatAsUsed>
 		</PackageReference>
-		<PackageReference Include="Testcontainers" Version="3.0.0" />
-		<PackageReference Include="TestContainers.Container.Abstractions" Version="1.5.4" />
-		<PackageReference Include="Testcontainers.Redis" Version="3.0.0" />
 		<PackageReference Include="xunit" Version="2.4.2">
 			<TreatAsUsed>true</TreatAsUsed>
 		</PackageReference>
@@ -63,7 +61,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Integration\Controllers\Students\" />
-	  <Folder Include="Unit\Services\" />
 	</ItemGroup>
 
 </Project>

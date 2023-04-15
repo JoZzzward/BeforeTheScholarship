@@ -87,12 +87,6 @@ public class DebtService : Manager, IDebtService
 
         using var context = await _dbContext.CreateDbContextAsync();
 
-        if (context.Debts.Any(x => x.Equals(model)))
-        {
-            _logger.LogError("--> Error on debt creation: debt already exist");
-            return null;
-        }
-
         var data = _mapper.Map<Debts>(model);
 
         await context.Debts.AddAsync(data);
@@ -111,13 +105,18 @@ public class DebtService : Manager, IDebtService
 
     public async Task<UpdateDebtResponse?> UpdateDebt(int? id, UpdateDebtModel model)
     {
-        _updateDebtResponseValidator.CheckValidation(model);
-        using var context = await _dbContext.CreateDbContextAsync();
+        await _updateDebtResponseValidator.CheckValidation(model);
+        await using var context = await _dbContext.CreateDbContextAsync();
 
-        var debt = await FindDebtById(id);
+        var debt = await context
+            .Debts
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (debt is null)
+        {
+            _logger.LogError("--> Student(Id: {StudentId}) was not found", id);
             return null;
+        }
 
         debt = _mapper.Map(model, debt);
 
@@ -137,15 +136,20 @@ public class DebtService : Manager, IDebtService
 
     public async Task<DeleteDebtResponse?> DeleteDebt(int? id)
     {
-        using var context = await _dbContext.CreateDbContextAsync();
+        await using var context = await _dbContext.CreateDbContextAsync();
 
-        var debt = await FindDebtById(id);
+        var debt = await context
+            .Debts
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (debt is null)
+        {
+            _logger.LogError("--> Student(Id: {StudentId}) was not found", id);
             return null;
+        }
 
         context.Debts.Remove(debt);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         await _cacheService.ClearStorage();
 

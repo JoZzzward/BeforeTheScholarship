@@ -2,7 +2,7 @@
 {
     public static class StudentConsts
     {
-        public static Guid  Id = Guid.NewGuid();
+        public static Guid Id = Guid.NewGuid();
         public const string Email = "testuseremail@test.com";
         public const string UserName = "testusername";
         public static string Password = "aaaa1111";

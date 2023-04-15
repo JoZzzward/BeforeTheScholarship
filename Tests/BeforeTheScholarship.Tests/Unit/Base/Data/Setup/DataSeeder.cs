@@ -3,7 +3,7 @@ using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 
-namespace BeforeTheScholarship.Tests.Unit.Helpers.Data.Setup
+namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
 {
     public static class DataSeeder
     {
@@ -25,7 +25,7 @@ namespace BeforeTheScholarship.Tests.Unit.Helpers.Data.Setup
                 {
                     StudentId = ExistedStudentsUuids.FirstGuid,
                     Borrowed = new Random().Next(50, 500),
-                    Phone = Guid.NewGuid().ToString().Divide(),
+                    Phone = "55544433322",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
                     WhenBorrowed = DateTimeOffset.UtcNow.LocalDateTime,
                     WhenToPayback = DateTimeOffset.UtcNow.LocalDateTime.AddDays(2)
@@ -34,7 +34,7 @@ namespace BeforeTheScholarship.Tests.Unit.Helpers.Data.Setup
                 {
                     StudentId = ExistedStudentsUuids.FirstGuid,
                     Borrowed = new Random().Next(50, 500),
-                    Phone = Guid.NewGuid().ToString().Divide(),
+                    Phone = "44433332222",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
                     WhenBorrowed = DateTimeOffset.UtcNow.LocalDateTime,
                     WhenToPayback = DateTimeOffset.UtcNow.LocalDateTime.AddDays(1)
@@ -43,7 +43,7 @@ namespace BeforeTheScholarship.Tests.Unit.Helpers.Data.Setup
                 {
                     StudentId = ExistedStudentsUuids.SecondGuid,
                     Borrowed = new Random().Next(50, 500),
-                    Phone = Guid.NewGuid().ToString().Divide(),
+                    Phone = "1234567891",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
                     WhenBorrowed = DateTimeOffset.MinValue,
                     WhenToPayback = DateTimeOffset.MinValue.AddDays(256)

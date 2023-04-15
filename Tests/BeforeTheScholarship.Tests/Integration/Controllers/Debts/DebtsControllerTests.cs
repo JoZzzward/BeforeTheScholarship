@@ -4,8 +4,6 @@ using BeforeTheScholarship.Tests.Integration.Base.Helpers;
 using BeforeTheScholarship.Tests.Integration.Controllers.Debts.Helpers;
 using BeforeTheScholarship.Tests.Integration.Core;
 using FluentAssertions;
-using Testcontainers.Redis;
-using Xunit.Abstractions;
 
 namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
 {
@@ -14,19 +12,12 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
     {
         private readonly HttpClient _client;
         private readonly DataHelper _sutDataHelper;
-        private readonly RedisContainer _redisContainer = new RedisBuilder()
-            .WithImage("redis")
-            .WithHostname("localhost")
-            .WithExposedPort(6379)
-            .Build();
 
-        public DebtsControllerTests(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
+        public DebtsControllerTests(CustomWebApplicationFactory factory)
         {
             _client = factory.SetupClient();
 
             _sutDataHelper = new DebtsControllerDataHelper();
-
-            _redisContainer.StartAsync();
         }
 
         [Fact]

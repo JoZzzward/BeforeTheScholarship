@@ -20,11 +20,11 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Students
         private readonly IStudentService _studentService = Substitute.For<IStudentService>();
         private readonly ILogger<StudentsController> _logger = LoggerInitializer.InitializeForType<StudentsController>();
         private readonly IMapper _mapper = AutoMapperInitializer.Initialize();
-
         private readonly StudentsDataHelper _studentsDataHelper = new();
 
         public StudentsControllerTests()
         {
+
             _controller = new StudentsController(_studentService, _logger, _mapper);
         }
 

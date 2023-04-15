@@ -1,11 +1,11 @@
 ﻿using BeforeTheScholarship.Context;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Tests.Integration.Base.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BeforeTheScholarship.Tests.Integration.Core.Setup
 {

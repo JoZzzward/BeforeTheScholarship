@@ -42,7 +42,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
 
             // Asserts
             response.EnsureSuccessStatusCode();
-            content.Email.Should().Be(model.Email); 
+            content.Email.Should().Be(model.Email);
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
             };
 
             var request = _sutDataHelper.GenerateRequestFromModel(model);
-            
+
             // Act
             var response = await _client.PostAsync("accounts/change-password", request);
             var content = _sutDataHelper.GenerateRequestFromModel<ChangePasswordResponse>(response);

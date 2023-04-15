@@ -3,7 +3,7 @@ using BeforeTheScholarship.Api.Controllers.Debts;
 using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.DebtService.Models;
-using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Helpers;
+using BeforeTheScholarship.Tests.Unit.Base.Services.Debts;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 using BeforeTheScholarship.Tests.Unit.Helpers.Configuration;
 using FluentAssertions;
