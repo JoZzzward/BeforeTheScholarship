@@ -1,5 +1,4 @@
 ﻿using BeforeTheScholarship.Services.DebtService;
-using BeforeTheScholarship.Tests.Unit.Base.Services.Debts;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 using BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers;
 using FluentAssertions;

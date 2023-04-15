@@ -118,6 +118,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
         public async Task<SendConfirmationEmailResponse?> SendConfirmEmail(SendConfirmationEmailModel model)
         {
             _sendConfirmationEmailModelValidator.CheckValidation(model);
+            
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             var resultSucceeded = await SendEmailConfirmationMail(user);
@@ -224,8 +225,10 @@ namespace BeforeTheScholarship.Services.UserAccountService
             }
 
             // Compares old password with current
-            if (new PasswordHasher<StudentUser>().VerifyHashedPassword(user, user.PasswordHash!, model.CurrentPassword)
-                == PasswordVerificationResult.Failed)
+            var passwordVerifiedStatus =
+                new PasswordHasher<StudentUser>().VerifyHashedPassword(user, user.PasswordHash!, model.CurrentPassword);
+
+            if (passwordVerifiedStatus == PasswordVerificationResult.Failed)
                 throw new Exception($"Current password is incorrect!");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);

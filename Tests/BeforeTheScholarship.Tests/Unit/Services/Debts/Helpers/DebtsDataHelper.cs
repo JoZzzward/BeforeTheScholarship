@@ -3,7 +3,7 @@ using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 using BeforeTheScholarship.Tests.Unit.Helpers.Data;
 
-namespace BeforeTheScholarship.Tests.Unit.Base.Services.Debts
+namespace BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers
 {
     public class DebtsDataHelper
     {

@@ -1,6 +1,6 @@
 ﻿using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.DebtService;
-using BeforeTheScholarship.Tests.Unit.Base.Services.Debts;
+using BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers;
 using NSubstitute.ClearExtensions;
 using NSubstitute.ReturnsExtensions;
 
