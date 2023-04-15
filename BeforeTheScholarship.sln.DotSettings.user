@@ -1,8 +1,8 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=84abf69c_002D71fe_002D4497_002D92e1_002Ddf2589bcddc5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetDebts_WithoutData_ReturnsIEnumerableOfDebtResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=84abf69c_002D71fe_002D4497_002D92e1_002Ddf2589bcddc5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetDebts_WithoutData_ReturnsIEnumerableOfDebtResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;ProjectFile&gt;2D16580A-4506-4FD7-BF75-23CF424FD872/d:Unit/d:Services/d:Debts/f:DebtServiceTests.cs&lt;/ProjectFile&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bf1bd0e5_002D63ac_002D49d8_002D95d7_002D8c216c2eaa1b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="RegisterUser_WithoutData_ReturnsRegisterUserAccountResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bf1bd0e5_002D63ac_002D49d8_002D95d7_002D8c216c2eaa1b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RegisterUser_WithoutData_ReturnsRegisterUserAccountResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::2D16580A-4506-4FD7-BF75-23CF424FD872::net7.0::BeforeTheScholarship.Tests.Integration.Controllers.Accounts.AccountControllerTests.RegisterUser_WithoutData_ReturnsRegisterUserAccountResponse&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;

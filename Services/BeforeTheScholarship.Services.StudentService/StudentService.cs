@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BeforeTheScholarship.Services.StudentService;
 
-public class StudentService : Manager, IStudentService
+public class StudentService : IStudentService
 {
     private readonly IDbContextFactory<AppDbContext> _dbContext;
     private readonly ILogger<StudentService> _logger;
@@ -20,7 +20,6 @@ public class StudentService : Manager, IStudentService
         ILogger<StudentService> logger,
         IModelValidator<UpdateStudentModel> updateStudentModelValidator
         )
-        : base (dbContext, logger)
     {
         _dbContext = dbContext;
         _mapper = mapper;
@@ -47,7 +46,9 @@ public class StudentService : Manager, IStudentService
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
-        var student = await FindStudentById(id);
+        var student = await context
+            .StudentUsers
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (student is null)
         {
@@ -68,7 +69,9 @@ public class StudentService : Manager, IStudentService
 
         using var context = await _dbContext.CreateDbContextAsync();
 
-        var student = await FindStudentById(id);
+        var student = await context
+            .StudentUsers
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (student is null)
         {
@@ -92,7 +95,9 @@ public class StudentService : Manager, IStudentService
     {
         using var context = await _dbContext.CreateDbContextAsync();
 
-        var student = await FindStudentById(id);
+        var student = await context
+            .StudentUsers
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (student is null)
         {

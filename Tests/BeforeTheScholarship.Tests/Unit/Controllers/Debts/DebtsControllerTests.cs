@@ -62,13 +62,20 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
         public async Task CreateDebt_WithoutData_ReturnsCreateDebtResponse()
         {
             // Arrange
-            var model = new CreateDebtModel();
+            var request = new CreateDebtRequest
+            {
+                StudentId = ExistedStudentsUuids.FirstGuid,
+                Borrowed = new Random().Next(50, 250),
+                Phone = "11111111111",
+                BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4)
+            };
 
-            var response = new CreateDebtResponse();
+            var response = new CreateDebtResponse
+            {
+                StudentId = ExistedStudentsUuids.FirstGuid
+            };
 
-            var request = new CreateDebtRequest();
-
-            _debtService.CreateDebt(model).Returns(response);
+            _debtService.CreateDebt(Arg.Any<CreateDebtModel>()).Returns(response);
 
             // Act 
             var result = await _controller.CreateDebt(request);
@@ -76,6 +83,7 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
             // Assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo(typeof(CreateDebtResponse));
+            result.StudentId.Should().Be(request.StudentId);
         }
 
         [Fact]

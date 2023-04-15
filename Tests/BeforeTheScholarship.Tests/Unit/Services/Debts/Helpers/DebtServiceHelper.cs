@@ -7,7 +7,7 @@ using BeforeTheScholarship.Tests.Unit.Services.Students.Helpers;
 
 namespace BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers;
 
-internal class DebtServiceHelper
+public class DebtServiceHelper
 {
     private readonly ValidationSetup _validationSetup = new();
     private readonly StudentServiceHelper _studentServiceHelper = new();
