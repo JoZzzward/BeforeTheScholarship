@@ -1,7 +1,6 @@
 ﻿using BeforeTheScholarship.Tests.Integration.Core.Setup;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
-using System.Net.Http.Headers;
 
 namespace BeforeTheScholarship.Tests.Integration.Core
 {

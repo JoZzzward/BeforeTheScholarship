@@ -16,23 +16,10 @@ namespace BeforeTheScholarship.Tests.Integration.Base.Helpers
 
         public T GenerateContentFromModel<T>(HttpResponseMessage response)
         {
-            try
-            {
-                var responseContent = response.Content.ReadAsStringAsync().Result;
-                var content = JsonSerializer.Deserialize<T>(responseContent);
+            var responseContent = response.Content.ReadAsStringAsync().Result;
+            var content = JsonSerializer.Deserialize<T>(responseContent);
 
-                return content;
-            }
-            catch (JsonReaderException ex)
-            {
-                Console.WriteLine("ERROR: " + ex.Message);
-                throw new JsonReaderException(ex.Message);
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine("ERROR: " + ex.Message);
-                throw new JsonException(ex.Message);
-            }
+            return content;
         }
     }
 }

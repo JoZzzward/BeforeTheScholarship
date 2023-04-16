@@ -1,7 +1,6 @@
 ﻿using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Consts;
-using Microsoft.AspNetCore.Identity;
 
 namespace BeforeTheScholarship.Tests.Integration.Base.Data.Setup
 {
@@ -64,36 +63,6 @@ namespace BeforeTheScholarship.Tests.Integration.Base.Data.Setup
             };
 
             return debts;
-        }
-
-        public static IEnumerable<StudentUser> InitializingStudents()
-        {
-            var student = new StudentUser
-            {
-                Id = StudentConsts.Id,
-                FirstName = "John",
-                LastName = "Watson",
-                UserName = StudentConsts.UserName,
-                NormalizedUserName = StudentConsts.UserName.ToUpper(),
-                Email = StudentConsts.Email,
-                NormalizedEmail = StudentConsts.Email.ToUpper(),
-                PhoneNumber = "12345678910",
-                EmailConfirmed = false,
-                AccessFailedCount = 0,
-                SecurityStamp = "QS4ZRMIAEHFYVGD4XRADQ6PDZKLRJRBA",
-                ConcurrencyStamp = "ca0b08f5-2804-49ae-81ac-99653a4e6678",
-                LockoutEnabled = true,
-                TwoFactorEnabled = false
-            };
-
-            student.PasswordHash = new PasswordHasher<StudentUser>().HashPassword(student, StudentConsts.Password);
-
-            var students = new List<StudentUser>
-            {
-                student
-            };
-
-            return students;
         }
     }
 }

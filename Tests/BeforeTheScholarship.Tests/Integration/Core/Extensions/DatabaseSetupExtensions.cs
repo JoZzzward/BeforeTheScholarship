@@ -1,4 +1,5 @@
-﻿using BeforeTheScholarship.Context;
+﻿using BeforeTheScholarship.Common.Extensions;
+using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Tests.Integration.Base.Data;
 using BeforeTheScholarship.Tests.Integration.Base.Data.Setup;
@@ -25,7 +26,7 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
             services.InitializeDatabase();
         }
 
-        private static void AddStudentUserToUserManager(this IServiceCollection services)
+        private static void CreateStudentUser(this IServiceCollection services)
         {
             var scopeProvider = services.BuildServiceProvider();
             var userManager = scopeProvider.GetRequiredService<UserManager<StudentUser>>();
@@ -45,12 +46,11 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
             var db = serviceProvider.GetRequiredService<AppDbContext>();
 
             var debts = DataSeeder.InitializingDebts();
-            var students = DataSeeder.InitializingStudents();
 
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
 
-            services.AddStudentUserToUserManager();
+            services.CreateStudentUser();
 
             db.Debts.AddRange(debts);
             db.SaveChanges();

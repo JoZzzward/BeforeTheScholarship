@@ -11,10 +11,10 @@ public static class HealthCheckConfiguration
     /// Adds healthchecks settings
     /// </summary>
     /// <param name="services"></param>
-    public static IServiceCollection AddAppHealthChecks(this IServiceCollection services, string name = null)
+    public static IServiceCollection AddAppHealthChecks(this IServiceCollection services)
     {
         services.AddHealthChecks()
-            .AddCheck<HealthCheck>(name ?? "BeforeTheScholarship.Api");
+            .AddCheck<HealthCheck>("BeforeTheScholarship.Api");
         
         return services;
     }

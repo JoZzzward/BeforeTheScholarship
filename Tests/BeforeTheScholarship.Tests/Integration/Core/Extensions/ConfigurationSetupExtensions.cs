@@ -8,9 +8,7 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
         public static void ConfigurationSetup(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddAppCors();
 
-            services.AddAppHealthChecks("Tests");
             services.AddAppVersioning();
 
             services.AddAppAutoMapper();

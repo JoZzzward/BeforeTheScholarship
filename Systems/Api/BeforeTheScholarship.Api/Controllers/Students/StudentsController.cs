@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Services.CacheService;
 using BeforeTheScholarship.Services.StudentService;
 using BeforeTheScholarship.Services.StudentService.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +14,7 @@ namespace BeforeTheScholarship.Api.Controllers.Students;
 [Route("api/v{version:apiVersion}/students")]
 [EnableCors(PolicyName = CorsSettings.DefaultOriginName)]
 [ApiController]
-[Authorize]
+//[Authorize]
 [ApiVersion("1.0")]
 public class StudentsController : ControllerBase
 {
@@ -40,7 +39,7 @@ public class StudentsController : ControllerBase
     /// HttpGet - Returns students from database
     /// </summary>
     [ProducesResponseType(typeof(IEnumerable<StudentResponse>), 200)]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [HttpGet("")]
     public async Task<IEnumerable<StudentResponse>> GetStudents()
     {
@@ -56,7 +55,7 @@ public class StudentsController : ControllerBase
     /// </summary>
     /// <param name="id">Unique student identifier</param>
     [ProducesResponseType(typeof(StudentResponse), 200)]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<StudentResponse> GetStudentById([FromRoute] Guid id)
     {

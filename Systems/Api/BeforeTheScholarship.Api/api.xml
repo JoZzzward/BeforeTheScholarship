@@ -82,7 +82,7 @@
             HealthCheck Configuration
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Configuration.HealthCheckConfiguration.AddAppHealthChecks(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+        <member name="M:BeforeTheScholarship.Api.Configuration.HealthCheckConfiguration.AddAppHealthChecks(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Adds healthchecks settings
             </summary>

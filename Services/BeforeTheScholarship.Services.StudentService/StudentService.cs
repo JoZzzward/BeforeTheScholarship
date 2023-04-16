@@ -37,7 +37,7 @@ public class StudentService : IStudentService
 
         var response = students.Select(_mapper.Map<StudentResponse>);
 
-        _logger.LogInformation("--> Students(Count: {StudentsCount}) was returned successfully!", response.Count());
+        _logger.LogInformation("--> Students (Count: {StudentsCount}) was returned successfully!", response.Count());
 
         return response;
     }
@@ -58,9 +58,9 @@ public class StudentService : IStudentService
 
         var response = _mapper.Map<StudentResponse>(student);
 
-        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully returned!", id);
+        _logger.LogInformation("--> Student (Id: {StudentId}) was successfully returned!", id);
 
-        return response;
+         return response;
     }
 
     public async Task<UpdateStudentResponse?> UpdateStudent(Guid id, UpdateStudentModel model)
@@ -86,7 +86,7 @@ public class StudentService : IStudentService
 
         var response = _mapper.Map<UpdateStudentResponse>(student);
 
-        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully updated", id);
+        _logger.LogInformation("--> Student (Id: {StudentId}) was successfully updated", id);
 
         return response;
     }
@@ -110,7 +110,7 @@ public class StudentService : IStudentService
 
         var response = _mapper.Map<DeleteStudentResponse>(student);
 
-        _logger.LogInformation("--> Student(Id: {StudentId}) was successfully removed", id);
+        _logger.LogInformation("--> Student (Id: {StudentId}) was successfully removed", id);
 
         return response;
     }

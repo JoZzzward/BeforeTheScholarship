@@ -14,13 +14,11 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
     public class DebtsControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _client;
-        private readonly DebtsControllerDataHelper _sutDataHelper;
+        private readonly DebtsControllerDataHelper _sutDataHelper = new();
 
         public DebtsControllerTests(CustomWebApplicationFactory factory)
         {
             _client = factory.SetupClient();
-
-            _sutDataHelper = new DebtsControllerDataHelper();
         }
 
         [Fact]
@@ -37,7 +35,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
             // Asserts
             response.EnsureSuccessStatusCode();
             content.Count().Should().BeGreaterOrEqualTo(3);
-            content.All(x => 50 <= x.Borrowed).Should().BeTrue();
+            content.All(x => x.Borrowed >= 50).Should().BeTrue();
         }
 
         [Fact]

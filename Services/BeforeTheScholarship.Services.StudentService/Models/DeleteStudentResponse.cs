@@ -1,11 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using BeforeTheScholarship.Entities;
 
 namespace BeforeTheScholarship.Services.StudentService.Models;
 
 public class DeleteStudentResponse
 {
-    public Guid? Id { get; set; }
+    [JsonPropertyName("id")] public Guid? Id { get; set; }
 }
 
 public class DeleteStudentResponseProfile : Profile
