@@ -7,6 +7,5 @@
         public const string UserName = "testusername";
         public static string Password = "aaaa1111";
         public static string NewPassword = "aaaa2222";
-        public const string IncorrectPassword = "aaa";
     }
 }

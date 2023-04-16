@@ -1,6 +1,7 @@
 ﻿using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
+using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Consts;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 
 namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
@@ -19,11 +20,12 @@ namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
 
         private static void InitializingDebts(out IEnumerable<Debts> debtsList)
         {
-            debtsList = new List<Debts>()
+            debtsList = new List<Debts>
             {
                 new()
                 {
-                    StudentId = ExistedStudentsUuids.FirstGuid,
+                    Uid = ExistedDebtConsts.Uid,
+                    StudentId = ExistedStudentConsts.Id,
                     Borrowed = new Random().Next(50, 500),
                     Phone = "55544433322",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
@@ -32,7 +34,8 @@ namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
                 },
                 new()
                 {
-                    StudentId = ExistedStudentsUuids.FirstGuid,
+                    Uid = ExistedDebtConsts.SecondUid,
+                    StudentId = ExistedStudentConsts.Id,
                     Borrowed = new Random().Next(50, 500),
                     Phone = "44433332222",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
@@ -41,7 +44,8 @@ namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
                 },
                 new()
                 {
-                    StudentId = ExistedStudentsUuids.SecondGuid,
+                    Uid = ExistedDebtConsts.ThirdUid,
+                    StudentId = ExistedStudentConsts.SecondId,
                     Borrowed = new Random().Next(50, 500),
                     Phone = "1234567891",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
@@ -57,7 +61,7 @@ namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
             {
                 new()
                 {
-                    Id = ExistedStudentsUuids.FirstGuid,
+                    Id = ExistedStudentConsts.Id,
                     FirstName = "John",
                     LastName = "Watson",
                     UserName = "Jonny",
@@ -75,7 +79,7 @@ namespace BeforeTheScholarship.Tests.Unit.Base.Data.Setup
                 },
                 new()
                 {
-                    Id = ExistedStudentsUuids.SecondGuid,
+                    Id = ExistedStudentConsts.SecondId,
                     FirstName = "Carla",
                     LastName = "Smith",
                     UserName = "Carlona",

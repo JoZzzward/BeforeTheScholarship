@@ -5,7 +5,7 @@ namespace BeforeTheScholarship.Services.StudentService.Models;
 
 public class DeleteStudentResponse
 {
-
+    public Guid? Id { get; set; }
 }
 
 public class DeleteStudentResponseProfile : Profile

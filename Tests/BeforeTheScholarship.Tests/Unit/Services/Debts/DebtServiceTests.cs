@@ -1,4 +1,5 @@
 ﻿using BeforeTheScholarship.Services.DebtService;
+using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Consts;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 using BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers;
 using FluentAssertions;
@@ -26,7 +27,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
 
             result.Should().NotBeNull();
             result.Count().Should().Be(3);
-            result.Any(x => 50 < x.Borrowed).Should().BeTrue();
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
 
         [Fact]
@@ -41,7 +42,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             // Assert
             result.Should().NotBeNull();
             result.Count().Should().Be(3);
-            result.Any(x => 50 < x.Borrowed).Should().BeTrue();
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
 
         [Fact]
@@ -52,12 +53,12 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             CacheServiceSetup.SetupSetStringByReturnsCompletedTask();
 
             // Act
-            var result = await _sut.GetDebts(ExistedStudentsUuids.FirstGuid);
+            var result = await _sut.GetDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
             result.Count().Should().BeGreaterOrEqualTo(2);
-            result.Any(x => 50 < x.Borrowed).Should().BeTrue();
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
 
         [Fact]
@@ -69,12 +70,12 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             CacheServiceSetup.SetupSetStringByReturnsCompletedTask();
 
             // Act
-            var result = await _sut.GetDebts(ExistedStudentsUuids.FirstGuid);
+            var result = await _sut.GetDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
             result.Count().Should().BeGreaterOrEqualTo(2);
-            result.Any(x => 50 < x.Borrowed).Should().BeTrue();
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
 
         [Fact]
@@ -99,7 +100,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             // Arrange
             CacheServiceSetup.SetupClearStorage();
 
-            var id = 1;
+            var id = ExistedDebtConsts.Uid;
             var model = _debtsDataHelper.GenerateUpdateDebtModel();
 
             // Act
@@ -107,6 +108,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
 
             // Assert
             result.Should().NotBeNull();
+            result.Uid.Should().Be(id);
         }
 
         [Fact]
@@ -114,13 +116,15 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
         {
             // Arrange
             CacheServiceSetup.SetupClearStorage();
-            var id = 2;
+
+            var id = ExistedDebtConsts.Uid;
 
             // Act
             var result = await _sut.DeleteDebt(id);
 
             // Assert
             result.Should().NotBeNull();
+            result.Uid.Should().Be(id);
         }
 
         [Fact]
@@ -130,11 +134,12 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             CacheServiceSetup.SetupGetStringReturnsNull();
 
             // Act
-            var result = await _sut.GetUrgentlyRepaidDebts(ExistedStudentsUuids.FirstGuid);
+            var result = await _sut.GetUrgentlyRepaidDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
             result.Count().Should().BeGreaterOrEqualTo(1);
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
 
         [Fact]
@@ -144,11 +149,12 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             CacheServiceSetup.SetupGetStringReturnsData();
 
             // Act
-            var result = await _sut.GetUrgentlyRepaidDebts(ExistedStudentsUuids.FirstGuid);
+            var result = await _sut.GetUrgentlyRepaidDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
             result.Count().Should().BeGreaterOrEqualTo(1);
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
 
         [Fact]
@@ -158,12 +164,12 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts
             CacheServiceSetup.SetupGetStringReturnsData();
 
             // Act
-            var result = await _sut.GetOverdueDebts(ExistedStudentsUuids.FirstGuid);
+            var result = await _sut.GetOverdueDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
             result.Count().Should().BeGreaterOrEqualTo(1);
-            result.ToList()[0].Borrowed.Should().BeGreaterOrEqualTo(50);
+            result.All(x => 50 <= x.Borrowed).Should().BeTrue();
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BeforeTheScholarship.Tests.Integration.Base.Helpers
 {
-    internal abstract class DataHelper
+    public abstract class DataHelper
     {
         public StringContent GenerateRequestFromModel<T>(T model)
         {
@@ -13,15 +14,25 @@ namespace BeforeTheScholarship.Tests.Integration.Base.Helpers
             return request;
         }
 
-        public T GenerateRequestFromModel<T>(HttpResponseMessage response)
+        public T GenerateContentFromModel<T>(HttpResponseMessage response)
         {
-            var responseContent = response.Content.ReadAsStringAsync().Result;
-            var content = JsonSerializer.Deserialize<T>(responseContent);
+            try
+            {
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                var content = JsonSerializer.Deserialize<T>(responseContent);
 
-            return content;
+                return content;
+            }
+            catch (JsonReaderException ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+                throw new JsonReaderException(ex.Message);
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+                throw new JsonException(ex.Message);
+            }
         }
-
-        public virtual Task<string> GenerateUserConfirmationToken(string email) => Task.FromResult(string.Empty);
-        public virtual Task<string> GenerateUserRecoveryPasswordToken(string email) => Task.FromResult(string.Empty);
     }
 }

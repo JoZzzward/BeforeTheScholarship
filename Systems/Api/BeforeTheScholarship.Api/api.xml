@@ -208,7 +208,7 @@
         </member>
         <member name="T:BeforeTheScholarship.Api.Controllers.Debts.DebtsController">
             <summary>
-            Debts ApiController
+            Debts controller
             </summary>
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.#ctor(BeforeTheScholarship.Services.DebtService.IDebtService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
@@ -224,7 +224,7 @@
         </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetDebts(System.Nullable{System.Guid})">
             <summary>
-            HttpGet - Returns debts that owned by StudentUser with <paramref name="studentId"/>
+            Returns debts that owned by StudentUser with <paramref name="studentId"/>
             </summary>
             <param name="studentId">Unique student identifier</param>
         </member>
@@ -246,14 +246,14 @@
             </summary>
             <param name="request"></param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Int32},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtRequest)">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.UpdateDebt(System.Nullable{System.Guid},BeforeTheScholarship.Api.Controllers.Debts.UpdateDebtRequest)">
             <summary>
             HttpPut - Updates existing debt with <paramref name="id"/> in database
             </summary>
             <param name="id">Unique debt identifier</param>
             <param name="request">Request body</param>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.DeleteDebt(System.Nullable{System.Int32})">
+        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.DeleteDebt(System.Nullable{System.Guid})">
             <summary>
             HttpDelete - Deletes existing debt in database
             </summary>

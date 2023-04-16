@@ -20,11 +20,11 @@ public interface IDebtService
     /// <summary>
     /// Updates a <see cref="DebtResponse"/> in database with the same <paramref name="id"/>
     /// </summary>
-    Task<UpdateDebtResponse?> UpdateDebt(int? id, UpdateDebtModel model);
+    Task<UpdateDebtResponse?> UpdateDebt(Guid? id, UpdateDebtModel model);
     /// <summary>
     /// Removes a <see cref="Debts"/> model with the same <paramref name="id"/> from database.
     /// </summary>
-    Task<DeleteDebtResponse?> DeleteDebt(int? id);
+    Task<DeleteDebtResponse?> DeleteDebt(Guid? id);
     /// <summary>
     /// Returns debts with 1 day or less left to the repayment date and that need to be urgently repaid
     /// </summary>

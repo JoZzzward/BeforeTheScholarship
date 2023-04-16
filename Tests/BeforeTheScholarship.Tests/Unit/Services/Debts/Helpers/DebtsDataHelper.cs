@@ -31,7 +31,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers
         {
             return new CreateDebtModel
             {
-                StudentId = ExistedStudentsUuids.SecondGuid,
+                StudentId = ExistedStudentConsts.SecondId,
                 Borrowed = new Random().Next(50, 500),
                 Phone = Guid.NewGuid().ToString().Divide(),
                 BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),

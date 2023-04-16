@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Entities;
+using System.Text.Json.Serialization;
 
 namespace BeforeTheScholarship.Services.DebtService.Models;
 
 public class DeleteDebtResponse
 {
-    public Guid StudentId { get; set; }
+    [JsonPropertyName("uid")] public Guid? Uid { get; set; }
 }
 
 public class DeleteDebtResponseProfile : Profile

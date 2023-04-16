@@ -1,7 +1,5 @@
 ﻿using BeforeTheScholarship.Entities;
-using BeforeTheScholarship.Tests.Integration.Base.Data;
 using Microsoft.AspNetCore.Identity;
-using NSubstitute.ClearExtensions;
 using NSubstitute.ReturnsExtensions;
 
 namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService.Helpers.Identity.UserManger
@@ -17,7 +15,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService.Helpers.Id
             return _userManager;
         }
 
-        public static class UserManagerSetup
+        public static class Setup
         {
             private static readonly IdentityResult identityResultSuccess = Task.FromResult(IdentityResult.Success).Result;
             private static readonly UserAccountServiceDataHelper _userAccountServiceDataHelper = new();

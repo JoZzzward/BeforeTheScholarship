@@ -31,10 +31,17 @@ public class UpdateDebtRequestValidator : AbstractValidator<UpdateDebtRequest>
             .WithMessage("Phone number length must be less than 12 numbers.");
 
         RuleFor(x => x.Phone)
-            .ForEach(x =>
-            {
-                x.Must(char.IsDigit);
-            }).WithMessage("Phone must contain only numbers.");
+            .Must(CorrectPhone)
+            .WithMessage("Phone number must contain only numbers.");
+    }
+
+    // Check is Phone field contains only numbers
+    public static bool CorrectPhone(string number)
+    {
+        if (string.IsNullOrEmpty(number))
+            return true;
+
+        return long.TryParse(number, out _);
     }
 }
 public class UpdateDebtsRequestProfile : Profile

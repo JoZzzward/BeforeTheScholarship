@@ -8,6 +8,7 @@ using FluentAssertions;
 
 namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
 {
+    [Trait("Category", "Unit")]
     public class UserAccountServiceTests
     {
         private readonly UserAccountServiceHelper _userAccountServiceHelper = new();
@@ -30,8 +31,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
                 Password = "userpassword"
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsNull();
-            UserManagerInitializer.UserManagerSetup.SetupCreateAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupCreateAsync();
 
             // Act
             var result = await _userAccountService.RegisterUser(model);
@@ -45,8 +46,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
         public async Task RegisterUser_UserAlreadyExists_ReturnsNull()
         {
             // Arrange
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupCreateAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupCreateAsync();
 
             var model = new RegisterUserAccountModel
             {
@@ -69,12 +70,12 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new LoginUserAccountModel
             {
-                Email = "testemail@test.com",
-                Password = "userpassword"
+                Email = StudentConsts.Email,
+                Password = StudentConsts.Password
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            SignInManagerInitializer.SignInManagerSetup.SetupPasswordSignInAsyncReturnsSuccess();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            SignInManagerInitializer.Setup.SetupPasswordSignInAsyncReturnsSuccess();
 
             // Act
             var result = await _userAccountService.LoginUser(model);
@@ -90,8 +91,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new LoginUserAccountModel();
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            SignInManagerInitializer.SignInManagerSetup.SetupPasswordSignInAsyncReturnsFailed();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            SignInManagerInitializer.Setup.SetupPasswordSignInAsyncReturnsFailed();
 
             // Act
             var result = await _userAccountService.LoginUser(model);
@@ -106,7 +107,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new LoginUserAccountModel();
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
 
             // Act
             var result = await _userAccountService.LoginUser(model);
@@ -124,8 +125,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
                 Email = "testemail@test.com"
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupGenerateEmailConfirmationTokenAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupGenerateEmailConfirmationTokenAsync();
 
             // Act
             var result = await _userAccountService.SendConfirmEmail(model);
@@ -139,12 +140,15 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
         public async Task SendConfirmEmail_IncorrectEmail_ReturnsNull()
         {
             // Arrange
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupGenerateEmailConfirmationTokenAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupGenerateEmailConfirmationTokenAsync();
 
-            var model = new SendConfirmationEmailModel();
+            var model = new SendConfirmationEmailModel
+            {
+                Email = StudentConsts.Email
+            };
 
-                // Act
+            // Act
             var result = await _userAccountService.SendConfirmEmail(model);
 
             // Assert
@@ -161,8 +165,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
                 Token = "fakeToken"
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupConfirmEmailAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupConfirmEmailAsync();
 
             // Act
             var result = await _userAccountService.ConfirmEmail(model);
@@ -178,8 +182,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new ConfirmationEmailModel();
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsNull();
-            UserManagerInitializer.UserManagerSetup.SetupConfirmEmailAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupConfirmEmailAsync();
 
             // Act
             var result = await _userAccountService.ConfirmEmail(model);
@@ -194,11 +198,11 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new SendPasswordRecoveryModel
             {
-                Email = "testemail@test.com"
+                Email = StudentConsts.Email
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupGeneratePasswordResetTokenAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupGeneratePasswordResetTokenAsync();
 
             // Act
             var result = await _userAccountService.SendRecoveryPasswordEmail(model);
@@ -214,8 +218,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new SendPasswordRecoveryModel();
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsNull();
-            UserManagerInitializer.UserManagerSetup.SetupGeneratePasswordResetTokenAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupGeneratePasswordResetTokenAsync();
 
             // Act
             var result = await _userAccountService.SendRecoveryPasswordEmail(model);
@@ -233,8 +237,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
                 Email = StudentConsts.Email
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupResetPasswordAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupResetPasswordAsync();
 
             // Act
             var result = await _userAccountService.RecoverPassword(model);
@@ -250,8 +254,8 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new PasswordRecoveryModel();
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsNull();
-            UserManagerInitializer.UserManagerSetup.SetupResetPasswordAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupResetPasswordAsync();
 
             // Act
             var result = await _userAccountService.RecoverPassword(model);
@@ -271,9 +275,9 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
                 NewPassword = StudentConsts.NewPassword
             };
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsData();
-            UserManagerInitializer.UserManagerSetup.SetupGeneratePasswordResetTokenAsync();
-            UserManagerInitializer.UserManagerSetup.SetupResetPasswordAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupGeneratePasswordResetTokenAsync();
+            UserManagerInitializer.Setup.SetupResetPasswordAsync();
 
             // Act
             var result = await _userAccountService.ChangePassword(model);
@@ -289,9 +293,9 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             var model = new ChangePasswordModel();
 
-            UserManagerInitializer.UserManagerSetup.SetupFindByEmailAsyncReturnsNull();
-            UserManagerInitializer.UserManagerSetup.SetupGeneratePasswordResetTokenAsync();
-            UserManagerInitializer.UserManagerSetup.SetupResetPasswordAsync();
+            UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsNull();
+            UserManagerInitializer.Setup.SetupGeneratePasswordResetTokenAsync();
+            UserManagerInitializer.Setup.SetupResetPasswordAsync();
 
             // Act
             var result = await _userAccountService.ChangePassword(model);

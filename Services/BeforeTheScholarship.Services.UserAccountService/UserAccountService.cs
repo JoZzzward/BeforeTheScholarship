@@ -249,11 +249,11 @@ namespace BeforeTheScholarship.Services.UserAccountService
             return response;
         }
 
-        private async Task<bool> SendEmailConfirmationMail(StudentUser user)
+        private async Task<bool> SendEmailConfirmationMail(StudentUser? user)
         {
-            if (user.Email == null)
+            if (user?.Email == null)
             {
-                _logger.LogError("--> Email confirmation mail for user(UserName: {UserUserName}) not was sent. Email is empty.", user.UserName);
+                _logger.LogError("--> Email confirmation mail for user was not sent. Email is Empty.");
                 return false;
             }
 

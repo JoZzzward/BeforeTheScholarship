@@ -2,7 +2,7 @@
 
 namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts.Helpers
 {
-    internal class DebtsControllerDataHelper : DataHelper
+    public class DebtsControllerDataHelper : DataHelper
     {
 
     }

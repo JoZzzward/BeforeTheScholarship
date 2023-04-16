@@ -169,7 +169,7 @@ public class AccountsController : ControllerBase
     /// <param name="request">Contains user credentials for password changing</param>
     [ProducesResponseType(typeof(ChangePasswordResponse), 200)]
     [ProducesResponseType(typeof(ChangePasswordResponse), 400)]
-    [Authorize]
+    //[Authorize]
     [HttpPost("change-password")]
     public async Task<ActionResult<ChangePasswordResponse>> ChangePassword([FromBody] ChangePasswordRequest request)
     {

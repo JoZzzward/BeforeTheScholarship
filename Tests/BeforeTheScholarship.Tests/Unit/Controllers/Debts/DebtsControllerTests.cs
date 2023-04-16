@@ -1,14 +1,12 @@
-﻿using AutoMapper;
-using BeforeTheScholarship.Api.Controllers.Debts;
+﻿using BeforeTheScholarship.Api.Controllers.Debts;
 using BeforeTheScholarship.Common.Extensions;
-using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.DebtService.Models;
+using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Consts;
+using BeforeTheScholarship.Tests.Unit.Controllers.Debts.Helpers;
 using BeforeTheScholarship.Tests.Unit.Controllers.Students.Consts;
 using BeforeTheScholarship.Tests.Unit.Helpers.Configuration;
-using BeforeTheScholarship.Tests.Unit.Services.Debts.Helpers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
 {
@@ -17,24 +15,20 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
     {
         private readonly DebtsController _controller;
 
-        private readonly IDebtService _debtService = Substitute.For<IDebtService>();
-        private readonly ILogger<DebtsController> _logger = LoggerInitializer.InitializeForType<DebtsController>();
-        private readonly IMapper _mapper = AutoMapperInitializer.Initialize();
-
-        private readonly DebtsDataHelper _debtsDataHelper = new();
-
         public DebtsControllerTests()
         {
-            _controller = new DebtsController(_debtService, _logger, _mapper);
+            _controller = new DebtsController(
+                DebtsControllerHelper.Initialize(),
+                LoggerInitializer.InitializeForType<DebtsController>(),
+                AutoMapperInitializer.Initialize());
         }
 
         [Fact]
         public async Task GetDebts_WithData_ReturnsIEnumerableOfDebtResponse()
         {
             // Arrange
-            var content = _debtsDataHelper.GenerateDebtResponses();
+            DebtsControllerHelper.Setup.SetupGetDebtsReturnsData();
 
-            _debtService.GetDebts().Returns(content);
             // Act 
             var result = await _controller.GetDebts();
 
@@ -46,13 +40,10 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
         public async Task GetDebts_WithStudentId_ReturnsIEnumerableOfDebtResponse()
         {
             // Arrange
-            Guid? studentId = ExistedStudentsUuids.FirstGuid;
-            var content = _debtsDataHelper.GenerateDebtResponses(studentId);
-
-            _debtService.GetDebts(studentId).Returns(content);
+            DebtsControllerHelper.Setup.SetupGetDebtsWithStudentIdReturnsData();
 
             // Act 
-            var result = await _controller.GetDebts(studentId);
+            var result = await _controller.GetDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Count().Should().Be(2);
@@ -62,20 +53,15 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
         public async Task CreateDebt_WithoutData_ReturnsCreateDebtResponse()
         {
             // Arrange
+            DebtsControllerHelper.Setup.SetupCreateDebtReturnsData();
+
             var request = new CreateDebtRequest
             {
-                StudentId = ExistedStudentsUuids.FirstGuid,
+                StudentId = ExistedStudentConsts.Id,
                 Borrowed = new Random().Next(50, 250),
                 Phone = "11111111111",
                 BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4)
             };
-
-            var response = new CreateDebtResponse
-            {
-                StudentId = ExistedStudentsUuids.FirstGuid
-            };
-
-            _debtService.CreateDebt(Arg.Any<CreateDebtModel>()).Returns(response);
 
             // Act 
             var result = await _controller.CreateDebt(request);
@@ -90,6 +76,8 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
         public async Task UpdateDebt_WithData_ReturnsOkObjectResult()
         {
             // Arrange
+            DebtsControllerHelper.Setup.SetupUpdateDebtReturnsData();
+
             var request = new UpdateDebtRequest
             {
                 Borrowed = new Random().Next(50, 250),
@@ -98,54 +86,44 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
                 WhenToPayback = DateTimeOffset.Now.AddDays(10)
             };
 
-            var model = new UpdateDebtModel
-            {
-                Borrowed = request.Borrowed,
-                Phone = request.Phone,
-                BorrowedFromWho = request.BorrowedFromWho,
-                WhenToPayback = request.WhenToPayback
-            };
-
-            var response = new UpdateDebtResponse();
-
-            _debtService.UpdateDebt(Arg.Any<int>(), model).Returns(response);
+            var id = ExistedDebtConsts.Uid;
 
             // Act 
-            var result = await _controller.UpdateDebt(1, request);
+            var result = await _controller.UpdateDebt(id, request);
+            var content = (result.Result as OkObjectResult).Value as UpdateDebtResponse;
 
             // Assert
             result.Should().NotBeNull();
-            result.Result.Should().BeOfType<OkObjectResult>();
+            content.Should().NotBeNull();
+            content.Uid.Should().Be(id);
+
         }
 
         [Fact]
         public async Task DeleteDebt_WithoutData_ReturnsOkObjectResult()
         {
             // Assert
-            var response = new DeleteDebtResponse();
+            DebtsControllerHelper.Setup.SetupDeleteDebtReturnsData();
 
-            _debtService.DeleteDebt(Arg.Any<int>()).Returns(response);
+            var id = ExistedDebtConsts.Uid;
 
             // Act 
-            var result = await _controller.DeleteDebt(1);
-
+            var result = await _controller.DeleteDebt(id);
+            var content = (result.Result as OkObjectResult).Value as DeleteDebtResponse;
             // Assert
             result.Should().NotBeNull();
             result.Result.Should().BeOfType<OkObjectResult>();
+            content.Uid.Should().Be(id);
         }
 
         [Fact]
         public async Task GetUrgentlyRepaidDebts_WithData_ReturnsIEnumerableOfDebtResponses()
         {
             // Arrange
-            Guid studentId = ExistedStudentsUuids.FirstGuid;
-            var content = _debtsDataHelper.GenerateDebtResponses(studentId);
-            content = content.ToList()
-                            .Where(x => x.WhenToPayback > DateTimeOffset.UtcNow &&
-                            x.WhenToPayback <= DateTimeOffset.UtcNow.AddDays(1));
-            _debtService.GetUrgentlyRepaidDebts(studentId).Returns(content);
+            DebtsControllerHelper.Setup.SetupGetUrgentlyRepaidDebtsReturnsData();
+
             // Act 
-            var result = await _controller.GetUrgentlyRepaidDebts(studentId);
+            var result = await _controller.GetUrgentlyRepaidDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
@@ -153,17 +131,13 @@ namespace BeforeTheScholarship.Tests.Unit.Controllers.Debts
         }
 
         [Fact]
-        public async Task GetOverdueDebts_WithData_ReturnsNull()
+        public async Task GetOverdueDebts_WithData_ReturnsEmptyData()
         {
             // Arrange
-            Guid studentId = ExistedStudentsUuids.FirstGuid;
-            var content = _debtsDataHelper.GenerateDebtResponses(studentId);
-            content = content.ToList().Where(x => (x.WhenToPayback - DateTimeOffset.Now).TotalDays <= 0);
-
-            _debtService.GetOverdueDebts(studentId).Returns(content);
+            DebtsControllerHelper.Setup.SetupGetOverdueDebtsReturnsEmptyData();
 
             // Act 
-            var result = await _controller.GetOverdueDebts(studentId);
+            var result = await _controller.GetOverdueDebts(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();

@@ -1,6 +1,7 @@
 ﻿using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Tests.Integration.Base.Data;
+using BeforeTheScholarship.Tests.Integration.Base.Data.Setup;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -18,20 +19,20 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
 
             services.AddDbContextFactory<AppDbContext>(opt =>
             {
-                opt.UseInMemoryDatabase("InMemoryDb");
+                opt.UseInMemoryDatabase(Guid.NewGuid().ToString());
             });
 
             services.InitializeDatabase();
-
-            services.CreateStudentUser();
         }
 
-        private static void CreateStudentUser(this IServiceCollection services)
+        private static void AddStudentUserToUserManager(this IServiceCollection services)
         {
             var scopeProvider = services.BuildServiceProvider();
             var userManager = scopeProvider.GetRequiredService<UserManager<StudentUser>>();
+
             userManager.CreateAsync(new StudentUser
             {
+                Id = StudentConsts.Id,
                 UserName = StudentConsts.UserName,
                 Email = StudentConsts.Email
             }, StudentConsts.Password);
@@ -43,8 +44,16 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
 
             var db = serviceProvider.GetRequiredService<AppDbContext>();
 
+            var debts = DataSeeder.InitializingDebts();
+            var students = DataSeeder.InitializingStudents();
+
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
+
+            services.AddStudentUserToUserManager();
+
+            db.Debts.AddRange(debts);
+            db.SaveChanges();
         }
     }
 }

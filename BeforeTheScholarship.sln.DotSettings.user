@@ -3,7 +3,5 @@
   &lt;ProjectFile&gt;2D16580A-4506-4FD7-BF75-23CF424FD872/d:Unit/d:Services/d:Debts/f:DebtServiceTests.cs&lt;/ProjectFile&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bf1bd0e5_002D63ac_002D49d8_002D95d7_002D8c216c2eaa1b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RegisterUser_WithoutData_ReturnsRegisterUserAccountResponse" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::2D16580A-4506-4FD7-BF75-23CF424FD872::net7.0::BeforeTheScholarship.Tests.Integration.Controllers.Accounts.AccountControllerTests.RegisterUser_WithoutData_ReturnsRegisterUserAccountResponse&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+  &lt;ProjectFile&gt;2D16580A-4506-4FD7-BF75-23CF424FD872/d:Integration/d:Controllers/d:Debts/f:DebtsControllerTests.cs&lt;/ProjectFile&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

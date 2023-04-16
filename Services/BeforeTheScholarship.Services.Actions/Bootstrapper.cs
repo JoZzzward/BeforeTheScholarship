@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-namespace BeforeTheScholarship.Services.Actions;
 
-public static class Bootstrapper
+namespace BeforeTheScholarship.Services.Actions
 {
-    public static IServiceCollection AddActionsService(this IServiceCollection services)
+    public static class Bootstrapper
     {
-        services.AddSingleton<IActionsService, ActionsService>();   
+        public static IServiceCollection AddActionsService(this IServiceCollection services)
+        {
+            services.AddSingleton<IActionsService, ActionsService>();
 
-        return services;
+            return services;
+        }
     }
 }

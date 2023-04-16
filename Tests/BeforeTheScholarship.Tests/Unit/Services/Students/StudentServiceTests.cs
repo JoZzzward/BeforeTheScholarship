@@ -6,6 +6,7 @@ using FluentAssertions;
 
 namespace BeforeTheScholarship.Tests.Unit.Services.Students
 {
+    [Trait("Category", "Unit")]
     public class StudentServiceTests
     {
         private readonly IStudentService _studentService;
@@ -35,7 +36,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Students
             // Arrange
 
             // Act
-            var result = await _studentService.GetStudentById(ExistedStudentsUuids.FirstGuid);
+            var result = await _studentService.GetStudentById(ExistedStudentConsts.Id);
 
             // Assert
             result.Should().NotBeNull();
@@ -46,7 +47,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Students
         public async Task UpdateStudent_WithData_ReturnsIEnumerableOfStudentResponse()
         {
             // Arrange
-            var id = ExistedStudentsUuids.FirstGuid;
+            var id = ExistedStudentConsts.Id;
 
             // Act
             var result = await _studentService.UpdateStudent(id, new UpdateStudentModel());
@@ -59,7 +60,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.Students
         public async Task DeleteStudent_WithData_ReturnsIEnumerableOfStudentResponse()
         {
             // Arrange
-            var id = ExistedStudentsUuids.FirstGuid;
+            var id = ExistedStudentConsts.Id;
 
             // Act
             var result = await _studentService.DeleteStudent(id);

@@ -2,7 +2,6 @@
 using BeforeTheScholarship.Api.Controllers.Accounts.Models;
 using BeforeTheScholarship.Services.UserAccountService.Models;
 using BeforeTheScholarship.Tests.Integration.Base.Data;
-using BeforeTheScholarship.Tests.Integration.Base.Helpers;
 using BeforeTheScholarship.Tests.Integration.Controllers.Accounts.Helpers;
 using BeforeTheScholarship.Tests.Integration.Core;
 using FluentAssertions;
@@ -13,7 +12,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
     public class AccountsControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _client;
-        private readonly DataHelper _sutDataHelper;
+        private readonly AccountControllerDataHelper _sutDataHelper;
 
         public AccountsControllerTests(CustomWebApplicationFactory factory)
         {
@@ -38,7 +37,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
 
             // Act
             var response = await _client.PostAsync("accounts/register", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<RegisterUserAccountResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<RegisterUserAccountResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -52,14 +51,14 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
             var model = new LoginUserAccountRequest
             {
                 Email = StudentConsts.Email,
-                Password = StudentConsts.Password
+                Password = StudentConsts.NewPassword
             };
 
             var request = _sutDataHelper.GenerateRequestFromModel(model);
 
             // Act
             var response = await _client.PostAsync("accounts/login", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<LoginUserAccountResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<LoginUserAccountResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -79,7 +78,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
 
             // Act
             var response = await _client.PostAsync("accounts/send-confirm-email", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<SendConfirmationEmailResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<SendConfirmationEmailResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -96,12 +95,12 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
                 Email = StudentConsts.Email,
                 Token = token
             };
-
+ 
             var request = _sutDataHelper.GenerateRequestFromModel(model);
 
             // Act
             var response = await _client.PostAsync("accounts/confirm-email", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<ConfirmationEmailResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<ConfirmationEmailResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -120,7 +119,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
             var request = _sutDataHelper.GenerateRequestFromModel(model);
             // Act
             var response = await _client.PostAsync("accounts/send-recover-password", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<PasswordRecoveryResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<PasswordRecoveryResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -143,7 +142,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
 
             // Act
             var response = await _client.PostAsync("accounts/recover-password", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<PasswordRecoveryResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<PasswordRecoveryResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();
@@ -165,7 +164,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts
 
             // Act
             var response = await _client.PostAsync("accounts/change-password", request);
-            var content = _sutDataHelper.GenerateRequestFromModel<ChangePasswordResponse>(response);
+            var content = _sutDataHelper.GenerateContentFromModel<ChangePasswordResponse>(response);
 
             // Asserts
             response.EnsureSuccessStatusCode();

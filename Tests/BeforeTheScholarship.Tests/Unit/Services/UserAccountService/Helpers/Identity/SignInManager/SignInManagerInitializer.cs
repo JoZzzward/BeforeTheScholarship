@@ -15,7 +15,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService.Helpers.Id
             return _signInManager;
         }
 
-        public static class SignInManagerSetup
+        public static class Setup
         {
             private static readonly SignInResult identityResultSuccess = Task.FromResult(SignInResult.Success).Result;
             private static readonly SignInResult identityResultFailed = Task.FromResult(SignInResult.Failed).Result;
@@ -31,7 +31,6 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService.Helpers.Id
                 _signInManager.PasswordSignInAsync(Arg.Any<StudentUser>(), Arg.Any<string>(), true, false)
                     .Returns(identityResultFailed);
             }
-
         }
     }
 }

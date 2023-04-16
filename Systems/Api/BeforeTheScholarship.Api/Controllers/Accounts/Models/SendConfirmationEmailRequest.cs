@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BeforeTheScholarship.Api.Controllers.Accounts;
 using BeforeTheScholarship.Api.Controllers.Accounts.Models;
 using BeforeTheScholarship.Services.UserAccountService.Models;
 using FluentValidation;

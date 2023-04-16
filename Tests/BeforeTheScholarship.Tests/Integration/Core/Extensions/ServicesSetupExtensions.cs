@@ -1,10 +1,10 @@
-﻿using BeforeTheScholarship.Services.Actions;
-using BeforeTheScholarship.Services.CacheService;
-using BeforeTheScholarship.Services.DebtService;
-using BeforeTheScholarship.Services.EmailSender;
-using BeforeTheScholarship.Services.RabbitMqService;
+﻿using BeforeTheScholarship.Services.DebtService;
 using BeforeTheScholarship.Services.StudentService;
 using BeforeTheScholarship.Services.UserAccountService;
+using BeforeTheScholarship.Tests.Integration.Helpers.ActionsService;
+using BeforeTheScholarship.Tests.Integration.Helpers.CacheService;
+using BeforeTheScholarship.Tests.Integration.Helpers.EmailSenderService;
+using BeforeTheScholarship.Tests.Integration.Helpers.RabbitMqService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BeforeTheScholarship.Tests.Integration.Core.Setup
@@ -17,10 +17,10 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
             services.AddDebtService();
             services.AddUserAccountService();
 
-            services.AddCacheService();
-            services.AddRabbitMqService();
-            services.AddActionsService();
-            services.AddEmailSender();
+            services.AddFakeCacheService();
+            services.AddFakeRabbitMqService();
+            services.AddFakeActionsService();
+            services.AddFakeEmailSenderService();
         }
     }
 }

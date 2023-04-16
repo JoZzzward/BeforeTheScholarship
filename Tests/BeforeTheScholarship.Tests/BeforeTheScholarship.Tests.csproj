@@ -59,8 +59,4 @@
 		<ProjectReference Include="..\..\Systems\Api\BeforeTheScholarship.Api\BeforeTheScholarship.Api.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Integration\Controllers\Students\" />
-	</ItemGroup>
-
 </Project>

@@ -30,7 +30,7 @@ public class DebtService : Manager, IDebtService
         ICacheService cacheService,
         IModelValidator<CreateDebtModel> addDebtResponseValidator,
         IModelValidator<UpdateDebtModel> updateDebtResponseValidator
-        ) : base(dbContext, studentService, logger, mapper, actionService, cacheService)
+        ) : base(studentService, logger, actionService, cacheService)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -49,8 +49,16 @@ public class DebtService : Manager, IDebtService
             _logger.LogInformation("--> Debts(Count: {DebtsCount}) was successfully returned from cache", cachedDataExists.Count());
             return cachedDataExists;
         }
+        using var context = await _dbContext.CreateDbContextAsync();
 
-        var response = await GetDebtsResponse();
+        var debt = context
+            .Debts
+            .AsQueryable();
+
+        var response = (await debt.ToListAsync()).Select(_mapper.Map<DebtResponse>);
+
+        if (response is null)
+            return null;
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.AllDebtsKey, response);
         
@@ -68,10 +76,15 @@ public class DebtService : Manager, IDebtService
             _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
             return cachedDataExists;
         }
+        using var context = await _dbContext.CreateDbContextAsync();
 
-        var response = await GetDebtsResponse(studentId);
+        var debt = context
+            .Debts
+            .AsQueryable();
 
-        if (response == null)
+        var response = (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(_mapper.Map<DebtResponse>);
+
+        if (response is null)
             return null;
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.DebtsWithSpecifiedStudentKey, response);
@@ -103,18 +116,18 @@ public class DebtService : Manager, IDebtService
         return response;
     }
 
-    public async Task<UpdateDebtResponse?> UpdateDebt(int? id, UpdateDebtModel model)
+    public async Task<UpdateDebtResponse?> UpdateDebt(Guid? uid, UpdateDebtModel model)
     {
         await _updateDebtResponseValidator.CheckValidation(model);
         await using var context = await _dbContext.CreateDbContextAsync();
 
         var debt = await context
             .Debts
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Uid == uid);
 
         if (debt is null)
         {
-            _logger.LogError("--> Student(Id: {StudentId}) was not found", id);
+            _logger.LogError("--> Student(Id: {StudentId}) was not found", uid);
             return null;
         }
 
@@ -129,18 +142,18 @@ public class DebtService : Manager, IDebtService
 
         var response = _mapper.Map<UpdateDebtResponse?>(debt);
 
-        _logger.LogInformation("--> Debt (Id: {DebtId}) was successfully updated.", id);
+        _logger.LogInformation("--> Debt (Id: {DebtId}) was successfully updated.", uid);
 
         return response;
     }
 
-    public async Task<DeleteDebtResponse?> DeleteDebt(int? id)
+    public async Task<DeleteDebtResponse?> DeleteDebt(Guid? id)
     {
         await using var context = await _dbContext.CreateDbContextAsync();
 
         var debt = await context
             .Debts
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Uid == id);
 
         if (debt is null)
         {

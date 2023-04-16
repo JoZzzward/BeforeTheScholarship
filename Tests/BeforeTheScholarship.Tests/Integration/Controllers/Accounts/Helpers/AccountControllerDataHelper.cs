@@ -14,7 +14,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts.Helpers
             _serviceProvider = serviceProvider;
         }
 
-        public override async Task<string> GenerateUserConfirmationToken(string email)
+        public async Task<string> GenerateUserConfirmationToken(string email)
         {
             var user = await FindUserByEmailAsync(email);
             var userManager = await CreateUserManagerInstanceAsync();
@@ -23,7 +23,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Accounts.Helpers
             return token;
         }
 
-        public override async Task<string> GenerateUserRecoveryPasswordToken(string email)
+        public async Task<string> GenerateUserRecoveryPasswordToken(string email)
         {
             var user = await FindUserByEmailAsync(email);
             var userManager = await CreateUserManagerInstanceAsync();

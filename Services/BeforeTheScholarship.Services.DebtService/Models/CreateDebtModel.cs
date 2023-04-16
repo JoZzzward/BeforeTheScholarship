@@ -42,7 +42,7 @@ public class CreateDebtModelValidator : AbstractValidator<CreateDebtModel>
         if (string.IsNullOrEmpty(number))
             return true;
 
-        return int.TryParse(number, out _);
+        return long.TryParse(number, out _);
     }
 }
 

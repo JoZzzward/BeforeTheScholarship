@@ -80,9 +80,9 @@ public class StudentsController : ControllerBase
         var response = await _studentService.UpdateStudent(id, model);
 
         if (response is null)
-            return BadRequest();
+            return BadRequest(response);
 
-        return Ok();
+        return Ok(response);
     }
 
     /// <summary>
@@ -96,8 +96,8 @@ public class StudentsController : ControllerBase
         var response = await _studentService.DeleteStudent(id);
 
         if (response is null)
-            return BadRequest();
+            return BadRequest(response);
 
-        return Ok();
+        return Ok(response);
     }
 }

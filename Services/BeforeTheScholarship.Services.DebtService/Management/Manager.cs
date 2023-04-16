@@ -14,44 +14,21 @@ namespace BeforeTheScholarship.Services.DebtService;
 
 public abstract class Manager
 {
-    private readonly IDbContextFactory<AppDbContext> _dbContext;
     private readonly IStudentService _studentService;
     private readonly ILogger<DebtService> _logger;
-    private readonly IMapper _mapper;
     private readonly IActionsService _actionService;
     private readonly ICacheService _cacheService;
 
     public Manager(
-        IDbContextFactory<AppDbContext> dbContext,
         IStudentService studentService,
         ILogger<DebtService> logger,
-        IMapper mapper,
         IActionsService actionService,
         ICacheService cacheService)
     {
-        _dbContext = dbContext;
         _studentService = studentService;
         _logger = logger;
-        _mapper = mapper;
         _actionService = actionService;
         _cacheService = cacheService;
-    }
-
-    protected async Task<IEnumerable<DebtResponse>?> GetDebtsResponse(Guid? debtId = null)
-    {
-        using var context = await _dbContext.CreateDbContextAsync();
-        var debt = context
-            .Debts
-            .AsQueryable();
-
-        var response = (debtId is null)
-            ? (await debt.ToListAsync()).Select(_mapper.Map<DebtResponse>)
-            : (await debt.ToListAsync()).Where(x => x.StudentId == debtId).Select(_mapper.Map<DebtResponse>);
-
-        if (!response.Any())
-            return null;
-
-        return response;
     }
 
     protected async Task<IEnumerable<DebtResponse>?> ReturnCachedDebts(string key)
