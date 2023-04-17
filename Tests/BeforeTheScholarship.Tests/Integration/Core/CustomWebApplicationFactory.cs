@@ -1,5 +1,6 @@
 ﻿using BeforeTheScholarship.Common.Security;
 using BeforeTheScholarship.Tests.Integration.Core.Authorization;
+using BeforeTheScholarship.Tests.Integration.Core.Extensions;
 using BeforeTheScholarship.Tests.Integration.Core.Setup;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -18,6 +19,7 @@ namespace BeforeTheScholarship.Tests.Integration.Core
                     services.ServicesSetup();
                     services.ConfigurationSetup();
                     services.DatabaseSetup();
+                    services.SecuritySetup();
                 });
                 return base.CreateHost(builder);
         }
