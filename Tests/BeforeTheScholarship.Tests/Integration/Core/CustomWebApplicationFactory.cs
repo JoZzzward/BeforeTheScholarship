@@ -1,5 +1,10 @@
-﻿using BeforeTheScholarship.Tests.Integration.Core.Setup;
+﻿using BeforeTheScholarship.Common.Security;
+using BeforeTheScholarship.Tests.Integration.Core.Authorization;
+using BeforeTheScholarship.Tests.Integration.Core.Setup;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace BeforeTheScholarship.Tests.Integration.Core
