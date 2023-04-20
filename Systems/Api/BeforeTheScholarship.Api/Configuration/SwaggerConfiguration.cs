@@ -62,7 +62,7 @@ public static class SwaggerConfiguration
                 {
                     Password = new OpenApiOAuthFlow
                     {
-                        TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
+                        TokenUrl = new Uri("http://localhost:7001/connect/token"),
                         Scopes = new Dictionary<string, string>
                         {
                             {AppScopes.DebtsRead, "DebtsRead"},
