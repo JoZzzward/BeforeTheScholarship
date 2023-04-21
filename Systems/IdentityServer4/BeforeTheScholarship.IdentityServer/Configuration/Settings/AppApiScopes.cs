@@ -1,4 +1,5 @@
 ﻿using BeforeTheScholarship.Common.Security;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 
 namespace BeforeTheScholarship.IdentityServer.Configuration.Settings;

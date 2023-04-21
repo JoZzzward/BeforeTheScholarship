@@ -1,0 +1,42 @@
+﻿@page "/confirmemail"
+@using Microsoft.AspNetCore.WebUtilities;
+
+@attribute [Authorize]
+
+@inject IAuthService authService
+@inject NavigationManager navigationManager
+
+@code {
+    [Parameter]
+    public string? Email { get; set; }
+
+    [Parameter]
+    public string? Token { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+        Console.WriteLine($"Uri: {uri} line 22 at Confirmemail");    
+        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("token", out var token))
+        {
+            var token_par = token.First();
+            Token = token_par;
+            Console.WriteLine(token_par);
+        }
+
+        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("email", out var email))
+        {
+            var emailed = email.First();
+            Email = emailed;
+            Console.WriteLine(emailed);      
+        }
+
+        await authService.ConfirmEmail(new ConfirmationEmail()
+        {
+            Email = Email,
+            Token = Token
+        });
+
+        navigationManager.NavigateTo("/");
+    }
+}

@@ -22,7 +22,8 @@ public static class CorsConfiguration
             {
                 AllowedOrigins = new[]
                 {
-                    "http://localhost:7000"
+                    "http://localhost:7000",
+                    "http://localhost:7002"
                 }
             };
         });

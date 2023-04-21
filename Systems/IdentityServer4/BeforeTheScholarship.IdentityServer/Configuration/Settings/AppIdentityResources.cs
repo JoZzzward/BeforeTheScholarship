@@ -9,6 +9,6 @@ public static class AppIdentityResources
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-            new IdentityResources.Email(),
+            new IdentityResources.Email()
         };
 }

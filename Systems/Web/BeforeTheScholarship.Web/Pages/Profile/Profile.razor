@@ -1,0 +1,10 @@
+﻿@page "/profile"
+
+@layout MainLayout
+@attribute [Authorize]
+
+<h1>@value</h1>
+
+@code {
+    string value = "Profile";
+}

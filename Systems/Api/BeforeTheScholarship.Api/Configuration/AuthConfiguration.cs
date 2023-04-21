@@ -34,7 +34,10 @@ public static class AuthConfiguration
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddUserManager<UserManager<StudentUser>>()
-            .AddDefaultTokenProviders();
+            .AddSignInManager<SignInManager<StudentUser>>()
+            .AddDefaultTokenProviders()
+            .AddTokenProvider(IdentityProviderInfo.Name, typeof(DataProtectorTokenProvider<StudentUser>))
+            ;
 
         services.AddAuthentication(options =>
         {

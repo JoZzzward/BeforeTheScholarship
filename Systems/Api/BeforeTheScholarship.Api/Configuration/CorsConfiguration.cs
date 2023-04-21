@@ -18,7 +18,7 @@ public static class CorsConfiguration
                 policy.WithOrigins("http://localhost:7001",
                                    "http://localhost:7002")
                                    .AllowAnyMethod()
-                                   .AllowAnyHeader(); 
+                                   .AllowAnyHeader();
             });
         });
         return services;

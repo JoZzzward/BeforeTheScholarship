@@ -79,8 +79,8 @@ public class DebtsController : ControllerBase
     /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
     [Authorize(Policy = AppScopes.DebtsRead)]
-    [HttpGet("overdue")]
-    public async Task<IEnumerable<DebtResponse>?> GetOverdueDebts([FromQuery] Guid? studentId)
+    [HttpGet("overdue/{studentId}")]
+    public async Task<IEnumerable<DebtResponse>?> GetOverdueDebts([FromRoute] Guid? studentId)
     {
         _logger.LogInformation("--> Trying to pay back Student (Id: {StudentId}) debts that have been overdue", studentId);
 
@@ -97,8 +97,8 @@ public class DebtsController : ControllerBase
     /// <param name="studentId">Identifier of the student whose debts must be repaid</param>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]
     [Authorize(Policy = AppScopes.DebtsRead)]
-    [HttpGet("urgently-repay")]
-    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromQuery] Guid? studentId)
+    [HttpGet("urgently-repay/{studentId}")]
+    public async Task<IEnumerable<DebtResponse>> GetUrgentlyRepaidDebts([FromRoute] Guid? studentId)
     {
         _logger.LogInformation("--> Trying to pay back Student (Id: {StudentId}) debts that need to be repaid urgently", studentId);
 

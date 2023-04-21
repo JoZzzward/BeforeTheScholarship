@@ -68,9 +68,7 @@ public class AccountsController : ControllerBase
 
         var model = _mapper.Map<LoginUserAccountModel>(request);
 
-        var user = await _userAccountService.LoginUser(model);
-
-        var response = _mapper.Map<LoginUserAccountResponse>(user);
+        var response = await _userAccountService.LoginUser(model);
 
         if (response == null)
             return BadRequest(response);

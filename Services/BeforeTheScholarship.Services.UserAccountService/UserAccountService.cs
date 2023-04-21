@@ -5,7 +5,6 @@ using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.Services.EmailSender;
 using BeforeTheScholarship.Services.UserAccountService.Helpers;
 using BeforeTheScholarship.Services.UserAccountService.Models;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 

@@ -1,0 +1,150 @@
+﻿@page "/debts"
+
+@layout MainLayout
+
+@attribute [Authorize]
+
+@inject ISnackbar Snackbar
+@inject ILocalStorageService LocalStorage
+@inject IQuerySender QuerySender
+
+<PageTitle>@pageTitle</PageTitle>
+
+@inject NavigationManager NavManager
+
+@using Microsoft.AspNetCore.WebUtilities
+@using BeforeTheScholarship.Web.Pages.Debts.Models
+@using BeforeTheScholarship.Web.Helpers
+@using BeforeTheScholarship.Web.Pages.Debts.Enums
+@using Blazored.LocalStorage
+@using BeforeTheScholarship.Web.Extensions
+
+<div class="m-4">
+    <h3>All Debts</h3>
+
+    @if (debtsItems is null)
+    {
+        <p class="m-4">Loading..</p>
+    }
+
+    @if (debtsItems.Count() is not 0)
+    {
+        @foreach (var debt in debtsItems)
+        {
+            if (debt is not null)
+            {
+                <div class="card w-25 mt-3 mb-3" style="background-color: #27272F; border-radius: 15px; -ms-border-radius: 15px; ">
+                    <div class="card-body">
+                        <h5 class="card-title">Debt</h5>
+                        <p class="card-text m-2">Sum: @debt.Borrowed</p>
+                        <p class="card-text m-2">Borrowed from: @debt.BorrowedFromWho</p>
+                        <div class="d-flex m-2">
+                            <p class="card-text m-0 me-2">Status:</p>
+                            <p class="m-0" style="color: @statusColor">@AnalyzeStatus(debt.WhenToPayback)</p>
+                        </div>
+                        <p class="card-text m-2">Taken:</p>
+                        <p class="card-text m-2">from: @debt.WhenBorrowed.ToShortStringFormat()</p>
+                        <p class="card-text m-2">to: @debt.WhenToPayback.ToShortStringFormat()</p>
+                        <button class="btn-primary p-2 rounded-3" @onclick="async () => await ManageDebt()">Manage</button>
+                    </div>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <p>Your debts list is empty!</p>
+    }
+
+</div>
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    [Parameter]
+    public string? filter { get; set; }
+
+    string pageTitle { get; set; } = "All Debts";
+
+    IEnumerable<DebtListItem>? debtsItems;
+
+    private string studentId = string.Empty;
+
+    private string statusColor { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        studentId = await LocalStorage.GetItemAsStringAsync("studentId");
+        studentId = studentId.Replace('\"', ' ').Trim();
+
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        var queryStrings = QueryHelpers.ParseQuery(uri.Query);
+
+        if (queryStrings.TryGetValue("filter", out var value))
+        {
+            filter = value;
+        }
+
+        await FillData(filter);
+    }
+
+    async Task FillData(string? filter = null)
+    {
+        switch (filter)
+        {
+            case null:
+                {
+                    var url = $"{Settings.ApiRoot}/debts/{studentId}";
+
+                    debtsItems = await QuerySender.SendGetQuery(url);
+                    pageTitle = "All Debts";
+                    break;
+                }
+            case "overdue":
+                {
+                    var url = $"{Settings.ApiRoot}/debts/overdue/{studentId}";
+
+                    debtsItems = await QuerySender.SendGetQuery(url);
+                    pageTitle = "Overdue Debts";
+                    break;
+                }
+            case "urgently-repay":
+                {
+                    var url = $"{Settings.ApiRoot}/debts/urgently-repay/{studentId}";
+
+                    debtsItems = await QuerySender.SendGetQuery(url);
+                    pageTitle = "Urgently Repay Debts";
+                    break;
+                }
+            default:
+                debtsItems = null;
+                break;
+        }
+    }
+
+    string AnalyzeStatus(DateTimeOffset whenToPayback)
+    {
+        if (whenToPayback > DateTimeOffset.UtcNow.DateTime && whenToPayback <= DateTimeOffset.UtcNow.DateTime.AddDays(1))
+        {
+            statusColor = DebtStatus.UrgentlyRepaidDebt.StatusColor;
+            return DebtStatus.UrgentlyRepaidDebt.StatusMessage;
+        }
+
+        if ((whenToPayback - DateTimeOffset.Now).TotalDays <= 0)
+        {
+            statusColor = DebtStatus.OverdueDebt.StatusColor;
+            return DebtStatus.OverdueDebt.StatusMessage;
+        }
+
+        statusColor = DebtStatus.SimpleDebt.StatusColor;
+        return DebtStatus.SimpleDebt.StatusMessage;
+    }
+
+    private async Task ManageDebt()
+    {
+        Snackbar.Add("Debt is manages", Severity.Success);
+    }
+
+}

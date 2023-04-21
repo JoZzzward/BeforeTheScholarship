@@ -1,4 +1,5 @@
-﻿using BeforeTheScholarship.Context;
+﻿using BeforeTheScholarship.Common.Security;
+using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
 using BeforeTheScholarship.IdentityServer.Configuration.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -22,10 +23,11 @@ public static class IS4Configuration
             .AddUserManager<UserManager<StudentUser>>()
             .AddSignInManager<SignInManager<StudentUser>>()
             .AddDefaultTokenProviders()
+            .AddTokenProvider(IdentityProviderInfo.Name, typeof(DataProtectorTokenProvider<StudentUser>))
             ;
 
         services.AddIdentityServer()
-                .AddAspNetIdentity<StudentUser>()
+            .AddAspNetIdentity<StudentUser>()
                 .AddInMemoryClients(AppApiClients.Get(services.BuildServiceProvider()))
                 .AddInMemoryIdentityResources(AppIdentityResources.IdentityResources)
 
