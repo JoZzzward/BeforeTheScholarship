@@ -22,8 +22,11 @@ If you not familiar with Docker, follow [this link](https://docs.docker.com/get-
 1. File ```clientsecret.txt``` contains ClientSecret for IdentityServer4 Configuration.
 
 2. File ```emailusername.txt``` should contain the email from which all letters to the site will come.
-
+Test email is: jozzzwardtm@mail.ru
 3. File ```emailpassword.txt``` should contain the specific password for sending out messages.
+Test password is: vNRJB1qegA5WnpfKDMX8
+
+> Email and password must be presented in first line without any spaces or new lines
 
 ---
 # How to launch the project
@@ -46,3 +49,19 @@ After all off this steps project will run currectly.
 * For authorization in Swagger use next information:  
     * ClientId is: ```frontend```
     * ClientSecret specified in ```clientsecret.txt```
+
+---
+
+# XUnit and Integration tests
+
+1. XUnit tests passing all just in one time launch.
+
+2. Integration tests. 
+    Advise: Ideally integration tests must be launched one by one. In other case you may get unpredictable errors.
+
+---
+# How to communicate with Blazor WebAssembly Web UI component:
+
+1. Register in application by username or email and password and than you can sign in and do your work.
+
+2. Initialize ```emailusername.txt``` and ```emailpassword.txt``` files correct by using test data from <Shared information> module 
