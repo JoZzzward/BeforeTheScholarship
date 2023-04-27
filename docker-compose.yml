@@ -70,3 +70,15 @@ services:
       - TZ=Europe/Moscow
     secrets:
       - clientsecret
+
+  beforethescholarship_web:
+    image: ${DOCKER_REGISTRY-}beforethescholarshipweb
+    build:
+      context: .
+      dockerfile: Systems/Web/BeforeTheScholarship.Web/Dockerfile
+    depends_on:
+      - beforethescholarship_postgresql
+      - beforethescholarship_api
+      - beforethescholarship_redis
+      - beforethescholarship_rabbitmq
+

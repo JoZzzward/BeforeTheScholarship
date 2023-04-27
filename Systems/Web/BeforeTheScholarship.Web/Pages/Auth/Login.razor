@@ -1,46 +1,48 @@
 @page "/login"
 @using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components
+@using BeforeTheScholarship.Web.Pages.Auth.Models
 
 @inject IAuthService AuthService
+@inject ISnackbar Snackbar
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
+
+<PageTitle>Login</PageTitle>
 
 <MudGrid Justify="Justify.Center" Class="pa-10">
     <MudItem xs="7" sm="4">
         <MudPaper Class="pa-4">
-            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+            <EditForm Model="@loginUserAccountRequest" OnValidSubmit="OnValidSubmit">
                 
                 <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-3">Sign In</MudText>
-
-                <MudAlert Severity="Severity.Error" Class="@(ShowErrors ? "mb-3 d-block" : "d-none")">
-                    @Error
-                    <br />
-                    @ErrorDetail
-                </MudAlert>
+                
+                <ErrorListPreview Errors="Errors" ShowErrors=_showErrors></ErrorListPreview>
 
                 <MudTextField T="string"
-                                @bind-Value="model.Email" For="@(() => model.Email)"
-                                Label="Email" 
-                                Required="true" 
-                                RequiredError="Email is required!"
-                                HelperText="Input your username"
-                                Validation="@(new EmailAddressAttribute { ErrorMessage = "Email address is invalid" })" />
-                <MudTextField @bind-Value="model.Password" For="@(() => model.Password)"
-                                Label="Password" 
-                                HelperText="Input your password"
-                                InputType="@PasswordInput"
-                                Adornment="Adornment.End"
-                                AdornmentIcon="@PasswordInputIcon"
-                                Required="true"
-                                RequiredError="Password is required!"
-                                OnAdornmentClick="TogglePasswordVisibility" />
+                              @bind-Value="loginUserAccountRequest.Email" For="@(() => loginUserAccountRequest.Email)"
+                              Label="Login" 
+                              Required="true" 
+                              RequiredError="Email or username is required!"
+                              HelperText="Input your email or username"/>
+                <MudTextField @bind-Value="loginUserAccountRequest.Password" For="@(() => loginUserAccountRequest.Password)"
+                              Label="Password" 
+                              HelperText="Input your password"
+                              InputType="@PasswordInput"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@PasswordInputIcon"
+                              Required="true"
+                              RequiredError="Password is required!"
+                              OnAdornmentClick="TogglePasswordVisibility" />
 
-                <div Class="d-flex justify-space-between align-center">
-                    <MudCheckBox For="@(() => model.RememberMe)" @bind-Checked="model.RememberMe" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
-                    <MudLink Href="/forgot-password">Forgot password?</MudLink>
-                </div>
+                <MudItem Class="d-flex justify-space-between align-center">
+                    <MudButton Class="bg-transparent"
+                               @onclick="GoToSendRecoverPasswordPage">
+                        Forgot password?
+                    </MudButton>
+                </MudItem>
 
-                <div class="d-flex justify-space-between">
+                <MudItem Class="d-flex justify-space-between">
                     <MudButton Variant="Variant.Filled"
                                Color="Color.Primary"
                                Size="Size.Large"
@@ -49,7 +51,7 @@
                              Color="Color.Primary">
                         Dont have an account?
                     </MudLink>
-                </div>
+                </MudItem>
             </EditForm>
         </MudPaper>
     </MudItem>
@@ -57,55 +59,58 @@
 
 @code {
     bool success;
-    MudForm form;
+    MudForm form = new();
 
-    private LoginModel model = new()
-    {
-        Email = "jozzzwardtm@mail.ru",
-        Password = "aaaa1111"
-    };
+    private LoginUserAccountRequest loginUserAccountRequest = new();
+
+    private readonly LoginUserAccountRequestValidator _loginUserAccountRequestValidator = new();
 
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-    private bool ShowErrors;
-    private string Error;
-    private string ErrorDetail;
+    private List<string>? Errors = new();
+    private bool _showErrors = false;
 
     void TogglePasswordVisibility()
     {
-        @if (PasswordVisibility)
-        {
-            PasswordVisibility = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
-        }
-        else
-        {
-            PasswordVisibility = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
-        }
+        ToggleVisibility(ref PasswordVisibility, ref PasswordInputIcon, ref PasswordInput);
+    }
+
+    static void ToggleVisibility(ref bool visibility, ref string icon, ref InputType inputType)
+    {
+        visibility = !visibility;
+        icon = visibility ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
+        inputType = visibility ? InputType.Text : InputType.Password;
+    }
+
+    async Task GoToSendRecoverPasswordPage()
+    {
+        NavigationManager.NavigateTo("/send-recover-password");
     }
 
     private async Task OnValidSubmit()
     {
-        ShowErrors = false;
-        Error = "";
-        ErrorDetail = "";
-
-        var result = await AuthService.Login(model);
-
-        if (result.Successful)
+        var validatorResult = await _loginUserAccountRequestValidator.ValidateAsync(loginUserAccountRequest);
+        if (!validatorResult.IsValid)
         {
-            NavigationManager.NavigateTo("/");
+            Errors = validatorResult.Errors.Select(x => x.ErrorMessage).ToList();
+            _showErrors = true;
+            Snackbar.Add("Email is incorrect", Severity.Error);
+
+            return;
         }
+
+        _showErrors = false;
+        Errors = new List<string>();
+
+        var result = await AuthService.Login(loginUserAccountRequest);
+        if (result.Successful)
+            NavigationManager.NavigateTo("/");
         else
         {
-            Error = result.Error;
-            ErrorDetail = result.ErrorDescription;
-            ShowErrors = true;
+            Errors.Add(result.Error);
+            _showErrors = true;
         }
     }
 }

@@ -32,11 +32,17 @@ public class UpdateStudentmodelValidator : AbstractValidator<UpdateStudentModel>
             .MaximumLength(50).WithMessage("Email length must be less than 50.");
 
         RuleFor(x => x.PhoneNumber)
-            .ForEach(x =>
-            {
-                x.Must(char.IsDigit);
-            }).WithMessage("Phone must contain only numbers.");
+            .MaximumLength(12)
+            .WithMessage("Phone number length must be less than 12 numbers.");
+
+        RuleFor(x => x.PhoneNumber)
+            .Must(CorrectPhone)
+            .WithMessage("Phone number must contain only numbers.");
     }
+
+    // Check is Phone field contains only numbers. Returns true if null or empty
+    private static bool CorrectPhone(string number)
+        => string.IsNullOrEmpty(number) || long.TryParse(number, out _);
 }
 
 public class UpdateStudentModelProfile : Profile

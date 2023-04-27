@@ -58,7 +58,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
         public async Task GetOverdueDebts_WithData_Returns200Response()
         {
             // Arrange
-            var url = $"debts/overdue?studentId={StudentConsts.Id}";
+            var url = $"debts/overdue/{StudentConsts.Id}";
 
             // Act
             var response = await _client.GetAsync(url);
@@ -75,7 +75,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
         public async Task GetUrgentlyRepaidDebts_WithData_Returns200Response()
         {
             // Arrange
-            var url = $"debts/urgently-repay?studentId={StudentConsts.Id}";
+            var url = $"debts/urgently-repay/{StudentConsts.Id}";
             
             // Act
             var response = await _client.GetAsync(url);

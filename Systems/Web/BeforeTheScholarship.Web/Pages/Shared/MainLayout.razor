@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-@inject IConfigurationService configuration
+@inject IConfigurationService Configuration
 
 <MudThemeProvider @bind-IsDarkMode="@(_darkMode)" />
 <MudDialogProvider />
@@ -8,21 +8,29 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" 
+                       Color="Color.Inherit" 
+                       Edge="Edge.Start" 
+                       OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
-        <MudIconButton Icon="@(_darkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" @onclick="@DarkModeSwitch" Color="Color.Inherit" Edge="Edge.End" />
+        <MudIconButton Icon="@(_darkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" 
+                       @onclick="@DarkModeSwitch" 
+                       Color="Color.Inherit" 
+                       Edge="Edge.End" />
         <UserMenu />
     </MudAppBar>
     <MudDrawer @bind-Open="(_navigationMenuVisible)" Elevation="2">
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        @Body
+        <MudGrid Class="w-100">
+            @Body
+        </MudGrid>
     </MudMainContent>
 </MudLayout>
 
 <MudScrollToTop>
-    <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+    <MudFab Color="Color.Tertiary" Icon="@Icons.Material.Filled.ArrowCircleUp" />
 </MudScrollToTop>
 
 @code {
@@ -31,19 +39,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _darkMode = await configuration.GetDarkMode();
-        _navigationMenuVisible = await configuration.GetNavigationMenuVisible();
+        _darkMode = await Configuration.GetDarkMode();
+        _navigationMenuVisible = await Configuration.GetNavigationMenuVisible();
     }
 
     async void DarkModeSwitch()
     {
         _darkMode = !_darkMode;
-        await configuration.SetDarkMode(_darkMode);
+        await Configuration.SetDarkMode(_darkMode);
     }
 
     async void DrawerToggle()
     {
         _navigationMenuVisible = !_navigationMenuVisible;
-        await configuration.SetNavigationMenuVisible(_navigationMenuVisible);
+        await Configuration.SetNavigationMenuVisible(_navigationMenuVisible);
     }
 }

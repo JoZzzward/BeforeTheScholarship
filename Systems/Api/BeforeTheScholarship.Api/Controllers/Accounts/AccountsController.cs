@@ -82,6 +82,7 @@ public class AccountsController : ControllerBase
     /// <param name="request">Contains email and token for confirmation</param>
     [ProducesResponseType(typeof(ConfirmationEmailResponse), 200)]
     [ProducesResponseType(typeof(ConfirmationEmailResponse), 400)]
+    [Authorize]
     [HttpPost("send-confirm-email")]
     public async Task<ActionResult<SendConfirmationEmailResponse>> SendConfirmEmail([FromBody] SendConfirmationEmailRequest request)
     {

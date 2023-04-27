@@ -10,13 +10,15 @@
         <MudSpacer />
         <MudIconButton Icon="@(_darkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" @onclick="@DarkModeSwitch" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
-    <MudMainContent Style="width: 100%">
-        @Body
+    <MudMainContent>
+        <MudGrid Class="w-100">
+            @Body
+        </MudGrid>
     </MudMainContent>
 </MudLayout>
 
 @code {
-    private bool _darkMode = false;
+    private bool _darkMode;
 
     protected override async Task OnInitializedAsync()
     {

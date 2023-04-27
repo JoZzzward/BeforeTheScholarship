@@ -1,6 +1,6 @@
 ﻿using BeforeTheScholarship.Web.Pages.Debts.Consts.Statuses;
 
-namespace BeforeTheScholarship.Web.Pages.Debts.Enums
+namespace BeforeTheScholarship.Web.Pages.Debts.Consts
 {
     public static class DebtStatus
     {

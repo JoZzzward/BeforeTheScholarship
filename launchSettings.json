@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "beforethescholarship.web": "StartDebugging",
+        "beforethescholarship_api": "StartDebugging",
+        "beforethescholarship_emailworker": "StartDebugging",
+        "beforethescholarship_identity": "StartDebugging",
+        "beforethescholarship_rabbitmq": "StartWithoutDebugging"
+      }
+    }
+  }
+}

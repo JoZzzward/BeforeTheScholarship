@@ -37,6 +37,20 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService.Helpers.Id
                 _userManager.FindByEmailAsync(Arg.Any<string>()).ReturnsNull();
             }
 
+            public static void SetupFindByNameAsyncReturnsData()
+            {
+                var student = _userAccountServiceDataHelper.GenerateStudentUserMoqModel();
+
+                _userManager.FindByNameAsync(Arg.Any<string>()).Returns(student);
+            }
+
+            public static void SetupFindByNameAsyncReturnsNull()
+            {
+                var student = _userAccountServiceDataHelper.GenerateStudentUserMoqModel();
+
+                _userManager.FindByNameAsync(Arg.Any<string>()).ReturnsNull();
+            }
+
             public static void SetupGenerateEmailConfirmationTokenAsync()
             {
                 _userManager.GenerateEmailConfirmationTokenAsync(Arg.Any<StudentUser>()).Returns("tokenValue");

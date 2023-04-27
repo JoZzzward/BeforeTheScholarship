@@ -14,7 +14,7 @@ public class Manager
     private readonly EmailSettings _settings;
     private readonly IConfiguration _configuration;
 
-    public Manager(
+    protected Manager(
         ILogger<EmailSender> logger,
         EmailSettings settings,
         IConfiguration configuration

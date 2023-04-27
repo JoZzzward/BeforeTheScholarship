@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{34B159E1-D221-4870-846F-3509C829029C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeTheScholarship.Web", "Systems\Web\BeforeTheScholarship.Web\BeforeTheScholarship.Web.csproj", "{68D84097-4FEF-4FE9-8F5B-EF5D0FC83F8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeforeTheScholarship.Web", "Systems\Web\BeforeTheScholarship.Web\BeforeTheScholarship.Web.csproj", "{68D84097-4FEF-4FE9-8F5B-EF5D0FC83F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,10 +1,11 @@
-﻿using BeforeTheScholarship.Web.Pages.Auth;
+﻿using BeforeTheScholarship.Web;
+using BeforeTheScholarship.Web.Extensions;
+using BeforeTheScholarship.Web.Pages.Auth;
+using BeforeTheScholarship.Web.Pages.Auth.Models;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
-using BeforeTheScholarship.Web;
 
 public class AuthService : IAuthService
 {
@@ -21,7 +22,7 @@ public class AuthService : IAuthService
         _localStorage = localStorage;
     }
 
-    public async Task<LoginResult> Login(LoginModel loginModel)
+    public async Task<LoginResult> Login(LoginUserAccountRequest loginModel)
     {
         var url = $"{Settings.IdentityRoot}/connect/token";
 
@@ -38,10 +39,8 @@ public class AuthService : IAuthService
 
         var response = await _httpClient.PostAsync(url, requestContent);
 
-        var content = await response.Content.ReadAsStringAsync();
+        var loginResult = await response.ReadContent<LoginResult>();
 
-        var loginResult = JsonSerializer.Deserialize<LoginResult>(content)
-            ?? new LoginResult();
         loginResult.Successful = response.IsSuccessStatusCode;
 
         if (!response.IsSuccessStatusCode)
@@ -49,19 +48,106 @@ public class AuthService : IAuthService
 
         await _localStorage.SetItemAsync("authToken", loginResult.AccessToken);
         await _localStorage.SetItemAsync("refreshToken", loginResult.RefreshToken);
-        Console.WriteLine(loginModel.Email);
+
         ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email!);
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.AccessToken);
 
-        var studentInfo = await GetStudentInfo(loginModel.Email, loginModel.Password);
+        var studentInfo = await LoginUser(loginModel.Email, loginModel.Password);
 
         await _localStorage.SetItemAsync("studentId", studentInfo.StudentId);
 
         return loginResult;
     }
 
-    private async Task<LoginUserAccountResponse> GetStudentInfo(string email, string password)
+    public async Task<RegisterUserAccountResponse> Register(RegisterUserAccountRequest registerModel)
+    {
+        var url = $"{Settings.ApiRoot}/accounts/register";
+
+        var request = await registerModel.GenerateStringContentRequest();
+
+        var response = await _httpClient.PostAsync(url, request);
+
+        var result = await response.ReadContent<RegisterUserAccountResponse>();
+
+        return result;
+    }
+
+    public async Task<SendConfirmationEmailResponse> SendConfirmEmail(SendConfirmationEmailRequest model)
+    {
+        var url = $"{Settings.ApiRoot}/accounts/send-confirm-email";
+
+        var request = await model.GenerateStringContentRequest();
+
+        var response = await _httpClient.PostAsync(url, request);
+
+        var result = await response.ReadContent<SendConfirmationEmailResponse>();
+
+        return result;
+    }
+
+    public async Task<ConfirmationEmailResponse> ConfirmEmail(ConfirmationEmailRequest confirmationEmail)
+    {
+        var url = $"{Settings.ApiRoot}/accounts/confirm-email";
+
+        var request = await confirmationEmail.GenerateStringContentRequest();
+
+        var response = await _httpClient.PostAsync(url, request);
+
+        var result = await response.ReadContent<ConfirmationEmailResponse>();
+
+        return result;
+    }
+
+    public async Task<PasswordRecoveryResponse> RecoverPassword(PasswordRecoveryRequest passwordRecoveryRequest)
+    {
+        var url = $"{Settings.ApiRoot}/accounts/recover-password";
+
+        var request = await passwordRecoveryRequest.GenerateStringContentRequest();
+
+        var response = await _httpClient.PostAsync(url, request);
+
+        var result = await response.ReadContent<PasswordRecoveryResponse>();
+
+        return result;
+    }
+
+    public async Task<PasswordRecoveryResponse> SendRecoverPasswordMail(SendPasswordRecoveryRequest sendPasswordRecoveryRequest)
+    {
+        var url = $"{Settings.ApiRoot}/accounts/send-recover-password";
+
+        var request = await sendPasswordRecoveryRequest.GenerateStringContentRequest();
+
+        var response = await _httpClient.PostAsync(url, request);
+
+        var result = await response.ReadContent<PasswordRecoveryResponse>();
+
+        return result;
+    }
+
+    public async Task<ChangePasswordResponse> ChangePassword(ChangePasswordRequest changePasswordRequest)
+    {
+        var url = $"{Settings.ApiRoot}/accounts/change-password";
+
+        var request = await changePasswordRequest.GenerateStringContentRequest();
+        var response = await _httpClient.PostAsync(url, request);
+
+        var result = await response.ReadContent<ChangePasswordResponse>();
+
+        return result;
+    }
+
+    public async Task Logout()
+    {
+        await _localStorage.RemoveItemAsync("authToken");
+        await _localStorage.RemoveItemAsync("refreshToken");
+        await _localStorage.RemoveItemAsync("studentId");
+
+        ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+
+        _httpClient.DefaultRequestHeaders.Authorization = null;
+    }
+    private async Task<LoginUserAccountResponse> LoginUser(string email, string password)
     {
         var url = $"{Settings.ApiRoot}/accounts/login";
 
@@ -70,59 +156,13 @@ public class AuthService : IAuthService
             Email = email,
             Password = password
         };
-        var body = JsonSerializer.Serialize(model);
-        var request = new StringContent(body, Encoding.UTF8, "application/json");
+
+        var request = await model.GenerateStringContentRequest();
 
         var response = await _httpClient.PostAsync(url, request);
 
-        var content = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(content);
-
-        var result = JsonSerializer.Deserialize<LoginUserAccountResponse>(content,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var result = await response.ReadContent<LoginUserAccountResponse>();
 
         return result;
-    }
-
-    public async Task<RegisterResponse> Register(RegisterModel registerModel)
-    {
-        var url = $"{Settings.ApiRoot}/accounts";
-
-        var body = JsonSerializer.Serialize(registerModel);
-        var request = new StringContent(body, Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync(url, request);
-        var content = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
-            throw new Exception(content);
-
-        var data = JsonSerializer.Deserialize<RegisterResponse>(content, 
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-        return data;
-    }
-
-    public async Task ConfirmEmail(ConfirmationEmail confirmationEmail)
-    {
-        var url = $"{Settings.ApiRoot}/accounts/confirm-email";
-        var body = JsonSerializer.Serialize(confirmationEmail);
-        var request = new StringContent(body, Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync(url, request);
-        var content = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
-            throw new Exception(content);
-    }
-
-    public async Task Logout()
-    {
-        await _localStorage.RemoveItemAsync("authToken");
-        await _localStorage.RemoveItemAsync("refreshToken");
-
-        ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
-
-        _httpClient.DefaultRequestHeaders.Authorization = null;
     }
 }

@@ -58,7 +58,7 @@ namespace BeforeTheScholarship.Tests.Integration.Base.Data.Setup
                     Phone = "1234567891",
                     BorrowedFromWho = Guid.NewGuid().Shrink().Divide(4),
                     WhenBorrowed = DateTimeOffset.UtcNow,
-                    WhenToPayback = DateTimeOffset.UtcNow.AddHours(22)
+                    WhenToPayback = DateTimeOffset.UtcNow.AddHours(19)
                 }
             };
 

@@ -1,0 +1,51 @@
+﻿@using BeforeTheScholarship.Web.Helpers;
+@using BeforeTheScholarship.Web.Pages.Debts.Dialogs;
+@using BeforeTheScholarship.Web.Pages.Debts.Models;
+@using BeforeTheScholarship.Web.Pages.Debts.Services;
+@using Blazored.LocalStorage;
+
+@inject ISnackbar Snackbar
+@inject ILocalStorageService LocalStorage
+@inject IConfigurationService Configuration
+@inject IDebtService DebtService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public string Header { get; set; }
+
+    private string TextColor = Colors.Grey.Darken3;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var _darkMode = await Configuration.GetDarkMode();
+        TextColor = _darkMode ? Colors.Grey.Lighten5 : Colors.Grey.Darken3;
+    }
+
+    private async Task CreateDebt()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions
+            { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+
+        var dialog = await DialogService.ShowAsync<CreateDebtDialog>("Add debt", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var data = ((CreateDebtDialog)dialog.Dialog).model;
+            var studentId = await LocalStorage.GetItemAsStringAsync("studentId");
+
+            data.StudentId = LocalStorageHelper.GetStudentId(studentId);
+
+            var url = $"{Settings.ApiRoot}/debts";
+
+            await DebtService.SendPostQuery<CreateDebtResponse>(url, data);
+
+            Snackbar.Add("Debt was successfully created", Severity.Success);
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

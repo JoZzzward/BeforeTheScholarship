@@ -211,14 +211,9 @@
             Debts controller
             </summary>
         </member>
-        <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.#ctor(BeforeTheScholarship.Services.DebtService.IDebtService,Microsoft.Extensions.Logging.ILogger{BeforeTheScholarship.Api.Controllers.Debts.DebtsController},AutoMapper.IMapper)">
-            <summary>
-            Debts constructor that implements services
-            </summary>
-        </member>
         <member name="M:BeforeTheScholarship.Api.Controllers.Debts.DebtsController.GetDebts">
             <summary>
-            HttpGet - Gettings debts from database
+            Returns debts from database
             </summary>
             <returns></returns>
         </member>

@@ -19,7 +19,7 @@ public abstract class Manager
     private readonly IActionsService _actionService;
     private readonly ICacheService _cacheService;
 
-    public Manager(
+    protected Manager(
         IStudentService studentService,
         ILogger<DebtService> logger,
         IActionsService actionService,

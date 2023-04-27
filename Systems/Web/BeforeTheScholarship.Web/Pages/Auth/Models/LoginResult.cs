@@ -1,11 +1,11 @@
-﻿namespace BeforeTheScholarship.Web.Pages.Auth;
+﻿namespace BeforeTheScholarship.Web.Pages.Auth.Models;
 
 using System.Text.Json.Serialization;
 
 public class LoginResult
 {
     public bool Successful { get; set; }
-    
+
     [JsonPropertyName("scope")]
     public string Scope { get; set; }
 
@@ -14,7 +14,7 @@ public class LoginResult
 
     [JsonPropertyName("refresh_token")]
     public string RefreshToken { get; set; }
-    
+
     [JsonPropertyName("expires_in")]
     public int? ExpiresIn { get; set; }
 

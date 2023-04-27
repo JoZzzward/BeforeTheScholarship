@@ -54,6 +54,12 @@ services:
     networks:
       - beforethescholarship_network
 
+  beforethescholarship_web:
+    ports:
+      - "7002:80"
+    networks:
+      - beforethescholarship_network
+
 networks:
   beforethescholarship_network:
     name: beforethescholarship

@@ -1,10 +1,206 @@
 ﻿@page "/profile"
+@inject ISnackbar Snackbar
+@inject IStudentService StudentService
+@inject IAuthService AuthService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@using BeforeTheScholarship.Web.Pages.Profile.Models
+@using BeforeTheScholarship.Web.Pages.Profile.Services
+@using BeforeTheScholarship.Web.Pages.Auth.Models
+@using BeforeTheScholarship.Web.Pages.Auth.Dialogs
 
 @layout MainLayout
+
 @attribute [Authorize]
 
-<h1>@value</h1>
+@if (_studentUser != null)
+{
+    <MudContainer Class="w-75">
+        <MudPaper Class="m-5 p-4 position-relative"
+              Style="border-radius: 15px; height: 500px">
+            <MudItem Class="w-100 mb-3">
+                <MudText Typo="Typo.h4">Your Profile </MudText>
+                <MudDivider />
+            </MudItem>
+            <MudItem Class="d-flex justify-content-between">
+                <MudItem>
+                    <MudItem Class="mt-2">
+                        <MudText>First name: </MudText>
+                        <MudInputString Placeholder="First name"
+                                    @bind-Value="_studentUser.FirstName" />
+                    </MudItem>
+
+                    <MudItem Class="mt-2">
+                        <MudText>Last name: </MudText>
+                        <MudInputString Placeholder="Last name.."
+                                    @bind-Value="_studentUser.LastName" />
+                    </MudItem>
+
+                    <MudItem Class="mt-2">
+                        <MudText>Username: </MudText>
+                        <MudInputString Placeholder="User name.."
+                                    @bind-Value="_studentUser.UserName" />
+                    </MudItem>
+
+                </MudItem>
+                <MudItem>
+
+                    <MudItem Class="mt-2">
+                        <MudText>Phone number: </MudText>
+                        <MudInputString Placeholder="Phone number:"
+                                    @bind-Value="_studentUser.PhoneNumber" />
+                    </MudItem>
+
+                    <MudItem Class="mt-2">
+                        <MudText>Email: </MudText>
+                        <MudInputString Placeholder="Email.."
+                                    @bind-Value="_studentUser.Email"
+                                    Required="true"
+                                    RequiredError="Email is required!" />
+                    </MudItem>
+
+                    <MudItem Class="mt-2">
+                        <MudSwitch Label="@_emailConfirmedLabel"
+                               @bind-Checked="_studentUser.EmailConfirmed"
+                               ReadOnly="true" />
+                        <MudButton Class="@(_studentUser.EmailConfirmed ? "d-none m-1" : "m-1 mb-3 d-block" )"
+                               Color="Color.Info"
+                               Variant="Variant.Outlined"
+                               Size="Size.Medium"
+                               @onclick="SendConfirmationEmail">
+                            Send confirmation email
+                        </MudButton>
+                    </MudItem>
+
+                    <MudItem Class="mt-2">
+                        <MudText>Password: </MudText>
+                        <MudButton Class="mt-1"
+                               Color="Color.Info"
+                               Variant="Variant.Outlined"
+                               Size="Size.Medium"
+                               @onclick="ChangePassword">
+                            Change password
+                        </MudButton>
+                    </MudItem>
+                </MudItem>
+            </MudItem>
+            <MudItem Class="mt-2">
+                <MudButtonGroup Class="float-end position-absolute bottom-0 end-0 m-4"
+                            Size="Size.Medium"
+                            Color="Color.Secondary"
+                            OverrideStyles="false">
+                    <MudButton Class="m-1"
+                           Color="Color.Info"
+                           Variant="Variant.Outlined"
+                           Size="Size.Medium"
+                           @onclick="UpdateStudent">
+                        UPDATE
+                    </MudButton>
+
+                    <MudButton Class="m-1"
+                           Color="Color.Secondary"
+                           Variant="Variant.Outlined"
+                           Size="Size.Medium"
+                           @onclick="DeleteStudent">
+                        DELETE
+                    </MudButton>
+                </MudButtonGroup>
+            </MudItem>
+        </MudPaper>
+    </MudContainer>
+}
 
 @code {
-    string value = "Profile";
+
+    private StudentUserResponse? _studentUser;
+
+    private string? _emailConfirmedLabel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _studentUser = await StudentService.GetStudentUser();
+
+        if (_studentUser is null)
+        {
+            await AuthService.Logout();
+            NavigationManager.NavigateTo("/");
+        }
+
+        _emailConfirmedLabel = $"Email is {(_studentUser!.EmailConfirmed ? string.Empty : "not")} confirmed";
+    }
+
+    private async Task UpdateStudent()
+    {
+        var updateModel = new UpdateStudentUserRequest
+            {
+                Email = _studentUser.Email,
+                FirstName = _studentUser.FirstName,
+                LastName = _studentUser.LastName,
+                UserName = _studentUser.UserName,
+                PhoneNumber = _studentUser.PhoneNumber
+            };
+
+        var response = await StudentService.UpdateStudentById<UpdateStudentUserResponse>(updateModel);
+
+        if (response.Id.HasValue)
+            Snackbar.Add("Your profile was successfully updated", Severity.Success);
+        else
+            Snackbar.Add("Error while updating your profile", Severity.Error);
+    }
+
+    private async Task DeleteStudent()
+    {
+        var response = await StudentService.DeleteStudentById<DeleteStudentResponse>();
+
+        if (response.Id.HasValue)
+        {
+            Snackbar.Add("Your profile was successfully deleted", Severity.Success);
+            await AuthService.Logout();
+            NavigationManager.NavigateTo("/");
+        }
+        else
+            Snackbar.Add("Error while deleting your profile", Severity.Error);
+    }
+
+    private async Task SendConfirmationEmail()
+    {
+        if (_studentUser!.EmailConfirmed)
+            return;
+
+        var model = new SendConfirmationEmailRequest { Email = _studentUser.Email.Replace('\"', ' ').Trim() };
+        var validator = new SendConfirmationEmailRequestValidator();
+
+        var validationResult = await validator.ValidateAsync(model);
+
+        if (!validationResult.IsValid)
+        {
+            Snackbar.Add("Incorrect email address!", Severity.Error, config =>
+                config.ShowCloseIcon = false);
+            return;
+        }
+
+        await AuthService.SendConfirmEmail(model);
+        Snackbar.Add("Confirmation email was send on your email", Severity.Info);
+    }
+
+    private async Task ChangePassword()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions
+            { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+        var dialog = await DialogService.ShowAsync<ChangePasswordDialog>("Change password", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var data = ((ChangePasswordDialog)dialog.Dialog).changePasswordRequest;
+            data.Email = _studentUser.Email;
+            await AuthService.ChangePassword(data);
+
+            Snackbar.Add("Your password was successfully changed", Severity.Success);
+        }
+    }
 }

@@ -3,12 +3,12 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(SimpleLayout)">
                 <Authorizing>
-                    <text>Please wait, we are authorizing you...</text>
+                    <MudText Typo="Typo.h4" Color="Color.Primary">Please wait, we are authorizing you...</MudText>
                 </Authorizing>
                 <NotAuthorized>
                     @if (@context.User.Identity?.IsAuthenticated is true)
                     {
-                        <p>You are not authorized to be here.</p>
+                        <MudText Typo="Typo.h4" Color="Color.Primary">You are not authorized to be here.</MudText>
                     }
                     else
                     {
@@ -18,11 +18,7 @@
             </AuthorizeRouteView>
         </Found>
         <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(SimpleLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
-                <MudButton Href="/" Color="Color.Secondary">GO BACK</MudButton>
-            </LayoutView>
+            <PageNotFoundView/>
         </NotFound>
     </Router>
 </CascadingAuthenticationState>

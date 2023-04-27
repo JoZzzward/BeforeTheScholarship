@@ -1,42 +1,46 @@
-﻿@page "/confirmemail"
+﻿@page "/confirm-email"
+
+@inject ISnackbar Snackbar
+
+@using BeforeTheScholarship.Web.Extensions;
 @using Microsoft.AspNetCore.WebUtilities;
+@using BeforeTheScholarship.Web.Pages.Auth.Models
 
 @attribute [Authorize]
 
-@inject IAuthService authService
-@inject NavigationManager navigationManager
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
 
 @code {
-    [Parameter]
-    public string? Email { get; set; }
 
-    [Parameter]
-    public string? Token { get; set; }
+    private readonly ConfirmationEmailRequestValidator _confirmationEmailRequestValidator = new();
 
     protected override async Task OnInitializedAsync()
     {
-        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
-        Console.WriteLine($"Uri: {uri} line 22 at Confirmemail");    
-        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("token", out var token))
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        QueryHelpers.ParseQuery(uri.Query).TryGetValue("email", out var email);
+
+        QueryHelpers.ParseQuery(uri.Query).TryGetValue("token", out var token);
+
+        var model = new ConfirmationEmailRequest
+            {
+                Email = email.ToString(),
+                Token = token.ToString().Replace(' ', '+')
+            };
+
+        var validationResult = await _confirmationEmailRequestValidator.ValidateAsync(model);
+
+        if (!validationResult.IsValid)
         {
-            var token_par = token.First();
-            Token = token_par;
-            Console.WriteLine(token_par);
+            Snackbar.Add($"Email was not confirmed! Error: {validationResult.Errors.Select(x => x.ErrorMessage)}", Severity.Error);
+            return;
         }
 
-        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("email", out var email))
-        {
-            var emailed = email.First();
-            Email = emailed;
-            Console.WriteLine(emailed);      
-        }
+        await AuthService.ConfirmEmail(model);
+        
+        Snackbar.Add("Email was confirmed!", Severity.Success);
 
-        await authService.ConfirmEmail(new ConfirmationEmail()
-        {
-            Email = Email,
-            Token = Token
-        });
-
-        navigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/profile");
     }
 }

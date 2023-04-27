@@ -55,7 +55,6 @@ public class StudentsController : ControllerBase
     /// </summary>
     /// <param name="id">Unique student identifier</param>
     [ProducesResponseType(typeof(StudentResponse), 200)]
-    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<StudentResponse> GetStudentById([FromRoute] Guid id)
     {
@@ -70,7 +69,7 @@ public class StudentsController : ControllerBase
     /// HttpPut - Updates existed StudentUser in database
     /// </summary>
     [HttpPut("{id}")]
-    public async Task<ActionResult<UpdateStudentResponse>> UpdateStudent([FromRoute]Guid id, [FromBody] UpdateStudentRequest request)
+    public async Task<ActionResult<UpdateStudentResponse>> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request)
     {
         _logger.LogInformation("--> Trying to update student(Id: {StudentId})", id);
 

@@ -3,7 +3,7 @@ using BeforeTheScholarship.Common.Helpers;
 
 namespace BeforeTheScholarship.Services.UserAccountService.Helpers;
 
-public static partial class ContentReader
+public static class ContentReader
 {
     public static string ReadFromFile(string fileName, string userEmail, string token)
     {

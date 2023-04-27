@@ -1,0 +1,329 @@
+﻿@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components
+@using BeforeTheScholarship.Web.Pages.Debts.Services
+@using BeforeTheScholarship.Web.Pages.Debts.Models
+@using BeforeTheScholarship.Web.Pages.Debts.Consts
+@using BeforeTheScholarship.Web.Pages.Debts.Dialogs
+@using BeforeTheScholarship.Web.Extensions
+@using FluentValidation.Results
+@using System.Text.Json
+@using BeforeTheScholarship.Web.Helpers
+
+@inject ISnackbar Snackbar
+@inject ILocalStorageService LocalStorage
+@inject IConfigurationService Configuration
+@inject IDebtService DebtService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@if(DebtsItems.Any())
+{
+    <MudContainer Class="m-4">
+        <MudItem Class="d-flex m-4 w-100 position-relative" Style="@($"color: {TextColor}")">
+            <MudText Typo="Typo.h4" Style="@($"color: {TextColor}")">All Debts</MudText>
+            <MudButton Class="p-2 position-absolute end-0 me-15"
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    Size="Size.Medium"
+                    Style="height: 50px;"
+                    @onclick="(async () => await CreateDebt())">CREATE</MudButton>
+        </MudItem>
+        <MudItem Style="@($"color: {TextColor};")">
+            <MudItem Class="d-flex w-100">
+                <MudItem>
+                    @if(DebtsItems != null)
+                    {
+                        @foreach (var debt in DebtsItems)
+                        {
+                            <MudCard Class="p-3 m-2 card-body position-relative"
+                             Style="@("border-radius: 15px; height: 290px")">
+
+                                <MudText Typo="Typo.h5" Class="card-title">Debt</MudText>
+                                <MudText Class="card-text m-2">Sum: @debt.Borrowed</MudText>
+                                <MudText Class="card-text m-2">Borrowed from: @debt.BorrowedFromWho</MudText>
+
+                                <MudItem Class="d-flex m-2">
+                                    <MudText Class="card-text m-0 me-2">Status:</MudText>
+                                    <MudText Class="m-0" Style="@($"color: {AnalyzeStatus(debt.WhenToPayback).StatusColor}")">@AnalyzeStatus(debt.WhenToPayback).StatusMessage</MudText>
+                                </MudItem>
+
+                                <MudText Class="card-text m-2">Taken:</MudText>
+
+                                <MudItem Class="d-flex">
+                                    <MudText Class="card-text m-1 p-1">from:</MudText>
+                                    <MudText Class="card-text m-1 bg-dark p-1"
+                                     Style="@($"color: {Colors.Grey.Lighten5}")">
+                                        @debt.WhenBorrowed.ToShortStringFormat()
+                                    </MudText>
+
+                                    <MudText Class="card-text m-1 p-1">to:</MudText>
+                                    <MudText Class="card-text m-1 bg-dark p-1"
+                                     Style="@($"color: {Colors.Grey.Lighten5}")">
+                                        @debt.WhenToPayback.ToShortStringFormat()
+                                    </MudText>
+                                </MudItem>
+
+                                <MudItem Class="m-2">
+                                    <MudButton Class="p-2 m-3 position-absolute bottom-0 end-0"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       @onclick="@(async () => await ManageDebt(debt.Uid))">Manage</MudButton>
+                                </MudItem>
+
+                            </MudCard>
+                        }                        
+                    }
+                </MudItem>
+                <MudItem Class="m-2 position-relative">
+                    <MudPaper Class="position-fixed"
+                          Height="600px"
+                          Width="100vh"
+                          Style="@("border-radius: 15px;")">
+                        <MudItem Class="p-4">
+                            <MudText Typo="Typo.h5">Additional information about debt</MudText>
+
+                            <ErrorListPreview Errors="Errors" ShowErrors="_showErrors"/>
+
+                            <MudItem Class="mt-2">
+                                <MudText>Sum:</MudText>
+                                <MudInput T="decimal"
+                                      Placeholder="Debt sum"
+                                      MaxLength="20"
+                                      @bind-Value="activeDebtItem.Borrowed" />
+                            </MudItem>
+
+                            <MudItem Class="mt-2">
+                                <MudText>Borrowed from: </MudText>
+                                <MudInputString Placeholder="John"
+                                            @bind-Value="activeDebtItem.BorrowedFromWho" />
+                            </MudItem>
+
+                            <MudItem Class="mt-2">
+                                <MudText>Phone: </MudText>
+                                <MudInputString Placeholder="Phone number.."
+                                            @bind-Value="phoneNumber" />
+                            </MudItem>
+
+                            <MudItem Class="mt-2">
+                                <MudText>Status: </MudText>
+                                <MudInputString Value="@statusInfo.StatusMessage"
+                                            Style="@($"color: {statusInfo.StatusColor}")"
+                                            ReadOnly="true" />
+                            </MudItem>
+
+                            <MudItem Class="mt-2">
+                                <MudDatePicker Label="When was the debt taken:"
+                                           @bind-Date="activeDebtWhenBorrowed"
+                                           ReadOnly="true" />
+                            </MudItem>
+
+                            <MudItem Class="mt-2 d-flex">
+                                <MudDatePicker Label="Date when to repay the debt:"
+                                           Class="me-2"
+                                           Placeholder="Payback date.."
+                                           Editable="true"
+                                           DisableToolbar="true"
+                                           @bind-Date="activeDebtDateWhenToPayback"
+                                           DateFormat="dd.MM.yyyy" />
+                                <MudTimePicker Label="Time when to repay the debt:"
+                                           Class="ms-2"
+                                           @bind-Time="activeDebtTimeWhenToPayback"
+                                           Editable="true" />
+                            </MudItem>
+
+                            <MudItem Class="mt-2">
+                                <MudButtonGroup Class="float-end position-absolute bottom-0 end-0 m-4"
+                                            Size="Size.Medium"
+                                            Color="Color.Secondary"
+                                            OverrideStyles="false">
+                                    <MudButton Class="m-1"
+                                           Color="Color.Info"
+                                           Variant="Variant.Outlined"
+                                           Size="Size.Medium"
+                                           @onclick="((_) => UpdateDebt(activeDebtItem.Uid))">
+                                        UPDATE
+                                    </MudButton>
+
+                                    <MudButton Class="m-1"
+                                           Color="Color.Secondary"
+                                           Variant="Variant.Outlined"
+                                           Size="Size.Medium"
+                                           @onclick="((_) => DeleteDebt(activeDebtItem.Uid))">
+                                        DELETE
+                                    </MudButton>
+                                </MudButtonGroup>
+                            </MudItem>
+                        </MudItem>
+                    </MudPaper>
+                </MudItem>
+            </MudItem>
+        </MudItem>
+    </MudContainer>
+}
+
+@code
+{
+    [Parameter]
+    public IEnumerable<DebtListItem> DebtsItems { get; set; } = new List<DebtListItem>();
+
+    private string TextColor = Colors.Grey.Darken3;
+    private string OppositeTextColor = Colors.Grey.Lighten5;
+    private StatusInfo statusInfo = new();
+
+    private DebtListItem activeDebtItem = new();
+
+    private DateTime? activeDebtWhenBorrowed;
+    private DateTime? activeDebtDateWhenToPayback;
+    private TimeSpan? activeDebtTimeWhenToPayback;
+    private string phoneNumber = string.Empty;
+
+    private UpdateDebtRequestValidator updateDebtRequestValidator = new();
+
+    private List<string>? Errors = new ();
+    private bool _showErrors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitializeTextColors();
+
+        var debt = DebtsItems.FirstOrDefault();
+
+        await ManageDebt(debt.Uid);
+    }
+
+    async Task InitializeTextColors()
+    {
+        var _darkMode = await Configuration.GetDarkMode();
+        TextColor = _darkMode ? Colors.Grey.Lighten5 : Colors.Grey.Darken3;
+        OppositeTextColor = TextColor == Colors.Grey.Lighten5 ? Colors.Grey.Darken3 : Colors.Grey.Lighten5;
+    }
+
+    static StatusInfo AnalyzeStatus(DateTimeOffset whenToPayback)
+    {
+        if (whenToPayback > DateTimeOffset.Now && whenToPayback <= DateTimeOffset.Now.AddDays(1)) // Returns "Urgently repay" status
+            return new StatusInfo
+                {
+                    StatusColor = DebtStatus.UrgentlyRepaidDebt.StatusColor,
+                    StatusMessage = DebtStatus.UrgentlyRepaidDebt.StatusMessage
+                };
+
+        if ((whenToPayback - DateTimeOffset.Now).TotalDays <= 0) // Returns "Overdue" status
+            return new StatusInfo
+                {
+                    StatusColor = DebtStatus.OverdueDebt.StatusColor,
+                    StatusMessage = DebtStatus.OverdueDebt.StatusMessage
+                };
+
+        return new StatusInfo // Returns all others debts status
+            {
+                StatusColor = DebtStatus.SimpleDebt.StatusColor,
+                StatusMessage = DebtStatus.SimpleDebt.StatusMessage
+            };
+    }
+
+    private async Task ManageDebt(Guid uid)
+    {
+        if (activeDebtItem.Uid == uid)
+            return;
+
+        activeDebtItem = DebtsItems.FirstOrDefault(x => x.Uid == uid);
+
+        statusInfo = AnalyzeStatus(activeDebtItem.WhenToPayback);
+
+        activeDebtWhenBorrowed = activeDebtItem.WhenBorrowed.DateTime.ToLocalTime();
+        activeDebtDateWhenToPayback = activeDebtItem.WhenToPayback.DateTime.ToLocalTime();
+        activeDebtTimeWhenToPayback = activeDebtItem.WhenToPayback.TimeOfDay;
+
+        phoneNumber = string.Format($"{Convert.ToUInt64(activeDebtItem.Phone):+# (###) ### ##-##}");
+    }
+
+    private async Task<UpdateDebtResponse?> UpdateDebt(Guid uid)
+    {
+        var request = await ValidateUpdateDebtModel();
+
+        if (request == null)
+            return null;
+
+        Errors = null;
+        _showErrors = !_showErrors;
+
+        var url = $"{Settings.ApiRoot}/debts/{uid}";
+
+        var result = await DebtService.SendPutQuery<UpdateDebtResponse>(url, request);
+
+        Snackbar.Add($"Debt was successfully updated!", Severity.Success);
+
+        return result;
+    }
+
+    private async Task<UpdateDebtRequest?> ValidateUpdateDebtModel()
+    {
+        // Converts chosen DateTime and TimeSpan into DateTimeOffset
+        var chosenWhenToPayback = new DateTimeOffset(
+            activeDebtDateWhenToPayback!.Value.ToUniversalTime().Add(activeDebtTimeWhenToPayback!.Value));
+
+        var request = new UpdateDebtRequest
+            {
+                Borrowed = activeDebtItem.Borrowed,
+                BorrowedFromWho = activeDebtItem.BorrowedFromWho,
+                Phone = activeDebtItem.Phone,
+                WhenToPayback = chosenWhenToPayback
+            };
+
+        var validatorResult = await updateDebtRequestValidator.ValidateAsync(request);
+
+        if (!validatorResult.IsValid)
+        {
+            Errors = validatorResult.Errors.Select(x => x.ErrorMessage).ToList();
+            _showErrors = true;
+            Snackbar.Add("Data is incorrect", Severity.Error);
+            return null;
+        }
+
+        return request;
+    }
+
+    private async Task DeleteDebt(Guid uid)
+    {
+        var url = $"{Settings.ApiRoot}/debts/{uid}";
+
+        await DebtService.SendDeleteQuery<DeleteDebtResponse>(url);
+
+        await ReloadData();
+
+        Snackbar.Add("Debt was successfully deleted!", Severity.Success);
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task CreateDebt()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions 
+        { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+
+        var dialog = await DialogService.ShowAsync<CreateDebtDialog>("Add debt", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var data = ((CreateDebtDialog)dialog.Dialog).model;
+            var studentId = await LocalStorage.GetItemAsStringAsync("studentId");
+
+            data.StudentId = LocalStorageHelper.GetStudentId(studentId);
+
+            var url = $"{Settings.ApiRoot}/debts";
+
+            await DebtService.SendPostQuery<CreateDebtResponse>(url, data);
+
+            await ReloadData();
+            
+            Snackbar.Add("Debt was successfully created", Severity.Success);
+        }
+    }
+
+    private async Task ReloadData()
+    {
+        DebtsItems = await DebtService.GetDebtsByStudentIdAsync();
+    }
+}

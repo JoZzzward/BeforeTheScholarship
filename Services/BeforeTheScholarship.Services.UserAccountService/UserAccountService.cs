@@ -60,10 +60,14 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             var user = await _userManager.FindByEmailAsync(model.Email.RemoveWhiteSpaces());
 
-            if (user != null)
+            if (user == null)
             {
-                _logger.LogError("--> User (Email: {UserEmail}) already exist.", model.Email);
-                return null;
+                user = await _userManager.FindByNameAsync(model.Email.RemoveWhiteSpaces());
+                if (user != null)
+                {
+                    _logger.LogError("--> User ({UserEmail}) with specific credentials already exist.", model.Email);
+                    return new RegisterUserAccountResponse { Error = $"User with specific credentials already exist." };
+                }
             }
 
             user = _mapper.Map<StudentUser>(model);
@@ -75,7 +79,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
                 var errorList = string.Join(", ", result.Errors.Select(s => s.Description));
 
                 _logger.LogError("--> User (Email: {UserEmail}) can not be registered. Errors: {ErrorList}", model.Email, errorList);
-                return null;
+                return new RegisterUserAccountResponse { Error = errorList };
             }
 
             await SendEmailConfirmationMail(user);
@@ -126,6 +130,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
                 return null;
 
             var response = _mapper.Map<SendConfirmationEmailResponse>(model);
+
             return response;
         }
 
@@ -145,13 +150,15 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             if (!result.Succeeded)
             {
-                _logger.LogError("--> User (Email: {UserEmail}) can not confirm his email. Errors: {ErrorList}", model.Email, result.Errors);
+                _logger.LogError("--> User (Email: {UserEmail}) can not confirm his email. Errors: {ErrorList}", 
+                    model.Email,
+                    result.Errors.Select(x => string.Join(", ", x.Description)));
                 return null;
             }
 
             var response = _mapper.Map<ConfirmationEmailResponse>(model);
 
-            _logger.LogInformation("--> User with email({UserEmail}) successfully confirmed his email.", response.Email);
+            _logger.LogInformation("--> User (Email: {UserEmail}) successfully confirmed his email.", response.Email);
 
             return response;
         }
@@ -201,7 +208,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             if (!result.Succeeded)
             {
-                _logger.LogError("--> User (Email: {UserEmail}) can not recover his password. Errors: {ErrorList}", model.Email, result.Errors);
+                _logger.LogError("--> User (Email: {UserEmail}) can not recover his password. Errors: {ErrorList}", model.Email, result.Errors.Select(x => x.Description));
                 return null;
             }
 
@@ -237,7 +244,7 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             if (!result.Succeeded)
             {
-                _logger.LogError("--> User (Email: {UserEmail}) can not change his password. Errors: {ErrorList}", model.Email, result.Errors);
+                _logger.LogError("--> User (Email: {UserEmail}) can not change his password. Errors: {ErrorList}", model.Email, result.Errors.Select(x => x.Description));
                 return null;
             }
 
@@ -263,10 +270,10 @@ namespace BeforeTheScholarship.Services.UserAccountService
             var content = ContentReader.ReadFromFile("emailConfirmation.html", user.Email, token);
 
             // Setting first letter to uppercase
-            var username = char.ToUpper(user.UserName[0]) + user.UserName.Substring(1);
+            var username = char.ToUpper(user.UserName[0]) + user.UserName[1..];
 
             // Sending email confirmation mail for current user
-            _emailSender?.SendEmail(new EmailModel()
+            _emailSender?.SendEmail(new EmailModel
             {
                 EmailTo = user.Email,
                 Subject = $"Hello, dear {username}!",

@@ -1,38 +1,41 @@
 ﻿@page "/register"
+@using Microsoft.AspNetCore.Components
+@using BeforeTheScholarship.Web.Pages.Auth.Models
+
 @layout SimpleLayout
 
 @inject IAuthService AuthService
+@inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
-<MudGrid Justify="Justify.Center" Class="pt-10">
+<PageTitle>Register</PageTitle>
+
+<MudGrid Justify="Justify.Center" class="p-4">
     <MudItem xs="7" sm="4">
-        <MudPaper Class="pa-4">
-            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <MudPaper class="p-4">
+            <EditForm Model="@registerUserAccountRequest" OnValidSubmit="OnValidSubmit">
 
                 <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-3">Register</MudText>
 
-                <MudAlert Severity="Severity.Error" Class="@(ShowErrors ? "mb-3 d-block" : "d-none")">
-                    @Error
-                    <br />
-                    @ErrorDetail
-                </MudAlert>
+                <ErrorListPreview Errors="Errors" ShowErrors=_showErrors></ErrorListPreview>
+
 
                 <MudTextField T="string"
-                              @bind-Value="model.Name" For="@(() => model.Name)"
+                              @bind-Value="registerUserAccountRequest.UserName" For="@(() => registerUserAccountRequest.UserName)"
                               Label="Name"
                               Required="true"
                               RequiredError="Email is required!"
                               HelperText="Input your name"/>
 
                 <MudTextField T="string"
-                              @bind-Value="model.Email" For="@(() => model.Email)"
+                              @bind-Value="registerUserAccountRequest.Email" For="@(() => registerUserAccountRequest.Email)"
                               Label="Email"
                               Required="true"
                               RequiredError="Email is required!"
                               HelperText="Input your email"
                               Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
 
-                <MudTextField @bind-Value="model.Password" For="@(() => model.Password)"
+                <MudTextField @bind-Value="registerUserAccountRequest.Password" For="@(() => registerUserAccountRequest.Password)"
                               Label="Password"
                               HelperText="Input your password"
                               InputType="@PasswordInput"
@@ -42,7 +45,7 @@
                               RequiredError="Password is required!"
                               OnAdornmentClick="TogglePasswordVisibility" />
 
-                <MudTextField @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)"
+                <MudTextField @bind-Value="registerUserAccountRequest.ConfirmPassword" For="@(() => registerUserAccountRequest.ConfirmPassword)"
                               Label="Confirm password"
                               HelperText="Repeat your password"
                               InputType="@ConfirmPasswordInput"
@@ -52,7 +55,7 @@
                               RequiredError="Password confirm is required!"
                               OnAdornmentClick="ToggleConfirmPasswordVisibility" />
 
-                <div class="d-flex justify-space-between p-4">
+                <div class="d-flex justify-content-between p-4">
                     <MudButton Variant="Variant.Filled"
                            Color="Color.Primary"
                            Size="Size.Large"
@@ -69,13 +72,9 @@
 @code {
     MudForm form;
 
-    private RegisterModel model = new RegisterModel()
-        {
-            Name = "Kirill",
-            Email = "jozzzwardtm@mail.ru",
-            Password = "123123123",
-            ConfirmPassword = "1231231233"
-        };
+    private RegisterUserAccountRequest registerUserAccountRequest = new();
+
+    private readonly RegisterUserAccountRequestValidator _registerUserAccountRequestValidator = new();
 
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
@@ -85,69 +84,51 @@
     InputType ConfirmPasswordInput = InputType.Password;
     string ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-    private bool ShowErrors;
-    private string Error;
-    private string ErrorDetail;
+    private List<string>? Errors = new();
+    private bool _showErrors;
 
     void TogglePasswordVisibility()
     {
-        if (PasswordVisibility)
-        {
-            PasswordVisibility = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
-        }
-        else
-        {
-            PasswordVisibility = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
-        }
+        ToggleVisibility(ref PasswordVisibility, ref PasswordInputIcon, ref PasswordInput);
     }
 
     void ToggleConfirmPasswordVisibility()
     {
-        if (ConfirmPasswordVisibility)
-        {
-            ConfirmPasswordVisibility = false;
-            ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            ConfirmPasswordInput = InputType.Password;
-        }
-        else
-        {
-            ConfirmPasswordVisibility = true;
-            ConfirmPasswordInputIcon = Icons.Material.Filled.Visibility;
-            ConfirmPasswordInput = InputType.Text;
-        }
+        ToggleVisibility(ref ConfirmPasswordVisibility, ref ConfirmPasswordInputIcon, ref ConfirmPasswordInput);
+    }
+
+    static void ToggleVisibility(ref bool visibility, ref string icon, ref InputType inputType)
+    {
+        visibility = !visibility;
+        icon = visibility ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
+        inputType = visibility ? InputType.Text : InputType.Password;
     }
 
     private async Task OnValidSubmit()
     {
-        ShowErrors = false;
-        Error = "";
-        ErrorDetail = "";
+        var validatorResult = await _registerUserAccountRequestValidator.ValidateAsync(registerUserAccountRequest);
 
-        Console.WriteLine(model.ConfirmPassword + "   " + model.Password);
-
-        if (model.ConfirmPassword != model.Password)
+        if (!validatorResult.IsValid || registerUserAccountRequest is null)
         {
-            Error = "Confirm your password";
-            ErrorDetail = "Password and confirm password must be equals!";
-            ShowErrors = true;
+            Errors = validatorResult.Errors.Select(x => x.ErrorMessage).ToList();
+            _showErrors = true;
+            Snackbar.Add("Incorrect email or password", Severity.Error);
+
             return;
         }
 
-        var result = await AuthService.Register(model);
+        _showErrors = false;
+        Errors = new List<string>();
 
-        if (result.ErrorDescription.Count() == 0)
+        var result = await AuthService.Register(registerUserAccountRequest);
+
+        if (result.Email == null)
         {
-            NavigationManager.NavigateTo("/");
+            Errors.Add(result.Error);
+            _showErrors = true;
+            return;
         }
-        else
-        {
-            Error = result.Error;
-            ErrorDetail = string.Join("\n ", result.ErrorDescription);
-            ShowErrors = true;
-        }
+
+        NavigationManager.NavigateTo("/login");
     }
 }

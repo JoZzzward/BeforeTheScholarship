@@ -1,0 +1,17 @@
+﻿<MudAlert Severity="Severity.Error" Class="@(ShowErrors ? "mb-3 d-block" : "d-none")">
+    @if (Errors is not null)
+    {
+        @foreach (var error in Errors)
+        {
+            @error
+        }
+    }
+</MudAlert>
+
+@code {
+    [Parameter]
+    public IEnumerable<string> Errors { get; set; } = new List<string>();
+
+    [Parameter]
+    public bool ShowErrors { get; set; } = false;
+}

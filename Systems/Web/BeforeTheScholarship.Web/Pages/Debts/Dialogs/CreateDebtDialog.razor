@@ -1,0 +1,59 @@
+﻿@using BeforeTheScholarship.Web.Pages.Debts.Models
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@model" @ref="form" Validation="@(modelValidator.ValidateValue)">
+            <MudGrid>
+                <MudItem xs="12" Class="d-flex">
+                    <MudTextField Label="Sum" 
+                                  Class="me-2"
+                                  @bind-Value="model.Borrowed"
+                                  For="@(() => model.Borrowed)"
+                                  Required="true"
+                                  RequiredError="Sum is required!">
+                    </MudTextField>
+                    <MudTextField Label="Borrowed from who" 
+                                  Class="ms-2"
+                                  @bind-Value="model.BorrowedFromWho"
+                                  For="@(() => model.BorrowedFromWho)"
+                                  Required="true"
+                                  RequiredError="Borrowed from who field is required!">
+                    </MudTextField>
+                </MudItem>
+                <MudItem xs="12" Class="d-flex px-3">
+                    <MudTextField Label="Phone number" @bind-Value="model.Phone"
+                                  For="@(() => model.Phone)">
+                    </MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton @onclick="(Cancel)">Cancel</MudButton>
+        <MudButton Color="Color.Primary" @onclick="(Submit)">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; } = default!;
+
+    [CascadingParameter]
+    IEnumerable<DebtListItem> DebtsItems { get; set; }
+
+    protected MudForm? form;
+
+    public CreateDebtRequest model = new();
+    private CreateDebtRequestValidator modelValidator = new();
+
+    protected async Task Submit()
+    {
+        await form.Validate();
+
+        if (form.IsValid)
+            MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    protected void Cancel() => MudDialog.Cancel();
+}

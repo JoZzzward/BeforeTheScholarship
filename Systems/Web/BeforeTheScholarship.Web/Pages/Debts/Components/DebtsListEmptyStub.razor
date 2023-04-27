@@ -1,0 +1,93 @@
+﻿@using BeforeTheScholarship.Web.Helpers;
+@using BeforeTheScholarship.Web.Pages.Debts.Dialogs;
+@using BeforeTheScholarship.Web.Pages.Debts.Models;
+@using BeforeTheScholarship.Web.Pages.Debts.Services;
+@using Blazored.LocalStorage;
+
+@inject ISnackbar Snackbar
+@inject ILocalStorageService LocalStorage
+@inject IConfigurationService Configuration
+@inject IDebtService DebtService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<MudContainer Class="m-4">
+    <MudItem Class="d-flex m-4 w-100 position-relative" Style="@($"color: {TextColor}")">
+        <MudText Typo="Typo.h4" Style="@($"color: {TextColor}")">All Debts</MudText>
+        <MudButton Class="p-2 position-absolute end-0 me-15"
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    Size="Size.Medium"
+                    Style="height: 50px;"
+                    @onclick="(async () => await CreateDebt())">CREATE</MudButton>
+    </MudItem>
+    <MudText Typo="Typo.h6" 
+        Style="@($"color: {TextColor}")">
+            Your debts storage is empty!
+        </MudText>
+    <MudItem Class="w-25 m-3" Style="height: 290px;">
+        <MudCard>
+            <MudCardHeader Class="p-0 ps-4">
+                <CardHeaderContent>
+                    <MudSkeleton Animation="Animation.Wave" Width="20%" Height="50px;"/>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @for (var i = 0; i < 4; i++)
+                {
+                    <MudSkeleton Animation="Animation.Wave" Class="@((i != 0) ? "mt-2" : "")" />
+                }
+            </MudCardContent>
+            <MudCardContent Class="d-flex">
+                <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                <MudSpacer />
+                <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                <MudSpacer />
+                <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                <MudSpacer />
+                <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                <MudSpacer />
+            </MudCardContent>
+            <MudCardContent Class="p-0 ps-4 pb-2">
+                <MudSkeleton Animation="Animation.Wave" Width="30%" Height="50px" />
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+</MudContainer>
+
+@code{
+    private string TextColor = Colors.Grey.Darken3;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var _darkMode = await Configuration.GetDarkMode();
+        TextColor = _darkMode ? Colors.Grey.Lighten5 : Colors.Grey.Darken3;
+    }
+
+    private async Task CreateDebt()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions
+            { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+
+        var dialog = await DialogService.ShowAsync<CreateDebtDialog>("Add debt", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var data = ((CreateDebtDialog)dialog.Dialog).model;
+            var studentId = await LocalStorage.GetItemAsStringAsync("studentId");
+
+            data.StudentId = LocalStorageHelper.GetStudentId(studentId);
+
+            var url = $"{Settings.ApiRoot}/debts";
+
+            await DebtService.SendPostQuery<CreateDebtResponse>(url, data);
+
+            Snackbar.Add("Debt was successfully created", Severity.Success);
+            NavigationManager.NavigateTo("/", true);
+        }
+    }
+}

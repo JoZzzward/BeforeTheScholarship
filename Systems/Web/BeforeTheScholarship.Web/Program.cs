@@ -1,6 +1,4 @@
 using BeforeTheScholarship.Web;
-using BeforeTheScholarship.Web.Helpers;
-using BeforeTheScholarship.Web.Pages.Auth;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -19,12 +17,8 @@ services.AddMudServices();
 
 services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-services.AddScoped<IQuerySender, QuerySender>();
-
 services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
-services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<IConfigurationService, ConfigurationService>();
-
 services.RegisterClientServices();
 
 await builder.Build().RunAsync();

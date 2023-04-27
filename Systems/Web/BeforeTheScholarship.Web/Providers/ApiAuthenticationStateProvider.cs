@@ -41,6 +41,7 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
         var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
         var authState = Task.FromResult(new AuthenticationState(anonymousUser));
+        _localStorage.RemoveItemAsync("studentId");
         NotifyAuthenticationStateChanged(authState);
     }
 

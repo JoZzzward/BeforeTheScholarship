@@ -28,15 +28,16 @@ public static class IS4Configuration
 
         services.AddIdentityServer()
             .AddAspNetIdentity<StudentUser>()
-                .AddInMemoryClients(AppApiClients.Get(services.BuildServiceProvider()))
-                .AddInMemoryIdentityResources(AppIdentityResources.IdentityResources)
+            .AddResourceOwnerValidator<ResourceOwnerPasswordValidator<StudentUser>>()
+            .AddInMemoryClients(AppApiClients.Get(services.BuildServiceProvider()))
+            .AddInMemoryIdentityResources(AppIdentityResources.IdentityResources)
 
-                .AddInMemoryApiResources(AppApiResources.ApiResources)
-                .AddInMemoryApiScopes(AppApiScopes.ApiScopes)
+            .AddInMemoryApiResources(AppApiResources.ApiResources)
+            .AddInMemoryApiScopes(AppApiScopes.ApiScopes)
 
-                //.AddTestUsers(AppTestUsers.TestUsers)
+            //.AddTestUsers(AppTestUsers.TestUsers)
 
-                .AddDeveloperSigningCredential();
+            .AddDeveloperSigningCredential();
 
         return services;
     }

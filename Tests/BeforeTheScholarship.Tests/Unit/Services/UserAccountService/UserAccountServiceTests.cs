@@ -47,6 +47,7 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
         {
             // Arrange
             UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
+            UserManagerInitializer.Setup.SetupFindByNameAsyncReturnsData();
             UserManagerInitializer.Setup.SetupCreateAsync();
 
             var model = new RegisterUserAccountModel

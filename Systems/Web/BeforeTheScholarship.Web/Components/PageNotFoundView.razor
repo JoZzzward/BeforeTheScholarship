@@ -1,0 +1,20 @@
+﻿<PageTitle>Not found</PageTitle>
+
+<LayoutView Layout="@typeof(SimpleLayout)">
+    <MudContainer Class="d-flex justify-content-center" Style="height: 75vh;">
+        <MudCard Class="p-4 my-auto mx-auto justify-content-center" Style="border-radius: 15px; width: 800px">
+            <MudText Typo="Typo.h3"
+                     Style="@($"color: {Colors.Grey.Lighten2}")"
+                     Class="m-5">
+                Sorry, there's nothing at this address.
+            </MudText>
+            <MudButton Href="/debts"
+                       Style="@($"color: {Colors.Grey.Lighten4}; font-size: 20px")"
+                       Color="Color.Dark"
+                       Class="float-end m-5"
+                       Variant="Variant.Filled">
+                GO BACK
+            </MudButton>
+        </MudCard>
+    </MudContainer>
+</LayoutView>

@@ -1,0 +1,35 @@
+﻿@page "/debts/overdue"
+@using BeforeTheScholarship.Web.Pages.Debts.Services
+@using BeforeTheScholarship.Web.Pages.Debts.Models
+@using BeforeTheScholarship.Web.Pages.Debts.Components
+
+@layout MainLayout
+
+@attribute [Authorize]
+
+@inject IDebtService DebtService
+
+<PageTitle>@Header</PageTitle>
+
+<DebtsHeaderBar Header="@Header" />
+
+@if (_debtsItems != null && _debtsItems.Any())
+{
+    <DebtsListPreview DebtsItems="_debtsItems"/>
+}
+else
+{
+    <DebtsListEmptyStub/>
+}
+
+@code {
+
+    IEnumerable<DebtListItem>? _debtsItems = new List<DebtListItem>();
+    
+    private const string Header = "All Overdue Debts";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _debtsItems = await DebtService.GetDebtsByStudentIdAsync("overdue/");
+    }
+}

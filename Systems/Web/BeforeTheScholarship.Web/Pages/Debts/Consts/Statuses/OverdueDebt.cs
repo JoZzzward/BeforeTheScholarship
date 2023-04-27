@@ -2,7 +2,7 @@
 {
     public class OverdueDebt
     {
-        public string StatusMessage = "AllGood";
-        public string StatusColor = "green";
+        public string StatusMessage = "Overdue";
+        public string StatusColor = "red";
     }
 }

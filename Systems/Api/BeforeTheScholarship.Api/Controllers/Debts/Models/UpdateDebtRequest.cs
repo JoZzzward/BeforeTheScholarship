@@ -35,15 +35,11 @@ public class UpdateDebtRequestValidator : AbstractValidator<UpdateDebtRequest>
             .WithMessage("Phone number must contain only numbers.");
     }
 
-    // Check is Phone field contains only numbers
-    public static bool CorrectPhone(string number)
-    {
-        if (string.IsNullOrEmpty(number))
-            return true;
-
-        return long.TryParse(number, out _);
-    }
+    // Check is Phone field contains only numbers. Returns true if null or empty
+    private static bool CorrectPhone(string number)
+        => string.IsNullOrEmpty(number) || long.TryParse(number, out _);
 }
+
 public class UpdateDebtsRequestProfile : Profile
 {
     public UpdateDebtsRequestProfile()

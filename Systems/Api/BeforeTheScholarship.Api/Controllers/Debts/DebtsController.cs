@@ -23,9 +23,6 @@ public class DebtsController : ControllerBase
     private readonly ILogger<DebtsController> _logger;
     private readonly IMapper _mapper;
 
-    /// <summary>
-    /// Debts constructor that implements services
-    /// </summary>
     public DebtsController(
         IDebtService debtService,
         ILogger<DebtsController> logger,
@@ -38,7 +35,7 @@ public class DebtsController : ControllerBase
     }
 
     /// <summary>
-    /// HttpGet - Gettings debts from database
+    /// Returns debts from database
     /// </summary>
     /// <returns></returns>
     [ProducesResponseType(typeof(IEnumerable<DebtResponse>), 200)]

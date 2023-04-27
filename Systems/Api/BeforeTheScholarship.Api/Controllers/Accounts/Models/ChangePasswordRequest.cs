@@ -31,6 +31,7 @@ public class ChangePasswordRequestValidator : AbstractValidator<ChangePasswordRe
             .WithMessage("Password must have minimum 1 lowercase letter");
     }
 }
+
 public class ChangePasswordRequestProfile : Profile
 {
     public ChangePasswordRequestProfile()
