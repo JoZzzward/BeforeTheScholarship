@@ -53,9 +53,12 @@ After all off this steps project will run currectly.
 ---
 # XUnit and Integration tests
 
-1. XUnit tests passing all just in one time launch.
+1. Disable ```DbInitializer.Execute(app.Services);``` in ```BeforeTheScholarship.Api``` project.
+> Just comment this it's enough.
 
-2. Integration tests. 
+2. XUnit tests passing all just in one time launch.
+
+3. Integration tests. 
     Advise: Ideally integration tests must be launched one by one. In other case you may get unpredictable errors.
 
 ---
