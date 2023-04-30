@@ -49,7 +49,10 @@
                     <MudItem Class="mt-2">
                         <MudText>Phone number: </MudText>
                         <MudInputString Placeholder="Phone number:"
-                                    @bind-Value="_studentUser.PhoneNumber" />
+                                    @bind-Value="_studentUser.PhoneNumber" 
+                                    HelperText="Phone is required"
+                                    Required="true"
+                                    RequiredError="Phone number is required"/>
                     </MudItem>
 
                     <MudItem Class="mt-2">

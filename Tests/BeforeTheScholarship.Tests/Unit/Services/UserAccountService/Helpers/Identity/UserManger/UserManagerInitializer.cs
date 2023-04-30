@@ -46,8 +46,6 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService.Helpers.Id
 
             public static void SetupFindByNameAsyncReturnsNull()
             {
-                var student = _userAccountServiceDataHelper.GenerateStudentUserMoqModel();
-
                 _userManager.FindByNameAsync(Arg.Any<string>()).ReturnsNull();
             }
 

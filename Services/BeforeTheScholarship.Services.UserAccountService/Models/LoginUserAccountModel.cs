@@ -14,7 +14,6 @@ public class LoginUserAccountModelValidator : AbstractValidator<LoginUserAccount
     public LoginUserAccountModelValidator()
     {
         RuleFor(x => x.Email)
-            .EmailAddress().WithMessage("Incorrect email.")
             .MaximumLength(50).WithMessage("Email length must be less than 50");
 
         RuleFor(x => x.Password)

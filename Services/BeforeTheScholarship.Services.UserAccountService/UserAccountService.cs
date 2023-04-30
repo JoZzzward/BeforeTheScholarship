@@ -60,14 +60,12 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             var user = await _userManager.FindByEmailAsync(model.Email.RemoveWhiteSpaces());
 
-            if (user == null)
+            user ??= await _userManager.FindByNameAsync(model.Email.RemoveWhiteSpaces());
+
+            if (user != null)
             {
-                user = await _userManager.FindByNameAsync(model.Email.RemoveWhiteSpaces());
-                if (user != null)
-                {
-                    _logger.LogError("--> User ({UserEmail}) with specific credentials already exist.", model.Email);
-                    return new RegisterUserAccountResponse { Error = $"User with specific credentials already exist." };
-                }
+                _logger.LogError("--> User ({UserEmail}) with specific credentials already exist.", model.Email);
+                return new RegisterUserAccountResponse { Error = $"User with specific credentials already exist." };
             }
 
             user = _mapper.Map<StudentUser>(model);

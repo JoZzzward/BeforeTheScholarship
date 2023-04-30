@@ -48,7 +48,6 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             // Arrange
             UserManagerInitializer.Setup.SetupFindByEmailAsyncReturnsData();
             UserManagerInitializer.Setup.SetupFindByNameAsyncReturnsData();
-            UserManagerInitializer.Setup.SetupCreateAsync();
 
             var model = new RegisterUserAccountModel
             {
@@ -62,7 +61,9 @@ namespace BeforeTheScholarship.Tests.Unit.Services.UserAccountService
             var result = await _userAccountService.RegisterUser(model);
 
             // Assert
-            result.Should().BeNull();
+            result.Should().NotBeNull();
+            result.Email.Should().BeNull();
+            result.Error.Should().NotBeNull();
         }
 
         [Fact]

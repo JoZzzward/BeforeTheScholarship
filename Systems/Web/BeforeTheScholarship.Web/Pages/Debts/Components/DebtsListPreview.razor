@@ -317,7 +317,7 @@
             await DebtService.SendPostQuery<CreateDebtResponse>(url, data);
 
             await ReloadData();
-            
+
             Snackbar.Add("Debt was successfully created", Severity.Success);
         }
     }
@@ -325,5 +325,6 @@
     private async Task ReloadData()
     {
         DebtsItems = await DebtService.GetDebtsByStudentIdAsync();
+        StateHasChanged();
     }
 }

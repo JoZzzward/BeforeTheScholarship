@@ -37,10 +37,13 @@
             return;
         }
 
-        await AuthService.ConfirmEmail(model);
+        var response = await AuthService.ConfirmEmail(model);
         
-        Snackbar.Add("Email was confirmed!", Severity.Success);
+        if (response.Email is not null)
+        {
+            Snackbar.Add("Email was confirmed!", Severity.Success);
 
-        NavigationManager.NavigateTo("/profile");
+            NavigationManager.NavigateTo("/profile");
+        }
     }
 }
