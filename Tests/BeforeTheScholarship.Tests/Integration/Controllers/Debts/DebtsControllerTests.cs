@@ -141,7 +141,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Debts
         public async Task DeleteDebt_WithData_Returns200Response()
         {
             // Arrange
-            var url = $"debts/{ExistedDebtConsts.SecondUid}";
+            var url = $"debts/{ExistedDebtConsts.ThirdUid}";
 
             // Act
             var response = await _client.DeleteAsync(url);

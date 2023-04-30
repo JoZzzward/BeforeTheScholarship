@@ -26,17 +26,12 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
             services.InitializeDatabase();
         }
 
-        private static void CreateStudentUser(this IServiceCollection services)
+        private static void CreateStudentUser(this IServiceCollection services, StudentUser user, string password)
         {
             var scopeProvider = services.BuildServiceProvider();
             var userManager = scopeProvider.GetRequiredService<UserManager<StudentUser>>();
 
-            userManager.CreateAsync(new StudentUser
-            {
-                Id = StudentConsts.Id,
-                UserName = StudentConsts.UserName,
-                Email = StudentConsts.Email
-            }, StudentConsts.Password);
+            userManager.CreateAsync(user, password);
         }
 
         private static void InitializeDatabase(this IServiceCollection services)
@@ -50,9 +45,23 @@ namespace BeforeTheScholarship.Tests.Integration.Core.Setup
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
 
-            services.CreateStudentUser();
+            services.CreateStudentUser(new StudentUser
+            {
+                Id = StudentConsts.Id,
+                UserName = StudentConsts.UserName,
+                Email = StudentConsts.Email
+            }, StudentConsts.Password);
 
             db.Debts.AddRange(debts);
+            db.SaveChanges();
+
+            services.CreateStudentUser(new StudentUser
+            {
+                Id = StudentConsts.SecondId,
+                UserName = StudentConsts.SecondUserName,
+                Email = StudentConsts.SecondEmail
+            }, StudentConsts.SecondPassword);
+
             db.SaveChanges();
         }
     }

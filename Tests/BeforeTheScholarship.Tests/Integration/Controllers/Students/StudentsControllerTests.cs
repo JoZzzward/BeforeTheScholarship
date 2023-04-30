@@ -80,7 +80,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Students
         public async Task DeleteStudent_WithData_Returns200Response()
         {
             // Arrange
-            var url = $"students/{StudentConsts.Id}";
+            var url = $"students/{StudentConsts.SecondId}";
 
             // Act
             var response = await _client.DeleteAsync(url);
@@ -89,7 +89,7 @@ namespace BeforeTheScholarship.Tests.Integration.Controllers.Students
             // Asserts
             response.EnsureSuccessStatusCode();
             content.Should().NotBeNull();
-            content.Id.Should().Be(StudentConsts.Id);
+            content.Id.Should().Be(StudentConsts.SecondId);
         }
     }
 }
