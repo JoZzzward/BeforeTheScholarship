@@ -62,14 +62,6 @@ After all off this steps project will run currectly.
 
 3. Integration tests. 
     Advise: Ideally integration tests must be launched one by one. In other case you may get unpredictable errors.
-            Some tests may conflict with others and they better be launched separately.
-```
-Example:
-
-Tests contain only 1 user.
-
-So if DeleteUser_Test deletes him, then UpdateUser_Test won't find that user and will throw an error.
-```
 
 ---
 # How to communicate with Blazor WebAssembly Web:
