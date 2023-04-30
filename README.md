@@ -16,15 +16,15 @@ To get started with Blazor, follow the instructions with [this link](https://aka
 If you not familiar with Docker, follow [this link](https://docs.docker.com/get-docker/) for review and download.
 
 ---
-
 # Shared information 
 
 1. File ```clientsecret.txt``` contains ClientSecret for IdentityServer4 Configuration.
 
 2. File ```emailusername.txt``` should contain the email from which all letters to the site will come.
-Test email is: jozzzwardtm@mail.ru
+
 3. File ```emailpassword.txt``` should contain the specific password for sending out messages.
-Test password is: vNRJB1qegA5WnpfKDMX8
+
+>Tested information included in specific files.
 
 > Email and password must be presented in first line without any spaces or new lines
 
@@ -51,7 +51,6 @@ After all off this steps project will run currectly.
     * ClientSecret specified in ```clientsecret.txt```
 
 ---
-
 # XUnit and Integration tests
 
 1. XUnit tests passing all just in one time launch.
@@ -65,3 +64,5 @@ After all off this steps project will run currectly.
 1. Register in application by username or email and password and than you can sign in and do your work.
 
 2. Initialize ```emailusername.txt``` and ```emailpassword.txt``` files correct by using test data from <Shared information> module 
+
+---
