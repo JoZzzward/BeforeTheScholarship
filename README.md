@@ -32,12 +32,14 @@ If you not familiar with Docker, follow [this link](https://docs.docker.com/get-
 # How to launch the project
 
 1. Fill ```emailusername.txt``` with information about the email from which all letters to the site will come.
+> Email must be ```some-work-testing@mail.ru``` or other if you prefer.
 
 2. File ```emailpassword.txt``` with information about the specific password for sending out messages.
+> Email password must be ```5DMVKn6tTJaBMD1df5he``` or other if you prefer.
 
-3. Build the project with ```docker-compose build``` command.
+3. Open main project folder in terminal and than build the project with ```docker-compose build``` command.
 
-4. Open main project folder in terminal and than run ```docker-compose up``` command.
+4. Run project by ```docker-compose up``` command.
 
 After all off this steps project will run currectly.
 
@@ -53,19 +55,29 @@ After all off this steps project will run currectly.
 ---
 # XUnit and Integration tests
 
-1. Disable ```DbInitializer.Execute(app.Services);``` in ```BeforeTheScholarship.Api``` project.
+1. Make sure ```DbInitializer.Execute(app.Services);``` in ```BeforeTheScholarship.Api``` project is disabled otherwise integration tests will not run.
 > Just comment this it's enough.
 
 2. XUnit tests passing all just in one time launch.
 
 3. Integration tests. 
     Advise: Ideally integration tests must be launched one by one. In other case you may get unpredictable errors.
+            Some tests may conflict with others and they better be launched separately.
+```
+Example:
+
+Tests contain only 1 user.
+
+So if DeleteUser_Test deletes him, then UpdateUser_Test won't find that user and will throw an error.
+```
 
 ---
-# How to communicate with Blazor WebAssembly Web UI component:
+# How to communicate with Blazor WebAssembly Web:
+
+Url: [http://localhost:7002/](http://localhost:7002/)
 
 1. Register in application by username or email and password and than you can sign in and do your work.
 
-2. Initialize ```emailusername.txt``` and ```emailpassword.txt``` files correct by using test data from <Shared information> module 
+2. Make sure ```emailusername.txt``` and ```emailpassword.txt``` files are not empty.
 
 ---
