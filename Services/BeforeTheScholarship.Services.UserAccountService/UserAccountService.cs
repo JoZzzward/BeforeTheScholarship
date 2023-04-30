@@ -99,8 +99,13 @@ namespace BeforeTheScholarship.Services.UserAccountService
 
             if (user is null)
             {
-                _logger.LogError("--> User (Email: {UserEmail}) not found while login in.", model.Email);
-                return null;
+                user = await _userManager.FindByNameAsync(model.Email);
+
+                if (user is null)
+                {
+                    _logger.LogError("--> User (Email: {UserEmail}) not found while login in.", model.Email);
+                    return null;
+                }
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
