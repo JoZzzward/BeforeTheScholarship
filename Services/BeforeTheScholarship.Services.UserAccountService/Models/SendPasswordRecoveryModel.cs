@@ -12,8 +12,7 @@ public class PasswordRecoveryMailModelValidator : AbstractValidator<SendPassword
     public PasswordRecoveryMailModelValidator()
     {
         RuleFor(x => x.Email)
-            .EmailAddress()
-            .WithMessage("Incorrect email.")
+            .EmailAddress().WithMessage("Incorrect email.")
             .MaximumLength(50).WithMessage("Email length must be less than 50");
     }
 }

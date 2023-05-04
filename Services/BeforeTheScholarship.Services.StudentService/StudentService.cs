@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Common.Exceptions;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Services.StudentService.Models;
@@ -50,11 +51,7 @@ public class StudentService : IStudentService
             .StudentUsers
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (student is null)
-        {
-            _logger.LogError("Student (Id: {StudentId}) was not found!", id);
-            return null;
-        }
+        ProcessException.ThrowIf(() => student is null, $"Student (Id: {id}) was not found!");
 
         var response = _mapper.Map<StudentResponse>(student);
 
@@ -73,11 +70,7 @@ public class StudentService : IStudentService
             .StudentUsers
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (student is null)
-        {
-            _logger.LogError("Student (Id: {StudentId}) was not found!", id);
-            return null;
-        }
+        ProcessException.ThrowIf(() => student is null, $"Student (Id: {id}) was not found!");
 
         student = _mapper.Map(model, student);
 
@@ -99,11 +92,7 @@ public class StudentService : IStudentService
             .StudentUsers
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (student is null)
-        {
-            _logger.LogError("Student (Id: {StudentId}) was not found!", id);
-            return null;
-        }
+        ProcessException.ThrowIf(() => student is null, $"Student (Id: {id}) was not found!");
 
         context.StudentUsers.Remove(student);
         context.SaveChanges();

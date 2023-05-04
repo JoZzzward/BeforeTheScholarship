@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BeforeTheScholarship.Common.Exceptions;
 using BeforeTheScholarship.Common.Extensions;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
@@ -40,9 +41,8 @@ public abstract class Manager
 
     protected async Task CreateSendDebtEmailAction(Debts data)
     {
-        // TODO: Put delay time in configuration file
         var delay = (data.WhenToPayback - data.WhenToPayback.AddDays(-1)).TotalMilliseconds;
-
+        Console.WriteLine(delay);
         var debt = await _studentService.GetStudentById(data.StudentId);
 
         var content = ContentReader.ReadFromFile("debtNotification.html", debt.UserName, data);

@@ -13,8 +13,7 @@ public class SendConfirmationEmailModelValidator : AbstractValidator<SendConfirm
     public SendConfirmationEmailModelValidator()
     {
         RuleFor(x => x.Email)
-            .EmailAddress()
-            .WithMessage("Incorrect email.")
+            .EmailAddress().WithMessage("Incorrect email.")
             .MaximumLength(50).WithMessage("Email length must be less than 50");
     }
 }

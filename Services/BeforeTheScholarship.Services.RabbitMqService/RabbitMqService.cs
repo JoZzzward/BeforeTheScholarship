@@ -117,30 +117,23 @@ public class RabbitMqService : IRabbitMqService, IDisposable
                 NetworkRecoveryInterval = TimeSpan.FromSeconds(5)
             };
 
-            var retriesCount = 1;
-            while (retriesCount <= 15)
+            for (int retriesCount = 1; retriesCount <= 15; retriesCount++)
+            {
                 try
                 {
                     _logger.LogInformation("Trying connect to RabbitMQ. Retries count: {RetriesCount}", retriesCount);
-                    if (connection == null)
-                    {
-                        connection = factory.CreateConnection();
-                    }
 
-                    if (channel == null)
-                    {
-                        channel = connection.CreateModel();
-                        channel.BasicQos(0, 1, false);
-                    }
+                    connection ??= factory.CreateConnection();
+                    channel ??= connection.CreateModel();
+                    channel.BasicQos(0, 1, false);
                     DeclareExchange();
                     break;
                 }
                 catch (BrokerUnreachableException)
                 {
                     Task.Delay(1000).Wait();
-
-                    retriesCount++;
                 }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BeforeTheScholarship.Common.CacheConstKeys;
+using BeforeTheScholarship.Common.Exceptions;
 using BeforeTheScholarship.Common.Validation;
 using BeforeTheScholarship.Context;
 using BeforeTheScholarship.Entities;
@@ -76,16 +77,18 @@ public class DebtService : Manager, IDebtService
             _logger.LogInformation("--> Debts(Count: {DebtsCount}) was returned from cache", cachedDataExists.Count());
             return cachedDataExists;
         }
+
         using var context = await _dbContext.CreateDbContextAsync();
+
+        var student = await context.StudentUsers.FirstOrDefaultAsync(x => x.Id == studentId);
+
+        ProcessException.ThrowIf(() => student is null, $"Student (Id: {studentId}) was not found!");
 
         var debt = context
             .Debts
             .AsQueryable();
 
         var response = (await debt.ToListAsync()).Where(x => x.StudentId == studentId).Select(_mapper.Map<DebtResponse>);
-
-        if (response is null)
-            return null;
 
         await _cacheService.SetStringAsync(DebtsCacheKeys.DebtsWithSpecifiedStudentKey, response);
 
@@ -99,6 +102,10 @@ public class DebtService : Manager, IDebtService
         _addDebtResponseValidator.CheckValidation(model);
 
         using var context = await _dbContext.CreateDbContextAsync();
+
+        var student = await context.StudentUsers.FirstOrDefaultAsync(x => x.Id == model.StudentId);
+
+        ProcessException.ThrowIf(() => student is null, $"Student (Id: {model.StudentId}) was not found!");
 
         var data = _mapper.Map<Debts>(model);
 
@@ -125,11 +132,7 @@ public class DebtService : Manager, IDebtService
             .Debts
             .FirstOrDefaultAsync(x => x.Uid == uid);
 
-        if (debt is null)
-        {
-            _logger.LogError("--> Student(Id: {StudentId}) was not found", uid);
-            return null;
-        }
+        ProcessException.ThrowIf(() => debt is null, $"Debt (Id: {uid}) was not found!");
 
         debt = _mapper.Map(model, debt);
 
@@ -147,19 +150,15 @@ public class DebtService : Manager, IDebtService
         return response;
     }
 
-    public async Task<DeleteDebtResponse?> DeleteDebt(Guid? id)
+    public async Task<DeleteDebtResponse?> DeleteDebt(Guid? uid)
     {
         await using var context = await _dbContext.CreateDbContextAsync();
 
         var debt = await context
             .Debts
-            .FirstOrDefaultAsync(x => x.Uid == id);
+            .FirstOrDefaultAsync(x => x.Uid == uid);
 
-        if (debt is null)
-        {
-            _logger.LogError("--> Student(Id: {StudentId}) was not found", id);
-            return null;
-        }
+        ProcessException.ThrowIf(() => debt is null, $"Debt (Id: {uid}) was not found!");
 
         context.Debts.Remove(debt);
         await context.SaveChangesAsync();
@@ -168,13 +167,19 @@ public class DebtService : Manager, IDebtService
 
         var response = _mapper.Map<DeleteDebtResponse>(debt);
         
-        _logger.LogInformation("--> Debt (Id: {DebtId}) was successfully removed.", id);
+        _logger.LogInformation("--> Debt (Id: {DebtId}) was successfully removed.", uid);
 
         return response;
     }
 
     public async Task<IEnumerable<DebtResponse>?> GetUrgentlyRepaidDebts(Guid? studentId)
     {
+        using var context = await _dbContext.CreateDbContextAsync();
+
+        var student = await context.StudentUsers.FirstOrDefaultAsync(x => x.Id == studentId);
+
+        ProcessException.ThrowIf(() => student is null, $"Student (Id: {studentId}) was not found!");
+
         var cachedDataExists = await ReturnCachedDebts(DebtsCacheKeys.UrgentlyRepaidDebtsKey);
 
         if (cachedDataExists != null)
@@ -186,7 +191,10 @@ public class DebtService : Manager, IDebtService
         var debts = await GetDebts(studentId);
 
         if (debts == null)
+        {
+            _logger.LogInformation("--> User (Id: {StudentId}) dont have any debts.", studentId);
             return null;
+        }
 
         // Generates a list of debts with 1 day or less left to the repayment date
         debts = debts.Where(x => x.WhenToPayback > DateTimeOffset.UtcNow && x.WhenToPayback <= DateTimeOffset.UtcNow.AddDays(1));
@@ -211,7 +219,10 @@ public class DebtService : Manager, IDebtService
         var debts = await GetDebts(studentId);
 
         if (debts == null)
+        {
+            _logger.LogInformation("--> User (Id: {StudentId}) dont have any debts.", studentId);
             return null;
+        }
 
         // Generates a list of overdue debts
         debts = debts.Where(x => (x.WhenToPayback - DateTimeOffset.Now).TotalDays <= 0);

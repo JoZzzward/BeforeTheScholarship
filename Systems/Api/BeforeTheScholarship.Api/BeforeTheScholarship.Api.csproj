@@ -51,7 +51,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalVisibleTo Include="BeforeTheScholarship.Tests"/>
+		<InternalVisibleTo Include="BeforeTheScholarship.Tests" />
 	</ItemGroup>
 
 </Project>

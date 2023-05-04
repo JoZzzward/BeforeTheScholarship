@@ -59,7 +59,7 @@ public class Manager
 
     protected void InitializeCredentials(out string emailFrom, out string password)
     {
-        emailFrom = SecretSearcher.SearchSecret("EmailSecretValue:Username", "emailusername", _configuration);
-        password = SecretSearcher.SearchSecret("EmailSecretValue:Password", "emailpassword", _configuration);
+        emailFrom = SecretSearcher.SearchSecret("EmailUsername", "emailusername", _configuration);
+        password = SecretSearcher.SearchSecret("EmailPassword", "emailpassword", _configuration);
     }
 }

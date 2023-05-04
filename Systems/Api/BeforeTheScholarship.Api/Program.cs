@@ -41,7 +41,9 @@ app.UseAppSwagger();
 
 app.UseControllersAndViews();
 
-DbInitializer.Execute(app.Services);
+app.UseAppMiddlewares();
+
+//DbInitializer.Execute(app.Services);
 
 app.Run();
 

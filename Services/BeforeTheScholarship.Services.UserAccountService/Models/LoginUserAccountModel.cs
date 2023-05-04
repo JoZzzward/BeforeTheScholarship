@@ -19,6 +19,7 @@ public class LoginUserAccountModelValidator : AbstractValidator<LoginUserAccount
         RuleFor(x => x.Password)
             .Must(x => new Regex("^(?=.*\\d)(?=.*[a-zA-Z]).{8,30}$").Matches(x).Any())
             .WithMessage("Password must be 8 symbols or more")
+            .Must(x => new Regex("^(?=.*\\d)(?=.*[a-zA-Z]).{8,30}$").Matches(x).Any())
             .WithMessage("Password must have minimum 1 lowercase letter");
     }
 }

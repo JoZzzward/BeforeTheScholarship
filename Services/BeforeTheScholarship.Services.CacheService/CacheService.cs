@@ -1,4 +1,5 @@
 ﻿using BeforeTheScholarship.Common.CacheConstKeys;
+using BeforeTheScholarship.Common.Exceptions;
 using BeforeTheScholarship.Services.Settings;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
@@ -29,8 +30,7 @@ public class CacheService : ICacheService
         cacheStorage = Connection.GetDatabase();
     }
 
-    public async Task<bool> RemoveByKey(string key ) => 
-        await cacheStorage.KeyDeleteAsync( key );
+    public async Task<bool> RemoveByKey(string key ) => await cacheStorage.KeyDeleteAsync( key );
 
     public async Task<T?> GetStringAsync<T>(string key)
     {
@@ -41,7 +41,7 @@ public class CacheService : ICacheService
         {
             _logger.LogInformation("--> Cannot get cached data with specified Key ({Key})", key);
             return default;
-        }   
+        }
 
         var data = JsonSerializer.Deserialize<T>(cachedData);
 
